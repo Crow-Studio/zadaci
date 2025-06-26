@@ -1,9 +1,22 @@
 <script setup lang="ts">
+import { motion } from 'motion-v'
 import Zadaci from '~/components/svgs/Zadaci.vue'
 </script>
 
 <template>
-  <header class="px-2 sticky top-0 right-0 left-0 backdrop-blur z-30 md:px-5 xl:px-10 py-3 flex items-center justify-between">
+  <motion.header
+    :initial="{
+      opacity: 0, y: -10,
+    }"
+    :animate="{
+      opacity: 1,
+      y: 0,
+    }"
+    :transition="{
+      duration: 0.5, ease: 'easeIn',
+    }"
+    class="px-2 sticky top-0 right-0 left-0 backdrop-blur z-30 md:px-5 xl:px-10 py-3 flex items-center justify-between"
+  >
     <NuxtLink
       to="/"
       class="flex items-center gap-2"
@@ -23,5 +36,5 @@ import Zadaci from '~/components/svgs/Zadaci.vue'
         />
       </Button>
     </NuxtLink>
-  </header>
+  </motion.header>
 </template>

@@ -1,3 +1,72 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { motion, useMotionValue, useSpring } from 'motion-v'
+import { Button } from '../ui/button'
+import CustomCursor from '../shared/CustomCursor.vue'
+
+// Reactive data
+const mousePosition = ref({ x: 0, y: 0 })
+const isHovering = ref(false)
+
+const cursorX = useMotionValue(0)
+const cursorY = useMotionValue(0)
+
+const springConfig = { damping: 25, stiffness: 700 }
+const cursorXSpring = useSpring(cursorX, springConfig)
+const cursorYSpring = useSpring(cursorY, springConfig)
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 40 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  },
+}
+
+// Methods
+const setIsHovering = (value) => {
+  isHovering.value = value
+}
+
+const moveCursor = (e) => {
+  mousePosition.value = { x: e.clientX, y: e.clientY }
+  cursorX.set(e.clientX - 16)
+  cursorY.set(e.clientY - 16)
+}
+
+// Lifecycle
+onMounted(() => {
+  window.addEventListener('mousemove', moveCursor)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('mousemove', moveCursor)
+})
+</script>
+
 <template>
   <div
     class="relative overflow-hidden"
@@ -103,78 +172,3 @@
     </motion.div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { motion, useMotionValue, useSpring } from 'motion-v'
-import { Button } from '../ui/button'
-import CustomCursor from '../shared/CustomCursor.vue'
-
-// Reactive data
-const mousePosition = ref({ x: 0, y: 0 })
-const isHovering = ref(false)
-
-const cursorX = useMotionValue(0)
-const cursorY = useMotionValue(0)
-
-const springConfig = { damping: 25, stiffness: 700 }
-const cursorXSpring = useSpring(cursorX, springConfig)
-const cursorYSpring = useSpring(cursorY, springConfig)
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' },
-  },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 40 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
-  },
-}
-
-// Methods
-const setIsHovering = (value) => {
-  isHovering.value = value
-}
-
-const moveCursor = (e) => {
-  mousePosition.value = { x: e.clientX, y: e.clientY }
-  cursorX.set(e.clientX - 16)
-  cursorY.set(e.clientY - 16)
-}
-
-// Lifecycle
-onMounted(() => {
-  window.addEventListener('mousemove', moveCursor)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('mousemove', moveCursor)
-})
-</script>
-
-<style scoped>
-* {
-  cursor: none !important;
-}
-</style>

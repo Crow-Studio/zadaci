@@ -7,11 +7,19 @@ const props = defineProps<{
   cursorXSpring: MotionValue<number>
   cursorYSpring: MotionValue<number>
 }>()
+
+const showCursor = ref(true)
+
+onMounted(() => {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  showCursor.value = !isTouchDevice
+})
 </script>
 
 <template>
   <motion.div
-    class="fixed top-0 left-0 w-8 h-8 pointer-events-none z-50 mix-blend-difference"
+    v-if="showCursor"
+    class="custom-cursor fixed top-0 left-0 w-8 h-8 pointer-events-none z-50 mix-blend-difference"
     :style="{
       x: props?.cursorXSpring,
       y: props?.cursorYSpring,
@@ -27,3 +35,19 @@ const props = defineProps<{
     />
   </motion.div>
 </template>
+
+<style scoped>
+/* Only hide default cursor on devices that can hover */
+@media (hover: hover) and (pointer: fine) {
+  :deep(*) {
+    cursor: none !important;
+  }
+}
+
+/* Ensure cursor is hidden on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+</style>
