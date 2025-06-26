@@ -75,9 +75,5 @@ withDefaults(defineProps<Props>(), {
         </p>
       </div>
     </div>
-    <img
-      src="/images/restraurant.png"
-      class="absolute -right-80 size-full object-contain"
-    >
   </div>
 </template>
