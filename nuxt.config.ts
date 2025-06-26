@@ -89,6 +89,10 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       { name: 'Geist', provider: 'google' },
+      {
+        name: 'Regarn',
+        src: { url: '/fonts/Regarn-Regular.woff', format: 'woff' },
+      },
     ],
   },
   pinia: {
