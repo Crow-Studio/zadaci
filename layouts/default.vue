@@ -22,12 +22,6 @@ useHead({
   ],
   title: `Zadaci`,
 })
-
-defineOgImageComponent('Nuxt', {
-  headline: 'Greetings 👋',
-  title: 'Zadaci',
-  description: 'Say Hello 👋 to Effortless Project Management',
-})
 </script>
 
 <template>
