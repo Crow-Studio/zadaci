@@ -1,0 +1,27 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at 12:00 AM
+  workflow_dispatch:
+
+jobs:
+  update-cron-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Insert cron job with message
+        run: |
+            DATE_STR=$(date -u +"%A, %d %B, %Y")
+            MESSAGE="Cron job created on $DATE_STR"
+            response=$(curl -s -w "%{http_code}" -X POST ${{ secrets.SUPABASE_URL }}/rest/v1/cron_jobs \
+            -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"message\": \"$MESSAGE\"}")
+            
+            http_code="${response: -3}"
+            if [ "$http_code" -ne 201 ] && [ "$http_code" -ne 200 ]; then
+            echo "Failed to insert cron job. HTTP code: $http_code"
+            exit 1
+            fi
+
