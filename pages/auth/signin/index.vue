@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OauthProviders from '~/components/auth/oauth/OauthProviders.vue'
-import SignupForm from '~/components/auth/signup/SignupForm.vue'
+import SigninForm from '~/components/auth/signin/SigninForm.vue'
 import ThemeToggle from '~/components/shared/ThemeToggle.vue'
 
 definePageMeta({
@@ -18,11 +18,11 @@ watch(() => loggedIn.value, (loggedIn) => {
 })
 
 useHead({
-  titleTemplate: '%s - Sign up',
+  titleTemplate: '%s - Sign in',
 })
 
 defineOgImageComponent('Zadaci', {
-  title: 'Create an account',
+  title: 'Sign in',
   description: 'Say Hello 👋 to Effortless Project Management',
 })
 </script>
@@ -54,15 +54,15 @@ defineOgImageComponent('Zadaci', {
                     <h1 class="text-5xl font-semibold">Zadaci</h1>
                   </NuxtLink>
                   <div class="space-y-1 text-center">
-                    <h3 class="text-3xl font-bold text-brand dark:text-primary capitalize">
-                      Get started now!
+                    <h3 class="text-3xl font-bold text-brand dark:text-primary">
+                      Hello Again!
                     </h3>
                     <p class="text-sm text-muted-foreground">
-                      Easily stay organized and on track.
+                      Sign in to access your account.
                     </p>
                   </div>
                 </div>
-                <SignupForm />
+                <SigninForm />
                 <div class="flex items-center">
                   <hr class="w-full">
                   <p class="mx-3 shrink-0 text-center text-sm">
@@ -72,10 +72,10 @@ defineOgImageComponent('Zadaci', {
                 </div>
                 <OauthProviders />
                 <p class="text-center text-sm">
-                  Already have an account? <NuxtLink
-                    to="/auth/signin"
+                  Don't have an account? <NuxtLink
+                    to="/auth/signup"
                     class="underline decoration-wavy cursor-pointer"
-                  >Sign in</NuxtLink>.
+                  >Sign up</NuxtLink>.
                 </p>
               </div>
             </div>

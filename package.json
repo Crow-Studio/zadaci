@@ -36,6 +36,7 @@
     "@vue-email/components": "^0.0.21",
     "@vue-email/render": "^0.0.9",
     "@vueuse/core": "^13.4.0",
+    "@vueuse/nuxt": "13.4.0",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
@@ -68,11 +69,13 @@
     "vue-sonner": "^2.0.1",
     "zod": "^3.25.67"
   },
-  "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac",
+  "packageManager": "pnpm@10.12.4",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "@iconify-json/devicon": "^1.2.29",
     "@iconify-json/hugeicons": "^1.2.5",
+    "@iconify-json/logos": "^1.2.4",
     "@iconify-json/lucide": "^1.2.52",
     "@iconify-json/solar": "^1.2.2",
     "@types/pg": "^8.15.4",
