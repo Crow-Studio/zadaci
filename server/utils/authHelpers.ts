@@ -26,7 +26,7 @@ export async function authenticateOauthUser(options: AuthenticateOauthUserOption
     // check if the user has an existing oauth account
     const existingOauthAccount = await useDrizzle().query.oauthAccountTable.findFirst({
       where: table => and(
-        eq(table.providerUserId, options.providerUserId),
+        eq(table.provider_user_id, options.providerUserId),
         eq(table.provider, options.providerName),
       ),
     })
@@ -44,11 +44,11 @@ export async function authenticateOauthUser(options: AuthenticateOauthUserOption
     const session = await createSession(sessionToken, existingUser.id, sessionFlags, browser, device, os, location, ipAdress)
 
     const passkeys = await useDrizzle().query.passkeysTable.findMany({
-      where: table => (eq(table.userId, existingUser.id)),
+      where: table => (eq(table.user_id, existingUser.id)),
     })
 
     const totp = await useDrizzle().query.totpCredential.findFirst({
-      where: table => (eq(table.userId, existingUser.id)),
+      where: table => (eq(table.user_id, existingUser.id)),
     })
 
     const registeredPasskey = passkeys.length > 0 ? true : false
@@ -59,11 +59,11 @@ export async function authenticateOauthUser(options: AuthenticateOauthUserOption
         id: existingUser.id,
         email: existingUser.email,
         username: existingUser.username,
-        emailVerified: existingUser.emailVerified,
-        avatar: existingUser.profilePictureUrl,
+        emailVerified: existingUser.email_verified,
+        avatar: existingUser.profile_picture_url,
         registeredTOTP: totp ? true : false,
         registeredPasskey,
-        registered2FA: existingUser.registered2FA,
+        registered2FA: existingUser.registered_2fa,
         twoFactorVerified: false,
       },
       sessionToken: sessionToken,
@@ -80,10 +80,10 @@ export async function createOauthAccount(options: AuthenticateOauthUserOptions, 
   await useDrizzle().insert(tables.oauthAccountTable).values({
     id: uuidv4(),
     provider: options.providerName,
-    providerUserId: options.providerUserId,
-    userId: userId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    provider_user_id: options.providerUserId,
+    user_id: userId,
+    created_at: new Date(),
+    updated_at: new Date(),
   })
 }
 
@@ -99,12 +99,12 @@ export async function createUser(options: AuthenticateOauthUserOptions): Promise
     .values({
       email: options.providerUserEmail,
       id: uuidv4(),
-      recoveryCode: serializedRecoveryCode,
+      recovery_code: serializedRecoveryCode,
       username: options.providerUsername,
-      emailVerified: true,
-      profilePictureUrl: options.providerAvatar,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      email_verified: true,
+      profile_picture_url: options.providerAvatar,
+      created_at: new Date(),
+      updated_at: new Date(),
     })
     .returning()
 

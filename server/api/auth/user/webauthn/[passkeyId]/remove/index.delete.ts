@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     const existingPasskey = await useDrizzle().query.passkeysTable.findFirst({
       where: table => and(
         eq(table.id, passkeyId),
-        eq(table.userId, session.user.id),
+        eq(table.user_id, session.user.id),
       ),
     })
 
@@ -41,12 +41,12 @@ export default defineEventHandler(async (event) => {
     await useDrizzle().delete(tables.passkeysTable).where(
       and(
         eq(tables.passkeysTable.id, passkeyId),
-        eq(tables.passkeysTable.userId, session.user.id),
+        eq(tables.passkeysTable.user_id, session.user.id),
       ),
     )
 
     const passkeys = await useDrizzle().query.passkeysTable.findMany({
-      where: table => eq(table.userId, session.user.id),
+      where: table => eq(table.user_id, session.user.id),
     })
 
     const user = await useDrizzle().query.userTable.findFirst({
@@ -60,17 +60,17 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (passkeys.length <= 0 && user.registered2FA) {
+    if (passkeys.length <= 0 && user.registered_2fa) {
       // check if user has a totp credential
       const totp = await useDrizzle().query.totpCredential.findFirst({
-        where: table => eq(table.userId, session.user.id),
+        where: table => eq(table.user_id, session.user.id),
       })
 
       if (!totp) {
         // update user details
         await useDrizzle().update(tables.userTable).set({
-          updatedAt: new Date(),
-          registered2FA: false,
+          updated_at: new Date(),
+          registered_2fa: false,
         }).where(eq(tables.userTable.id, session.user.id))
 
         // update user session
@@ -78,7 +78,7 @@ export default defineEventHandler(async (event) => {
           const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(session.sessionToken)))
           await useDrizzle()
             .update(tables.sessionTable)
-            .set({ twoFactorVerified: false })
+            .set({ two_factor_verified: false })
             .where(eq(tables.sessionTable.id, sessionId))
         }
 

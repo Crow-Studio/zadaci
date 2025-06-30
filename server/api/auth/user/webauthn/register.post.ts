@@ -51,19 +51,19 @@ export default defineWebAuthnRegisterEventHandler({
 
     // update user details to registered2FA
     const [dbUser] = await useDrizzle().update(tables.userTable).set({
-      updatedAt: new Date(),
-      registered2FA: true,
+      updated_at: new Date(),
+      registered_2fa: true,
     }).where(eq(tables.userTable.email, user.userName)).returning()
 
     await useDrizzle().insert(tables.passkeysTable).values({
-      userId: dbUser.id,
+      user_id: dbUser.id,
       id: credential.id,
-      publicKey: credential.publicKey,
+      public_key: credential.publicKey,
       counter: credential.counter,
-      backedUp: credential.backedUp,
+      backed_up: credential.backedUp,
       transports: credential.transports,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      created_at: new Date(),
+      updated_at: new Date(),
     })
 
     // update user session
@@ -89,7 +89,7 @@ export default defineWebAuthnRegisterEventHandler({
         transports: tables.passkeysTable.transports,
       })
       .from(tables.userTable)
-      .innerJoin(tables.passkeysTable, eq(tables.passkeysTable.userId, tables.userTable.id))
+      .innerJoin(tables.passkeysTable, eq(tables.passkeysTable.user_id, tables.userTable.id))
       .where(eq(tables.userTable.username, userName.toLowerCase().trim()))
   },
 })

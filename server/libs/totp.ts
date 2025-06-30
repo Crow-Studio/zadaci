@@ -9,7 +9,7 @@ export async function getUserTOTPKey(
   const result = await useDrizzle()
     .select()
     .from(tables.totpCredential)
-    .where(eq(tables.totpCredential.userId, userId))
+    .where(eq(tables.totpCredential.user_id, userId))
 
   if (result.length === 0) {
     throw new Error('Invalid user ID')
@@ -33,13 +33,13 @@ export async function updateUserTOTPKey(
   await useDrizzle().transaction(async (tx) => {
     await tx
       .delete(tables.totpCredential)
-      .where(eq(tables.totpCredential.userId, userId))
+      .where(eq(tables.totpCredential.user_id, userId))
 
     await tx.insert(tables.totpCredential).values({
-      userId,
+      user_id: userId,
       key: Buffer.from(encrypted).toString('base64'),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      created_at: new Date(),
+      updated_at: new Date(),
       id: uuidv4(),
     })
   })
@@ -48,5 +48,5 @@ export async function updateUserTOTPKey(
 export async function deleteUserTOTPKey(userId: string): Promise<void> {
   await useDrizzle()
     .delete(tables.totpCredential)
-    .where(eq(tables.totpCredential.userId, userId))
+    .where(eq(tables.totpCredential.user_id, userId))
 }

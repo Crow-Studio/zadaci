@@ -65,11 +65,11 @@ export default defineWebAuthnAuthenticateEventHandler({
 
     // update the passkey table (updatedAt)
     await useDrizzle().update(tables.passkeysTable).set({
-      updatedAt: new Date(),
+      updated_at: new Date(),
     }).where(
       and(
         eq(tables.passkeysTable.id, credential.id || credential.authenticationInfo.credentialID),
-        eq(tables.passkeysTable.userId, session.user.id),
+        eq(tables.passkeysTable.user_id, session.user.id),
       ),
     )
 

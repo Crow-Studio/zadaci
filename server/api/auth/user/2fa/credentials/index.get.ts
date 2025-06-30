@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     const user = await useDrizzle().query.userTable.findFirst({
       where: table => eq(table.id, session.user.id),
       columns: {
-        recoveryCode: true,
+        recovery_code: true,
         id: true,
       },
     })
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     const passkeys = await useDrizzle()
       .select()
       .from(tables.passkeysTable)
-      .where(eq(tables.passkeysTable.userId, user.id))
+      .where(eq(tables.passkeysTable.user_id, user.id))
 
     return {
       passkeyCredentials: passkeys,

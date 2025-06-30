@@ -60,8 +60,8 @@ export default defineEventHandler(async (event) => {
 
     // update user details to registered2FA
     await useDrizzle().update(tables.userTable).set({
-      updatedAt: new Date(),
-      registered2FA: true,
+      updated_at: new Date(),
+      registered_2fa: true,
     }).where(eq(tables.userTable.id, session.user.id))
 
     // update user session

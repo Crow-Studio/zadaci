@@ -38,16 +38,16 @@ export default defineEventHandler(async (event) => {
 
     // update user details
     const [dbUser] = await useDrizzle().update(tables.userTable).set({
-      updatedAt: new Date(),
+      updated_at: new Date(),
       username,
-      profilePictureUrl: image,
+      profile_picture_url: image,
     }).where(eq(tables.userTable.id, session.user.id)).returning()
 
     // update user session details
     await setUserSession(event, {
       user: {
         ...session.user,
-        avatar: dbUser.profilePictureUrl as string,
+        avatar: dbUser.profile_picture_url as string,
         username: dbUser.username as string,
       },
     })
