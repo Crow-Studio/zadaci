@@ -28,7 +28,7 @@ const onUpdateStatus = async (val: Status) => {
       @update:model-value="(val) => onUpdateStatus(val as Status)"
     >
       <SelectTrigger
-        class="w-full shadow-none !border-0 !outline-none !text-sm cursor-pointer p-0 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [part='icon']:hidden [&_svg]:hidden !focus:ring-0 !focus:outline-none !focus-visible:ring-0 !focus-visible:ring-offset-0 !focus-visible:outline-none !active:ring-0 !active:outline-none !hover:border-0 !focus:border-0 !focus-visible:border-0"
+        class="w-full shadow-none !border-0 !outline-none !text-sm cursor-pointer p-0 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&_svg]:hidden !focus:ring-0 !focus:outline-none !focus-visible:ring-0 !focus-visible:ring-offset-0 !focus-visible:outline-none !active:ring-0 !active:outline-none !hover:border-0 !focus:border-0 !focus-visible:border-0"
         style="border: none !important; outline: none !important; box-shadow: none !important;"
       >
         <SelectValue placeholder="Select status" />
