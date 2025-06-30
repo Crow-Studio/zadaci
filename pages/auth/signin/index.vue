@@ -11,7 +11,7 @@ const { loggedIn } = useUserSession()
 
 watch(() => loggedIn.value, (loggedIn) => {
   if (loggedIn) {
-    navigateTo('/workspace/dashboard')
+    navigateTo('/workspace/onboarding')
   }
 }, {
   immediate: true,
@@ -23,7 +23,7 @@ useHead({
 
 defineOgImageComponent('Zadaci', {
   title: 'Sign in',
-  description: 'Say Hello 👋 to Effortless Project Management',
+  description: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
 })
 </script>
 

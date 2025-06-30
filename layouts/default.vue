@@ -6,19 +6,19 @@ useHead({
     { property: 'og:title', content: `Zadaci` },
     {
       name: 'description',
-      content: 'Say Hello 👋 to Effortless Project Management',
+      content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
     },
     {
       property: 'og:description',
-      content: 'Say Hello 👋 to Effortless Project Management',
+      content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
     },
-    { property: 'og:url', content: 'Say Hello 👋 to Effortless Project Management' },
-    { name: 'twitter:title', content: 'Say Hello 👋 to Effortless Project Management' },
+    { property: 'og:url', content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.' },
+    { name: 'twitter:title', content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.' },
     {
       name: 'twitter:description',
-      content: 'Say Hello 👋 to Effortless Project Management',
+      content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
     },
-    { name: 'twitter:site', content: 'Say Hello 👋 to Effortless Project Management' },
+    { name: 'twitter:site', content: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.' },
   ],
   title: `Zadaci`,
 })

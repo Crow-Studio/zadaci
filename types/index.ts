@@ -13,8 +13,12 @@ export const sendUniqueCodeSchema = toTypedSchema(z.object({
 }))
 
 export const onboardingProfileSchema = toTypedSchema(z.object({
-  first_name: z.string().min(1),
-  last_name: z.string().min(1),
+  first_name: z.string().min(1, {
+    message: 'First name is required!',
+  }),
+  last_name: z.string().min(1, {
+    message: 'Last name is required!',
+  }),
 }))
 
 export const onboardingWorkspaceSchema = toTypedSchema(z.object({
@@ -132,6 +136,18 @@ export interface WorkspaceBreadcrumb {
 
 export interface IProject { id: string, title: string, status: Status, priority: Priority, dueDate: Date | null }
 
+export interface Workspace {
+  id: string
+  name: string
+  imageUrl: string
+  inviteCode: string
+  createdAt: string
+  updatedAt: string
+  userRole: UserRole
+}
+
+export type UserRole = 'OWNER' | 'MEMBER' | 'GUEST'
+
 export interface WorkspaceStore {
   isOpenSidebar: boolean
   breadcrumb: WorkspaceBreadcrumb | null
@@ -139,6 +155,8 @@ export interface WorkspaceStore {
     project: IProject
     data: Task
   } | null
+  onboardingWorkspaceId: string | null
+  activeWorkspace: Workspace | null
 }
 
 export interface IProjectColumn {
