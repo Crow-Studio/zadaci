@@ -14,7 +14,6 @@ import {
 import {
   PinInput,
   PinInputGroup,
-  PinInputInput,
 } from '~/components/ui/pin-input'
 
 const props = defineProps<{
