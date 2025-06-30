@@ -15,3 +15,22 @@ export function get2FARedirect(user: User, defaultPath: string): string {
   }
   return defaultPath
 }
+
+export const formatDateForPicker = (dateValue: string | Date | null | undefined): string | undefined => {
+  if (!dateValue) return undefined // This handles null, undefined, and empty string
+
+  try {
+    const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue
+    if (isNaN(date.getTime())) return undefined
+
+    // @internationalized/date parseDate expects YYYY-MM-DD format
+    return date.toISOString().split('T')[0]
+  }
+  catch {
+    return undefined
+  }
+}
+
+export function capitalize(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1)
+}

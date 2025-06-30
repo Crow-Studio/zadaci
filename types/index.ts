@@ -110,7 +110,7 @@ export interface User {
   twoFactorVerified: boolean
 }
 
-export type ModalType = 'joinWaitlist' | 'setupAuthenticatorApp' | 'setupPasskeys' | 'setupSecurityKeys' | 'signout' | 'addNewProject' | 'addNewTask' | 'setupPassword' | 'resetPassword' | 'transferOwnership' | 'deleteWorkspace' | 'mobileSidebar' | 'inviteTeammate' | 'notificationCenter' | 'changeTeammateRole' | 'totpAuthentication' | 'deleteAccount' | 'editProject' | 'editProjectTask'
+export type ModalType = 'joinWaitlist' | 'setupAuthenticatorApp' | 'setupPasskeys' | 'setupSecurityKeys' | 'signout' | 'addNewProject' | 'addNewTask' | 'setupPassword' | 'resetPassword' | 'transferOwnership' | 'deleteWorkspace' | 'mobileSidebar' | 'inviteTeammate' | 'notificationCenter' | 'changeTeammateRole' | 'totpAuthentication' | 'deleteAccount' | 'editProject' | 'editProjectTask' | 'createWorkspace'
 
 export interface ModalData {
   qrcode?: string

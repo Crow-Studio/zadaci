@@ -27,6 +27,7 @@ useHead({
 
 <template>
   <main class="min-h-screen relative max-w-8xl overflow-hidden mx-auto flex flex-col">
+    <NuxtLoadingIndicator />
     <Toaster
       :close-button="true"
       rich-colors

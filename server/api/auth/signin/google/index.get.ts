@@ -14,8 +14,7 @@ export default defineOAuthGoogleEventHandler({
     return sendRedirect(event, '/workspace/dashboard')
   },
 
-  onError(event: H3Event, error: any) {
-    console.error('OAuth error:', error)
+  onError(event: H3Event, _) {
     return sendRedirect(event, '/auth/signin')
   },
 })
