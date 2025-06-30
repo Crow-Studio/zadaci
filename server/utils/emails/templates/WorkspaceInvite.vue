@@ -51,7 +51,7 @@ defineProps({
             width="200"
             height="60"
             style="margin: 0 auto;"
-            class="rounded-md object-contain"
+            class="rounded-md object-contain h-16 w-auto"
           />
         </Link>
         <Container>

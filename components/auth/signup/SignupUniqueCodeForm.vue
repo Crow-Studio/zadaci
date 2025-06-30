@@ -82,6 +82,7 @@ const onSendUniqueCode = sendUniqueCodeForm.handleSubmit(async (values) => {
               type="text"
               placeholder="name@example.com"
               v-bind="componentField"
+              :disabled="isSendingCode"
               class="block h-[46px] w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm focus:bg-none focus:outline-none active:bg-transparent"
             >
           </div>

@@ -50,8 +50,8 @@ defineOgImageComponent('Zadaci', {
                     to="/"
                     class="flex items-center gap-x-2.5"
                   >
-                    <SvgsZadaci class="w-[3.5rem] h-auto" />
-                    <h1 class="text-5xl font-semibold">Zadaci</h1>
+                    <SvgsZadaci class="w-[3rem] h-auto" />
+                    <h1 class="text-5xl mt-1 font-semibold font-bebas-neue">Zadaci</h1>
                   </NuxtLink>
                   <div class="space-y-1 text-center">
                     <h3 class="text-3xl font-bold text-brand dark:text-primary">

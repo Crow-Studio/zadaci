@@ -43,9 +43,9 @@ const props = defineProps({
           src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
           alt="Zadaci"
           style="margin: 0 auto; object-fit: contain"
-          class="h-56 w-auto rounded-md"
+          class="h-16 w-auto rounded-md"
         />
-        <Text class="text-2xl font-semibold">
+        <Text class="text-xl font-semibold text-center">
           The code below is only valid for 10 minutes.
         </Text>
         <Text class="block rounded-md bg-gray-100 p-5 text-center text-3xl text-brand">

@@ -37,7 +37,7 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
           src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
           alt="Zadaci"
           style="margin: 0 auto; object-fit: contain"
-          class="h-56 w-auto rounded-md"
+          class="h-16 w-auto rounded-md"
         />
         <Text class="text-center text-2xl font-semibold text-brand">
           You're on the waitlist!
@@ -75,7 +75,7 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
               width="200"
               height="60"
               style="margin: 0 auto;"
-              class="rounded-md object-contain"
+              class="rounded-md object-contain h-16 w-auto"
             />
           </Link>
         </Container>

@@ -90,6 +90,7 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       { name: 'Geist', provider: 'google' },
+      { name: 'Bebas Neue', provider: 'google' },
       {
         name: 'Regarn',
         src: { url: '/fonts/Regarn-Regular.woff', format: 'woff' },
