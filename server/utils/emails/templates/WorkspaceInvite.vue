@@ -30,7 +30,7 @@ defineProps({
         theme: {
           extend: {
             colors: {
-              brand: '#5e40ae',
+              brand: '#F97452',
             },
           },
         },
@@ -42,12 +42,12 @@ defineProps({
     >
       <Container class="mx-auto max-w-[650px] bg-gray-100 p-5">
         <Link
-          href="https://use-odama.thecodingmontana.com"
+          href="https://zadaci.vercel.app"
           class="flex items-center justify-center"
         >
           <Img
-            src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1732631847/wmmww1qiii7eiprbwphj.png"
-            alt="{workspace.name}"
+            src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+            alt="Zadaci"
             width="200"
             height="60"
             style="margin: 0 auto;"
@@ -85,8 +85,8 @@ defineProps({
           <Text class="text-base leading-6 text-gray-600">
             Best regards,
           </Text>
-          <Text class="text-base leading-6 text-gray-600">
-            use-odama Team.
+          <Text class="text-base leading-6 text-brand">
+            Zadaci Team.
           </Text>
         </Container>
 
@@ -98,7 +98,7 @@ defineProps({
           </Text>
           <Link
             :href="link!"
-            class="text-base"
+            class="text-sm"
           >
             {{ link }}
           </Link>

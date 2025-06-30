@@ -37,9 +37,9 @@ export default defineEventHandler(async (event) => {
         id: uuidv4(),
         email,
         code,
-        expiresAt: createDate(new TimeSpan(10, 'm')), // 10 minutes
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        expires_at: createDate(new TimeSpan(10, 'm')), // 10 minutes
+        created_at: new Date(),
+        updated_at: new Date(),
       })
 
       await sendUniqueCodeRequest({
@@ -56,8 +56,8 @@ export default defineEventHandler(async (event) => {
 
     await useDrizzle().update(tables.uniqueCodeTable).set({
       code,
-      expiresAt: createDate(new TimeSpan(10, 'm')),
-      updatedAt: new Date(),
+      expires_at: createDate(new TimeSpan(10, 'm')),
+      updated_at: new Date(),
     }).where(eq(tables.uniqueCodeTable.email, email))
 
     await sendUniqueCodeRequest({

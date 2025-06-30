@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (!isWithinExpirationDate(uniqueCodeRequest.expiresAt)) {
+    if (!isWithinExpirationDate(uniqueCodeRequest.expires_at)) {
       throw createError({
         message: 'The unique code has expired!',
         statusCode: 498,
@@ -66,11 +66,11 @@ export default defineEventHandler(async (event) => {
     const session = await createSession(sessionToken, user.id, sessionFlags, browser, device, os, location, ipAdress)
 
     const passkeys = await useDrizzle().query.passkeysTable.findMany({
-      where: table => (eq(table.userId, user.id)),
+      where: table => (eq(table.user_id, user.id)),
     })
 
     const totp = await useDrizzle().query.totpCredential.findFirst({
-      where: table => (eq(table.userId, user.id)),
+      where: table => (eq(table.user_id, user.id)),
     })
 
     const registeredPasskey = passkeys.length > 0 ? true : false
@@ -80,11 +80,11 @@ export default defineEventHandler(async (event) => {
         id: user.id,
         email: user.email,
         username: user.username,
-        emailVerified: user.emailVerified,
-        avatar: user.profilePictureUrl,
+        emailVerified: user.email_verified,
+        avatar: user.profile_picture_url,
         registeredTOTP: totp ? true : false,
         registeredPasskey,
-        registered2FA: user.registered2FA,
+        registered2FA: user.registered_2fa,
         twoFactorVerified: false,
       },
       sessionToken: sessionToken,

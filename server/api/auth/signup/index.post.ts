@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (!isWithinExpirationDate(uniqueCodeRequest.expiresAt)) {
+    if (!isWithinExpirationDate(uniqueCodeRequest.expires_at)) {
       throw createError({
         statusMessage: 'The unique code has expired!',
         statusCode: 498,
@@ -75,12 +75,12 @@ export default defineEventHandler(async (event) => {
       .values({
         email,
         id: uuidv4(),
-        recoveryCode: serializedRecoveryCode,
+        recovery_code: serializedRecoveryCode,
         username: `${capitalize(firstName)} ${capitalize(lastName)}`,
-        emailVerified: true,
-        profilePictureUrl: `https://avatar.vercel.sh/${email}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        email_verified: true,
+        profile_picture_url: `https://avatar.vercel.sh/${email}`,
+        created_at: new Date(),
+        updated_at: new Date(),
       })
       .returning()
 
@@ -88,11 +88,11 @@ export default defineEventHandler(async (event) => {
       id: newUser.id,
       username: newUser.username,
       email,
-      emailVerified: newUser.emailVerified,
+      emailVerified: newUser.email_verified,
       registeredTOTP: false,
       registeredPasskey: false,
       registered2FA: false,
-      avatar: newUser.profilePictureUrl!,
+      avatar: newUser.profile_picture_url!,
       twoFactorVerified: false,
     }
 

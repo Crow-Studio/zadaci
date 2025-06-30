@@ -22,7 +22,7 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
         theme: {
           extend: {
             colors: {
-              brand: '#5e40ae',
+              brand: '#F97452',
             },
           },
         },
@@ -34,8 +34,8 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
     >
       <Container class="mx-auto max-w-[650px] bg-gray-100 p-5">
         <Img
-          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1743073615/fvymape8bogx3nwfl1du.png"
-          alt="waitlist-svg"
+          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+          alt="Zadaci"
           style="margin: 0 auto; object-fit: contain"
           class="h-56 w-auto rounded-md"
         />
@@ -45,11 +45,11 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
         <Container>
           <Text class="text-base leading-6 text-gray-600">
             Thanks for joining the waitlist for <Link
-              href="https://use-odama.thecodingmontana.com"
+              href="https://zadaci.vercel.app"
               class="inline font-semibold text-brand"
             >
-              use-odama
-            </Link>, the modern restaurant management solution for your restaurant(s).
+              Zadaci
+            </Link>, an all-in-one project management platform built to help you and your team get things done faster.
           </Text>
           <Text class="text-base leading-6 text-gray-600">
             Your spot on the waitlist is officially confirmed.
@@ -66,12 +66,12 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
             You're receiving this email because you signup for the waitlist on
           </Text>
           <Link
-            href="https://use-odama.thecodingmontana.com"
+            href="https://zadaci.vercel.app"
             class="flex items-center justify-center"
           >
             <Img
-              src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1732631847/wmmww1qiii7eiprbwphj.png"
-              alt="{workspace.name}"
+              src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+              alt="Zadaci"
               width="200"
               height="60"
               style="margin: 0 auto;"

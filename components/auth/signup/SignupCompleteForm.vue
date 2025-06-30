@@ -51,7 +51,6 @@ const onSubmit = form.handleSubmit(async (values) => {
     await refreshSession()
     return navigateTo('/workspace/onboarding')
   }
-
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.message
@@ -86,12 +85,12 @@ function onClear() {
 
 <template>
   <form
-    class="mt-5 space-y-4"
+    class=" space-y-2"
     @submit.prevent="onSubmit"
   >
-    <div class="space-y-2">
+    <div class="space-y-1">
       <div class="space-y-1">
-        <label class="text-sm font-medium">Email</label>
+        <label class="text-sm block font-medium">Email</label>
         <div
           :class="cn(
             'border rounded-md relative flex items-center',
@@ -132,7 +131,7 @@ function onClear() {
         v-slot="{ componentField }"
         name="code"
       >
-        <FormItem class="space-y-1">
+        <FormItem>
           <FormLabel class="text-sm font-medium">
             Code
           </FormLabel>
@@ -181,7 +180,7 @@ function onClear() {
         'flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium text-white transition-all',
         {
           'cursor-pointer bg-brand focus:bg-brand-secondary': !form.errors.value.code && form.controlledValues.value.code,
-          'cursor-not-allowed bg-[#9e8cce]': !form.controlledValues.value.code || form.errors.value.code || isSigningUp,
+          'cursor-not-allowed bg-brand-secondary': !form.controlledValues.value.code || form.errors.value.code || isSigningUp,
 
         },
       )"

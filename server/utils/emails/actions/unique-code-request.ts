@@ -16,9 +16,9 @@ export async function sendUniqueCodeRequest({ code, email }: Props) {
     })
 
     await resend.emails.send({
-      from: 'Team use-odama <noreply@thecodingmontana.com>',
+      from: 'Team Zadaci <noreply@thecodingmontana.com>',
       to: [email],
-      subject: `Your unique use-odama sign up code is ${code}`,
+      subject: `Your unique Zadaci sign up code is ${code}`,
       html,
     })
   }

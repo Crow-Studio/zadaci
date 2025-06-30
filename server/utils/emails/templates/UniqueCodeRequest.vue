@@ -25,20 +25,25 @@ const props = defineProps({
         theme: {
           extend: {
             colors: {
-              brand: '#007291',
+              brand: '#F97452',
+            },
+            fontFamily: {
+              roboto: ['Roboto', 'Verdana'],
             },
           },
         },
+        separator: ':',
+        safelist: [],
+        experimental: {},
+        corePlugins: {},
       }"
     >
-      <Container class="mx-auto max-w-[600px] px-4 py-8">
+      <Container class="mx-auto max-w-[600px] px-4 py-8 font-roboto">
         <Img
-          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1732631847/wmmww1qiii7eiprbwphj.png"
-          alt="{workspace.name}"
-          width="200"
-          height="60"
+          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+          alt="Zadaci"
           style="margin: 0 auto; object-fit: contain"
-          class="rounded-md"
+          class="h-56 w-auto rounded-md"
         />
         <Text class="text-2xl font-semibold">
           The code below is only valid for 10 minutes.
@@ -51,10 +56,10 @@ const props = defineProps({
 
         <Container>
           <Text class="mb-2 text-lg font-bold">
-            What is useOdama?
+            What is Zadaci?
           </Text>
           <Text class="text-base leading-6 text-gray-600">
-            use-odama is a platform that provides modern restaurant solutions by simplifying daily operations and enhancing efficiency.
+            Zadaci is an all-in-one project management platform built to help you and your team get things done faster.
           </Text>
         </Container>
       </Container>
