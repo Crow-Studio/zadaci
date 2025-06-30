@@ -78,6 +78,9 @@ export default defineNuxtConfig({
         ],
       }),
     ],
+    build: {
+      sourcemap: false, // Disable sourcemaps entirely for production
+    },
   },
   auth: {
     webAuthn: true,
