@@ -12,6 +12,12 @@ import {
 import { cn } from '~/lib/utils'
 import { sendUniqueCodeSchema } from '~/types'
 
+const oauthStore = useOauthStore()
+
+const oauth = computed(() => {
+  return oauthStore?.oauth
+})
+
 const props = defineProps<{
   onResetForm: (params: { mail: string, codeSent: boolean }) => void
 }>()
@@ -82,6 +88,7 @@ const onSendUniqueCode = sendUniqueCodeForm.handleSubmit(async (values) => {
               type="text"
               placeholder="name@example.com"
               v-bind="componentField"
+              :disabled="sendUniqueCodeForm.isSubmitting.value || oauth.isSigninWithOauth"
               class="block h-[46px] w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm focus:bg-none focus:outline-none active:bg-transparent placeholder:text-muted-foreground"
             >
           </div>
@@ -97,7 +104,7 @@ const onSendUniqueCode = sendUniqueCodeForm.handleSubmit(async (values) => {
     </FormField>
     <button
       type="submit"
-      :disabled="!!sendUniqueCodeForm.controlledValues.value.email === false || !!sendUniqueCodeForm.errors.value.email || !!isSendingCode"
+      :disabled="!!sendUniqueCodeForm.controlledValues.value.email === false || !!sendUniqueCodeForm.errors.value.email || !!isSendingCode || oauth.isSigninWithOauth"
       :class="cn(
         'flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium text-white transition-all',
         {

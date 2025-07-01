@@ -281,3 +281,14 @@ export interface Subtask {
 }
 
 export const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+export interface IOauth {
+  isSigninWithOauth: boolean
+  provider: 'google' | 'github' | null
+}
+
+export interface OauthStore {
+  oauth: IOauth
+}
+
+export type IAuthProvider = 'google' | 'github'

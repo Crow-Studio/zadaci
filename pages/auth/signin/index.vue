@@ -7,6 +7,7 @@ definePageMeta({
   layout: 'auth',
 })
 
+const oauthStore = useOauthStore()
 const { loggedIn } = useUserSession()
 
 watch(() => loggedIn.value, (loggedIn) => {
@@ -24,6 +25,13 @@ useHead({
 defineOgImageComponent('Zadaci', {
   title: 'Sign in',
   description: 'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
+})
+
+onMounted(() => {
+  oauthStore?.onSigninWithOauthProvider({
+    isSigninWithOauth: false,
+    provider: null,
+  })
 })
 </script>
 
