@@ -16,7 +16,7 @@ const isOpenSidebar = computed(() => {
 
 const onNavigateToPage = (payload: WorkspaceBreadcrumb, pageName: string) => {
   workspaceStore?.onSetWorkspaceBreadcrumb(payload)
-  navigateTo(`/workspace/${pageName}`)
+  navigateTo(pageName)
 }
 
 const onAddNewProject = () => {
@@ -129,6 +129,26 @@ const currentActiveWorkspace = computed(() => {
             />
             Dashboard
           </button>
+          <button
+            class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+            @click="onNavigateToPage({
+              name: `${currentActiveWorkspace?.name}`,
+              path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+              children: [
+                {
+                  name: 'My Tasks',
+                  path: `/workspace/${currentActiveWorkspace?.id}/my-tasks`,
+                  children: null,
+                },
+              ],
+            }, `/workspace/${currentActiveWorkspace?.id}/my-tasks`)"
+          >
+            <Icon
+              name="hugeicons:task-01"
+              class="size-4"
+            />
+            My Tasks
+          </button>
         </div>
         <div class="grid">
           <h3 class="p-2 text-xs text-muted-foreground">
@@ -148,13 +168,19 @@ const currentActiveWorkspace = computed(() => {
             <button
               class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
               @click="onNavigateToPage({
-                name: 'Projects',
-                path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
                 children: [
                   {
-                    name: 'All',
+                    name: 'Projects',
                     path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
-                    children: null,
+                    children: [
+                      {
+                        name: 'All',
+                        path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
+                        children: null,
+                      },
+                    ],
                   },
                 ],
               }, `/workspace/${currentActiveWorkspace?.id}/projects/all`)"

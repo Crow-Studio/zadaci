@@ -33,6 +33,11 @@ const currentActiveWorkspace = computed(() => {
 
 const onSelectActiveWorkspace = (w: Workspace) => {
   workspaceStore.onSetActiveWorkspace(w)
+  workspaceStore?.onSetWorkspaceBreadcrumb({
+    name: 'Dashboard',
+    path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
+    children: null,
+  })
   navigateTo(`/workspace/${w.id}/dashboard`)
 }
 

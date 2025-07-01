@@ -20,7 +20,7 @@ const { params } = useRoute()
 const onNavigateToPage = (payload: WorkspaceBreadcrumb, pageName: string) => {
   workspaceStore?.onSetWorkspaceBreadcrumb(payload)
   onClose()
-  return navigateTo(`/workspace/${pageName}`)
+  return navigateTo(pageName)
 }
 
 const isModalOpen = computed(() => {
@@ -151,6 +151,26 @@ const onAddNewProject = () => {
                 class="size-4"
               />
               Dashboard
+            </button>
+            <button
+              class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+              @click="onNavigateToPage({
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                children: [
+                  {
+                    name: 'My Tasks',
+                    path: `/workspace/${currentActiveWorkspace?.id}/my-tasks`,
+                    children: null,
+                  },
+                ],
+              }, `/workspace/${currentActiveWorkspace?.id}/my-tasks`)"
+            >
+              <Icon
+                name="hugeicons:task-01"
+                class="size-4"
+              />
+              My Tasks
             </button>
           </div>
           <div class="grid">

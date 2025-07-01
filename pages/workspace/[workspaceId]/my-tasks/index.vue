@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
-import Greetings from '~/components/workspace/dashboard/Greetings.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -15,12 +14,12 @@ const currentActiveWorkspace = computed(() => {
 
 useHead({
   title: currentActiveWorkspace.value
-    ? `${currentActiveWorkspace.value?.name} - Dashboard`
-    : 'Dashboard',
+    ? `${currentActiveWorkspace.value?.name} - My Tasks`
+    : 'My Tasks',
 })
 
-defineOgImageComponent('UseOdama', {
-  title: currentActiveWorkspace.value ? `${currentActiveWorkspace.value?.name} - Dashboard` : 'Dashboard',
+defineOgImageComponent('Zadaci', {
+  title: currentActiveWorkspace.value ? `${currentActiveWorkspace.value?.name} - My Tasks` : 'My Tasks',
   description:
     'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
 })
@@ -35,9 +34,15 @@ onBeforeMount(() => {
 
 onMounted(() => {
   workspaceStore?.onSetWorkspaceBreadcrumb({
-    name: 'Dashboard',
+    name: `${currentActiveWorkspace.value?.name}`,
     path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
-    children: null,
+    children: [
+      {
+        name: 'My Tasks',
+        path: `/workspace/${currentActiveWorkspace.value?.id}/my-tasks`,
+        children: null,
+      },
+    ],
   })
 })
 </script>
@@ -55,18 +60,8 @@ onMounted(() => {
     </div>
     <div
       v-else
-      class="grid grid-cols-1 gap-10 md:grid-cols-4 w-full"
     >
-      <div class="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col gap-8 self-start">
-        <Greetings />
-        <!-- <WeeklyTasksProductivity /> -->
-      </div>
-      <!-- <div class="col-span-1 md:col-span-2 xl:col-span-1 self-start flex flex-col gap-8">
-        <ProjectStats />
-        <div>
-          <AllTasksStats />
-        </div>
-      </div> -->
+      {{ currentActiveWorkspace?.name }} - My Tasks
     </div>
   </section>
 </template>

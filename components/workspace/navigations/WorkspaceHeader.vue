@@ -30,6 +30,29 @@ const workspaceBreadcrumb = computed(() => {
   } | null
 })
 
+// Flatten the nested breadcrumb structure into a linear array
+const flattenedBreadcrumbs = computed(() => {
+  if (!workspaceBreadcrumb.value) return []
+
+  const result: { name: string, path: string }[] = []
+
+  const flatten = (item: { name: string, path: string, children?: { name: string, path: string, children?: any }[] | null }) => {
+    result.push({ name: item.name, path: item.path })
+
+    if (item.children && item.children.length > 0) {
+      // For nested breadcrumbs, we typically want to show the path to the deepest/current item
+      // This assumes the last child in the array is the current active path
+      const activeChild = item.children[item.children.length - 1]
+      if (activeChild) {
+        flatten(activeChild)
+      }
+    }
+  }
+
+  flatten(workspaceBreadcrumb.value)
+  return result
+})
+
 const onToggleMobileSidebar = () => {
   modalStore?.onOpen('mobileSidebar')
   modalStore?.setIsOpen(true)
@@ -69,24 +92,18 @@ const onToggleMobileSidebar = () => {
         orientation="vertical"
         class="mr-2 h-4"
       />
-      <Breadcrumb v-if="workspaceBreadcrumb">
+      <Breadcrumb v-if="flattenedBreadcrumbs.length > 0">
         <BreadcrumbList>
-          <BreadcrumbItem class="text-base">
-            <BreadcrumbLink :href="workspaceBreadcrumb.path">
-              {{ workspaceBreadcrumb.name }}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <template v-if="workspaceBreadcrumb.children?.length">
-            <BreadcrumbSeparator />
-            <BreadcrumbItem
-              v-for="child in workspaceBreadcrumb.children"
-              :key="child.path"
-              class="text-base"
-            >
-              <BreadcrumbLink :href="child.path">
-                {{ child.name }}
+          <template
+            v-for="(breadcrumb, index) in flattenedBreadcrumbs"
+            :key="breadcrumb.path"
+          >
+            <BreadcrumbItem class="text-base capitalize">
+              <BreadcrumbLink :href="breadcrumb.path">
+                {{ breadcrumb.name }}
               </BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator v-if="index < flattenedBreadcrumbs.length - 1" />
           </template>
         </BreadcrumbList>
       </Breadcrumb>
