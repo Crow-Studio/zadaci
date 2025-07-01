@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
-import { Loader2 } from 'lucide-vue-next'
+import { Loader2, X } from 'lucide-vue-next'
+import AddAssignee from '../global/AddAssignee.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import DatePicker from '~/components/workspace/DatePicker.vue'
+import type { Teammate } from '~/types'
 import { columns, newProjectSchema, priorityOptions } from '~/types'
 import {
   FormControl,
@@ -13,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Label } from '~/components/ui/label'
 
 const props = defineProps<{
   onClose: () => void
@@ -20,20 +24,48 @@ const props = defineProps<{
   onSetIsAddNewProject: (payload: boolean) => void
 }>()
 
+const workspaceStore = useWorkspaceStore()
+
+const activeWorkspace = computed(() => {
+  return workspaceStore?.activeWorkspace
+})
+
 const form = useForm({
   validationSchema: newProjectSchema,
 })
 
+const assignees = ref<Teammate[]>([])
+
+const onAddAssiginees = (payload: Teammate) => {
+  const newAssignees = [
+    ...assignees.value,
+    payload,
+  ]
+  assignees.value = newAssignees
+}
+
+const onRemoveAssignee = (payload: Teammate) => {
+  const newAssignees = assignees.value.filter(a => a.id !== payload.id)
+  assignees.value = newAssignees
+}
+
 const onSubmit = form.handleSubmit(async (values) => {
   props?.onSetIsAddNewProject(true)
   try {
+    if (assignees.value.length <= 0) {
+      props?.onSetIsAddNewProject(false)
+      return toast.error('Atleast one assignee is required!', {
+        position: 'top-center',
+      })
+    }
     const newFormValues = {
       ...values,
       description: values.description ? values.description : '',
       dueDate: values.dueDate ? new Date(values.dueDate) : undefined,
+      assignees: assignees.value,
     }
 
-    const res = await $fetch('/api/workspace/project/new', {
+    const res = await $fetch(`/api/workspace/${activeWorkspace.value?.id}/project/new`, {
       method: 'POST',
       body: newFormValues,
     })
@@ -194,6 +226,47 @@ const onCloseModal = () => {
           <FormMessage />
         </FormItem>
       </FormField>
+      <div class="grid gap-2">
+        <Label>Assignee</Label>
+        <div class="grid gap-y-2">
+          <div
+            v-if="assignees.length > 0"
+            class="flex items-center gap-x-2 w-full flex-wrap"
+          >
+            <div
+              v-for="teammate in assignees"
+              :key="teammate.id"
+              class="relative"
+            >
+              <div class="size-10 overflow-hidden">
+                <Avatar
+                  class="size-full absolute inset-0 object-cover"
+                >
+                  <AvatarImage
+                    :src="teammate.avatar!"
+                    :alt="teammate.username"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </div>
+              <Button
+                size="icon"
+                variant="destructive"
+                class="absolute cursor-pointer -right-1 -top-1 size-6 rounded-full border-2 border-background"
+                aria-label="Remove teammate"
+                @click="onRemoveAssignee(teammate)"
+              >
+                <X :size="16" />
+              </Button>
+            </div>
+          </div>
+          <AddAssignee
+            :assignees="assignees"
+            :on-add-assiginees="onAddAssiginees"
+            :on-remove-assignee="onRemoveAssignee"
+          />
+        </div>
+      </div>
       <FormField
         v-slot="{ componentField }"
         name="description"

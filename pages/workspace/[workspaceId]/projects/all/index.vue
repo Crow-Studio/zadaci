@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
+import { Avatar, AvatarImage, AvatarFallback } from '~/components/ui/avatar'
+import ProjectTabs from '~/components/workspace/projects/ProjectTabs.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
   layout: 'workspace',
 })
 
+const modalStore = useModalStore()
 const workspaceStore = useWorkspaceStore()
 
 const currentActiveWorkspace = computed(() => {
@@ -51,10 +54,15 @@ onMounted(() => {
     ],
   })
 })
+
+const onAddNewProject = () => {
+  modalStore?.onOpen('addNewProject')
+  modalStore?.setIsOpen(true)
+}
 </script>
 
 <template>
-  <section class="">
+  <section>
     <div
       v-if="status ==='idle' || status === 'pending'"
       class="min-h-[55vh] grid place-content-center"
@@ -66,8 +74,43 @@ onMounted(() => {
     </div>
     <div
       v-else
+      class="grid gap-5"
     >
-      {{ currentActiveWorkspace?.name }} - All Projects
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-x-3">
+          <Avatar class="w-12 h-12 sm:w-14 sm:h-14 rounded-md flex-shrink-0">
+            <AvatarImage
+              :src="currentActiveWorkspace?.imageUrl!"
+              :alt="currentActiveWorkspace?.name!"
+            />
+            <AvatarFallback class="rounded-md">
+              CN
+            </AvatarFallback>
+          </Avatar>
+          <div class="min-w-0 flex-1">
+            <h1 class="text-lg sm:text-xl font-semibold truncate">
+              All Projects
+            </h1>
+            <p class="text-xs sm:text-sm text-muted-foreground truncate">
+              Overview of all projects in <span class="capitalize">{{ currentActiveWorkspace?.name }}</span> Workspace.
+            </p>
+          </div>
+        </div>
+        <Button
+          class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:-translate-y-1.5 w-full sm:w-auto flex-shrink-0"
+          @click="onAddNewProject"
+        >
+          <Icon
+            name="solar:add-folder-outline"
+            class="size-5"
+          />
+          New Project
+        </Button>
+      </div>
+      <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
+        <ProjectTabs />
+        <!-- <ProjectStats /> -->
+      </div>
     </div>
   </section>
 </template>

@@ -292,3 +292,10 @@ export interface OauthStore {
 }
 
 export type IAuthProvider = 'google' | 'github'
+
+export interface Teammate {
+  id: string
+  avatar: string
+  email: string
+  username: string
+}

@@ -191,13 +191,19 @@ const onAddNewProject = () => {
               <button
                 class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
                 @click="onNavigateToPage({
-                  name: 'Projects',
-                  path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
+                  name: `${currentActiveWorkspace?.name}`,
+                  path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
                   children: [
                     {
-                      name: 'All',
+                      name: 'Projects',
                       path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
-                      children: null,
+                      children: [
+                        {
+                          name: 'All',
+                          path: `/workspace/${currentActiveWorkspace?.id}/projects/all`,
+                          children: null,
+                        },
+                      ],
                     },
                   ],
                 }, `/workspace/${currentActiveWorkspace?.id}/projects/all`)"
