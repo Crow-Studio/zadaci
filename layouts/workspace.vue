@@ -42,7 +42,7 @@ const isOpenSidebar = computed(() => {
       <Sidebar />
       <div
         class="flex-1 relative flex flex-col size-full gap-1 px-5 transition-all duration-300"
-        :class="{ 'pl-[0rem]': !isOpenSidebar, 'pl-[18rem]': isOpenSidebar }"
+        :class="{ 'pl-[0rem]': !isOpenSidebar, 'pl-[0rem] md:pl-[18rem]': isOpenSidebar }"
       >
         <WorkspaceHeader />
 
