@@ -108,7 +108,7 @@ const onAddNewProject = () => {
   modalStore?.setIsOpen(true)
 }
 
-const { data: projects } = await useAsyncData('mobile_sidebar_projects', () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
+const { data: projects } = await useAsyncData(`mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`, () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
 </script>
 
 <template>

@@ -31,13 +31,15 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
-const onSelectActiveWorkspace = (w: Workspace) => {
+const onSelectActiveWorkspace = async (w: Workspace) => {
   workspaceStore.onSetActiveWorkspace(w)
   workspaceStore?.onSetWorkspaceBreadcrumb({
     name: 'Dashboard',
-    path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
+    path: `/workspace/${w.id}/dashboard`,
     children: null,
   })
+  await refreshNuxtData([`sidebar_projects_${w.id}`, `board_view_projects_${w.id}`, `all_project_stats_${w.id}`, `mobile_sidebar_projects_${w.id}`])
+  console.log('switching')
   navigateTo(`/workspace/${w.id}/dashboard`)
 }
 

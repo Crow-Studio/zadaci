@@ -20,7 +20,7 @@ watchEffect(async () => {
   if (status.value === 'success') {
     if (!project.value) {
       navigateTo('/workspace/projects/all')
-      await refreshNuxtData(['sidebar_projects', 'board_view_projects', 'all_project_stat', 'mobile_sidebar_projects'])
+      await refreshNuxtData([`sidebar_projects_${currentActiveWorkspace.value?.id}`, `board_view_projects_${currentActiveWorkspace.value?.id}`, `all_project_stat_${currentActiveWorkspace.value?.id}`, `mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`])
     }
     else {
       workspaceStore?.onSetWorkspaceBreadcrumb({

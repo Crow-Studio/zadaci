@@ -240,7 +240,7 @@ export const priorityOptions = [
 
 export type Status = 'IDEA' | 'TODO' | 'IN PROGRESS' | 'IN REVIEW' | 'COMPLETED' | 'ABANDONED'
 export type Priority = 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE'
-export interface DBProject {
+export interface IDBProject {
   description: string | null
   status: Status
   priority: Priority
@@ -298,4 +298,16 @@ export interface Teammate {
   avatar: string
   email: string
   username: string
+}
+
+export interface DBProject {
+  id: string
+  title: string
+  description: string | null
+  status: Status
+  priority: Priority
+  dueDate: Date | null
+  workspaceId: string
+  createdAt: Date | string
+  updatedAt: Date | string
 }
