@@ -27,7 +27,7 @@ const isModalOpen = computed(() => {
   return modalStore?.type === 'mobileSidebar' && modalStore?.isOpen
 })
 
-const { data: rawWorkspaces, status } = await useAsyncData('workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`), {
+const { data: rawWorkspaces, status } = await useAsyncData('mobile_workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`), {
   transform(input) {
     return {
       input,

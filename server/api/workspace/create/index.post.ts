@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
       updated_at: new Date(),
     }).returning()
 
-    await useDrizzle()
+    const [member] = await useDrizzle()
       .insert(tables.workspaceMembersTable)
       .values({
         id: uuidv4(),
@@ -52,7 +52,17 @@ export default defineEventHandler(async (event) => {
       })
       .returning()
 
-    return { workspace }
+    const newWorkspace = {
+      user_role: member.role,
+      id: workspace.id,
+      updated_at: workspace.updated_at,
+      created_at: workspace.created_at,
+      image_url: workspace.image_url,
+      invite_code: workspace.invite_code,
+      name: workspace.name,
+    }
+
+    return { workspace: newWorkspace }
   }
   catch (error: any) {
     const errorMessage = error.error ? error.error.message : error.message

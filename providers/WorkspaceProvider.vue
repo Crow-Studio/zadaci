@@ -5,6 +5,7 @@ import AddNewTask from '~/modals/workspace/AddNewTask.vue'
 import MobileSidebar from '~/modals/workspace/MobileSidebar.vue'
 import EditProjectTask from '~/modals/workspace/EditProjectTask.vue'
 import EditProject from '~/modals/workspace/EditProject.vue'
+import CreateWorkspace from '~/modals/workspace/CreateWorkspace.vue'
 </script>
 
 <template>
@@ -15,5 +16,6 @@ import EditProject from '~/modals/workspace/EditProject.vue'
     <AddNewTask />
     <EditProjectTask />
     <EditProject />
+    <CreateWorkspace />
   </div>
 </template>
