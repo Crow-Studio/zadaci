@@ -6,11 +6,11 @@ import { cn } from '~/lib/utils'
 const props = defineProps<{
   email: string
   apiUrl: string
+  setIsResendingCode: (payload: boolean) => void
+  isResendCode: boolean
 }>()
 
-const timeElapsed = ref(30) // Set initial time to 60 seconds
-
-const isResendCode = ref(false)
+const timeElapsed = ref(30)
 
 let timer: ReturnType<typeof setInterval> | null = null
 
@@ -37,7 +37,7 @@ function startTimer() {
 
 async function onResendCode() {
   try {
-    isResendCode.value = true
+    props?.setIsResendingCode(true)
 
     const res: { message: string } = await $fetch(props?.apiUrl, {
       method: 'POST',
@@ -61,17 +61,17 @@ async function onResendCode() {
     })
   }
   finally {
-    isResendCode.value = false
+    props?.setIsResendingCode(false)
   }
 }
 </script>
 
 <template>
   <button
-    :disabled="isResendCode || (timeElapsed > 0 && isStopTimer)"
+    :disabled="props?.isResendCode || (timeElapsed > 0 && isStopTimer)"
     type="button"
     :class="cn(
-      'font-medium',
+      'font-medium cursor-pointer',
       isResendCode || (timeElapsed > 0 && isStopTimer) ? 'text-xs text-muted-foreground' : 'text-sm text-brand hover:text-brand-secondary',
     )"
     @click="onResendCode"

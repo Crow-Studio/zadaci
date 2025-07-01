@@ -19,6 +19,7 @@ const props = defineProps<{
 }>()
 
 const isSigningUp = ref(false)
+const isResendCode = ref(false)
 const apiUrl = ref('/api/auth/signup/send-unique-code')
 
 const { fetch: refreshSession } = useUserSession()
@@ -26,6 +27,10 @@ const { fetch: refreshSession } = useUserSession()
 const form = useForm({
   validationSchema: signinFormSchema,
 })
+
+const setIsResendingCode = (payload: boolean) => {
+  isResendCode.value = payload
+}
 
 const onSubmit = form.handleSubmit(async (values) => {
   try {
@@ -147,6 +152,7 @@ function onClear() {
                 autocomplete="off"
                 placeholder="gets-sets-flys"
                 v-bind="componentField"
+                :disabled="form.isSubmitting.value || isResendCode"
                 class="block h-[46px] w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm focus:bg-none focus:outline-none active:bg-transparent"
               >
             </div>
@@ -168,6 +174,8 @@ function onClear() {
             <ResendCodeButton
               :email="props?.email"
               :api-url="apiUrl"
+              :set-is-resending-code="setIsResendingCode"
+              :is-resend-code="isResendCode"
             />
           </div>
         </FormItem>
@@ -175,7 +183,7 @@ function onClear() {
     </div>
     <button
       type="submit"
-      :disabled="!!form.controlledValues.value.code === false || !!form.errors.value.code || !!isSigningUp"
+      :disabled="!!form.controlledValues.value.code === false || !!form.errors.value.code || !!isSigningUp || isResendCode"
       :class="cn(
         'flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium text-white transition-all',
         {

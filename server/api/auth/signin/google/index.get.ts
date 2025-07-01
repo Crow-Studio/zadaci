@@ -11,7 +11,7 @@ export default defineOAuthGoogleEventHandler({
       providerUsername: user.name,
       providerAvatar: user.picture,
     }, event)
-    return sendRedirect(event, '/workspace/dashboard')
+    return sendRedirect(event, '/workspace/onboarding')
   },
 
   onError(event: H3Event, _) {

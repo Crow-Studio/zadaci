@@ -20,12 +20,17 @@ const props = defineProps<{
 
 const isSigningIn = ref(false)
 const apiUrl = ref('/api/auth/signin/send-unique-code')
+const isResendCode = ref(false)
 
 const { fetch: refreshSession } = useUserSession()
 
 const form = useForm({
   validationSchema: signinFormSchema,
 })
+
+const setIsResendingCode = (payload: boolean) => {
+  isResendCode.value = payload
+}
 
 const onSubmit = form.handleSubmit(async (values) => {
   try {
@@ -49,7 +54,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     })
 
     await refreshSession()
-    return navigateTo('/workspace/dashboard')
+    return navigateTo(`/workspace/onboarding`)
   }
 
   catch (error: any) {
@@ -148,6 +153,7 @@ function onClear() {
                 autocomplete="off"
                 placeholder="gets-sets-flys"
                 v-bind="componentField"
+                :disabled="form.isSubmitting.value || isResendCode"
                 class="block h-[46px] w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm focus:bg-none focus:outline-none active:bg-transparent"
               >
             </div>
@@ -167,6 +173,8 @@ function onClear() {
             <ResendCodeButton
               :email="props?.email"
               :api-url="apiUrl"
+              :set-is-resending-code="setIsResendingCode"
+              :is-resend-code="isResendCode"
             />
           </div>
         </FormItem>
@@ -174,12 +182,12 @@ function onClear() {
     </div>
     <button
       type="submit"
-      :disabled="Boolean(!form.controlledValues.value.code || form.errors.value.code || isSigningIn)"
+      :disabled="Boolean(!form.controlledValues.value.code || form.errors.value.code || isSigningIn) || isResendCode"
       :class="cn(
         'flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium text-white transition-all',
         {
           'cursor-pointer bg-brand focus:bg-brand-secondary': !form.errors.value.code && form.controlledValues.value.code,
-          'cursor-not-allowed bg-[#9e8cce]': !form.controlledValues.value.code || form.errors.value.code || isSigningIn,
+          'cursor-not-allowed bg-brand-secondary opacity-80': !form.controlledValues.value.code || form.errors.value.code || isSigningIn,
 
         },
       )"

@@ -9,7 +9,7 @@ import { generateRandomRecoveryCode } from '~/server/utils'
 import { encryptString } from '~/server/utils/encryption'
 
 interface AuthenticateOauthUserOptions {
-  providerName: 'google' | 'facebook'
+  providerName: 'google' | 'github'
   providerUserEmail: string
   providerUsername: string
   providerUserId: string
@@ -72,7 +72,36 @@ export async function authenticateOauthUser(options: AuthenticateOauthUserOption
     })
   }
   else {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized email address' })
+    const user = await createUser(options)
+    await createOauthAccount(options, user.id)
+
+    // Create session token and store in database
+    const sessionFlags: SessionFlags = {
+      twoFactorVerified: false,
+    }
+
+    const sessionToken = generateSessionToken()
+    const { browser, device, ipAdress, location, os } = await createSessionMetadata(event)
+    const session = await createSession(sessionToken, user.id, sessionFlags, browser, device, os, location, ipAdress)
+
+    // Set user session with token
+    await setUserSession(event, {
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        emailVerified: user.email_verified,
+        avatar: user.profile_picture_url,
+        registeredTOTP: false,
+        registeredPasskey: false,
+        registeredSecurityKey: false,
+        registered2FA: false,
+        twoFactorVerified: false,
+      },
+      sessionToken: sessionToken,
+    }, {
+      maxAge: Math.floor((session.expiresAt.getTime() - Date.now()) / 1000), // Convert milliseconds to seconds
+    })
   }
 }
 

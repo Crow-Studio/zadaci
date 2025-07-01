@@ -71,7 +71,7 @@ function onClose() {
       <div class="space-y-2">
         <Button
           :disabled="isSigninOut"
-          class="w-full"
+          class="w-full cursor-pointer"
           variant="destructive"
           @click="onSignOut"
         >
@@ -83,7 +83,7 @@ function onClose() {
         </Button>
         <Button
           :disabled="isSigninOut"
-          class="w-full"
+          class="w-full cursor-pointer"
           variant="outline"
           @click="onClose"
         >

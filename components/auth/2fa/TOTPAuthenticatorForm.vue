@@ -47,7 +47,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 
     await fetchUserSession()
 
-    return navigateTo('/workspace/dashboard')
+    return navigateTo(`/workspace/onboarding`)
   }
 
   catch (error: any) {

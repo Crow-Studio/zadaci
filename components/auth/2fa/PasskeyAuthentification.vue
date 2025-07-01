@@ -19,7 +19,7 @@ const onUsePasskeys = async () => {
   props?.onSetIsAuthenticating(true)
   await authenticate(props?.email)
     .then(fetchUserSession)
-    .then(async () => await navigateTo('/workspace/dashboard'))
+    .then(async () => await navigateTo(`/workspace/onboarding`))
     .catch((error) => {
       const errorMessage = error.response
         ? error.response._data.statusMessage
