@@ -95,7 +95,7 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
-// const { data: projects } = await useAsyncData('sidebar_projects', () => useRequestFetch()('/api/workspace/project/all'))
+const { data: projects } = await useAsyncData('sidebar_projects', () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
 </script>
 
 <template>
@@ -191,21 +191,27 @@ const currentActiveWorkspace = computed(() => {
               />
               All Projects
             </button>
-            <!-- <button
+            <button
               v-for="project in projects"
               :key="project.id"
               class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
               @click="onNavigateToPage({
-                name: 'Projects',
-                path: `/workspace/projects/all`,
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
                 children: [
                   {
-                    name: `${project.title}`,
-                    path: `/workspace/projects/${project.id}`,
-                    children: null,
+                    name: `Projects`,
+                    path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                    children: [
+                      {
+                        name: `${project.title}`,
+                        path: `/workspace/projects/${project.id}`,
+                        children: null,
+                      },
+                    ],
                   },
                 ],
-              }, `projects/${project.id}`)"
+              }, `/workspace/${currentActiveWorkspace?.id}/projects/${project.id}`)"
             >
               <Icon
                 name="solar:folder-with-files-outline"
@@ -214,7 +220,7 @@ const currentActiveWorkspace = computed(() => {
               <span class="truncate text-start w-55">
                 {{ project.title }}
               </span>
-            </button> -->
+            </button>
           </div>
         </div>
         <div class="grid">

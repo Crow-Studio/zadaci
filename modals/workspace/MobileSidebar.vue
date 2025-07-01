@@ -107,6 +107,8 @@ const onAddNewProject = () => {
   modalStore?.onOpen('addNewProject')
   modalStore?.setIsOpen(true)
 }
+
+const { data: projects } = await useAsyncData('mobile_sidebar_projects', () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
 </script>
 
 <template>
@@ -214,30 +216,36 @@ const onAddNewProject = () => {
                 />
                 All Projects
               </button>
-            <!-- <button
-              v-for="project in projects"
-              :key="project.id"
-              class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
-              @click="onNavigateToPage({
-                name: 'Projects',
-                path: `/workspace/projects/all`,
-                children: [
-                  {
-                    name: `${project.title}`,
-                    path: `/workspace/projects/${project.id}`,
-                    children: null,
-                  },
-                ],
-              }, `projects/${project.id}`)"
-            >
-              <Icon
-                name="solar:folder-with-files-outline"
-                class="size-4"
-              />
-              <span class="truncate text-start w-55">
-                {{ project.title }}
-              </span>
-            </button> -->
+              <button
+                v-for="project in projects"
+                :key="project.id"
+                class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+                @click="onNavigateToPage({
+                  name: `${currentActiveWorkspace?.name}`,
+                  path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                  children: [
+                    {
+                      name: `Projects`,
+                      path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                      children: [
+                        {
+                          name: `${project.title}`,
+                          path: `/workspace/projects/${project.id}`,
+                          children: null,
+                        },
+                      ],
+                    },
+                  ],
+                }, `/workspace/${currentActiveWorkspace?.id}/projects/${project.id}`)"
+              >
+                <Icon
+                  name="solar:folder-with-files-outline"
+                  class="size-4"
+                />
+                <span class="truncate text-start w-55">
+                  {{ project.title }}
+                </span>
+              </button>
             </div>
           </div>
           <div class="grid">
