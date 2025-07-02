@@ -6,6 +6,7 @@ import MobileSidebar from '~/modals/workspace/MobileSidebar.vue'
 import EditProjectTask from '~/modals/workspace/EditProjectTask.vue'
 import EditProject from '~/modals/workspace/EditProject.vue'
 import CreateWorkspace from '~/modals/workspace/CreateWorkspace.vue'
+import DeleteProject from '~/modals/workspace/DeleteProject.vue'
 </script>
 
 <template>
@@ -17,5 +18,6 @@ import CreateWorkspace from '~/modals/workspace/CreateWorkspace.vue'
     <EditProjectTask />
     <EditProject />
     <CreateWorkspace />
+    <DeleteProject />
   </div>
 </template>

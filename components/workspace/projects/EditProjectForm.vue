@@ -23,6 +23,8 @@ const props = defineProps<{
   project: DBProject
 }>()
 
+const modalStore = useModalStore()
+
 const form = useForm({
   validationSchema: newProjectSchema,
 })
@@ -63,12 +65,12 @@ const onSubmit = form.handleSubmit(async (values) => {
       dueDate: values.dueDate ? new Date(values.dueDate) : undefined,
     }
 
-    const res = await $fetch(`/api/workspace/project/${props?.project.id}/update`, {
+    const res = await $fetch(`/api/workspace/${props?.project.workspaceId}/project/${props?.project.id}/update`, {
       method: 'PATCH',
       body: newFormValues,
     })
 
-    await refreshNuxtData(['sidebar_projects', 'board_view_projects', 'all_project_stats', 'mobile_sidebar_projects'])
+    await refreshNuxtData([`sidebar_projects_${props?.project.workspaceId}`, `board_view_projects_${props?.project.workspaceId}`, `all_project_stats_${props?.project.workspaceId}`, `mobile_sidebar_projects_${props?.project.workspaceId}`])
     form.resetForm()
     onCloseModal()
 
@@ -107,32 +109,11 @@ onMounted(() => {
 })
 
 const onDeleteProject = async () => {
-  isDeletingProject.value = true
-  try {
-    const res = await $fetch(`/api/workspace/project/${props?.project.id}/delete`, {
-      method: 'DELETE',
-    })
-
-    await refreshNuxtData(['sidebar_projects', 'board_view_projects', 'all_project_stats', 'mobile_sidebar_projects'])
-    form.resetForm()
-    onCloseModal()
-
-    toast.success(res.message, {
-      position: 'top-center',
-    })
-  }
-  catch (error: any) {
-    const errorMessage = error.response
-      ? error.response._data.message
-      : error.message
-
-    toast.error(errorMessage, {
-      position: 'top-center',
-    })
-  }
-  finally {
-    isDeletingProject.value = false
-  }
+  modalStore?.onOpen('deleteProject')
+  modalStore?.setIsOpen(true)
+  modalStore?.setModalData({
+    project: props?.project,
+  })
 }
 
 const onCloseModal = () => {
@@ -326,14 +307,14 @@ const navigateToProject = (path: string) => {
           name="heroicons:trash"
           class="size-5"
         />
-        Delete task
+        Delete project
       </Button>
       <Button
         variant="outline"
         class="w-full cursor-pointer"
         type="button"
         :disabled="props.isUpdateProject || isDeletingProject"
-        @click="navigateToProject(`/workspace/projects/${props?.project.id}`)"
+        @click="navigateToProject(`/workspace/${props?.project.workspaceId}/projects/${props?.project.id}`)"
       >
         <Icon
           name="solar:folder-with-files-outline"
