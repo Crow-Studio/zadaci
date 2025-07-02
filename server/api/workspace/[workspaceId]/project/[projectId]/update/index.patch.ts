@@ -62,8 +62,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    console.log('due_date', dueDate, typeof dueDate)
-
     if (dueDate != null && typeof dueDate !== 'string') {
       throw createError({
         statusMessage: 'Invalid due date!',
@@ -80,9 +78,24 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // check if workspace exists
+    const workspace = await useDrizzle().query.workspaceTable.findFirst({
+      where: table => eq(table.id, workspaceId),
+    })
+
+    if (!workspace) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Invalid Workspace!',
+      })
+    }
+
     // check if project exists
     const project = await useDrizzle().query.projectTable.findFirst({
-      where: table => eq(table.id, projectId),
+      where: table => and(
+        eq(table.id, projectId),
+        eq(table.workspace_id, workspaceId),
+      ),
     })
 
     if (!project) {

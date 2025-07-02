@@ -17,6 +17,7 @@ interface DonutItem {
 
 const props = defineProps<{
   projectId: string
+  workspaceId: string
 }>()
 
 const donutData = ref<DonutItem[]>([])
@@ -31,7 +32,7 @@ function isLastWeek(date: Date) {
 }
 
 const { data } = await useAsyncData(`all_project_task_stats_${props.projectId}`, () =>
-  useRequestFetch()(`/api/workspace/project/${props?.projectId}/task/all`),
+  useRequestFetch()(`/api/workspace/${props?.workspaceId}/project/${props?.projectId}/tasks/all`),
 )
 
 watchEffect(() => {

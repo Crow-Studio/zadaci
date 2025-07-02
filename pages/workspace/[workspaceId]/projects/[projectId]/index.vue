@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
 import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
+import TaskStats from '~/components/workspace/projects/tasks/TaskStats.vue'
 import type { Priority, Status } from '~/types'
 
 definePageMeta({
@@ -84,9 +85,11 @@ defineOgImageComponent('UseOdama', {
       </Button>
     </div>
 
-    <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
+    <div
+      v-if="project"
+      class="grid md:grid-cols-4 xl:grid-cols-8 gap-10"
+    >
       <TasksTabs
-        v-if="project"
         :project="{
           id: Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!,
           title: project.title,
@@ -96,7 +99,10 @@ defineOgImageComponent('UseOdama', {
           workspaceId: project.workspace_id,
         }"
       />
-      <!-- <TaskStats :project-id="Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!" /> -->
+      <TaskStats
+        :workspace-id="project.workspace_id"
+        :project-id="project.id"
+      />
     </div>
   </section>
 </template>

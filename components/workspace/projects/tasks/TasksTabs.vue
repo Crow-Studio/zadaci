@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import TasksBoardsView from './TasksBoardsView.vue'
+import TasksBoardsView from './TasksBoardsView.vue'
 import TasksCalendarView from './TasksCalendarView.vue'
 import TasksListView from './TasksListView.vue'
 import TasksTableView from './TasksTableView.vue'
@@ -59,9 +59,9 @@ const props = defineProps<{
       </TabsTrigger>
     </TabsList>
     <TabsContent value="board">
-      <!-- <TasksBoardsView
+      <TasksBoardsView
         :project="props?.project"
-      /> -->
+      />
     </TabsContent>
     <TabsContent value="list">
       <TasksListView :project-id="props?.project.id" />
