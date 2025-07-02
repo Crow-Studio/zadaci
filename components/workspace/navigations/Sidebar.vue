@@ -3,7 +3,7 @@ import User from './User.vue'
 import ToggleTheme from './ToggleTheme.vue'
 import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 import { ScrollArea } from '~/components/ui/scroll-area'
-import type { WorkspaceBreadcrumb, Workspace, DBProject } from '~/types'
+import type { WorkspaceBreadcrumb, Workspace } from '~/types'
 
 const workspaceStore = useWorkspaceStore()
 const modalStore = useModalStore()
@@ -95,24 +95,26 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
-const projects = ref<DBProject[]>([])
+const { data } = await useAsyncData(
+  () => `sidebar_projects_${currentActiveWorkspace.value?.id}`,
+  () => {
+    if (currentActiveWorkspace.value?.id) {
+      return useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value.id}/user/projects/all`)
+    }
+    return Promise.resolve([])
+  },
+  { watch: [() => currentActiveWorkspace.value?.id] },
+)
 
-watchEffect(async () => {
-  if (currentActiveWorkspace.value?.id) {
-    const { data } = await useAsyncData(
-      `sidebar_projects_${currentActiveWorkspace.value.id}`,
-      () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
-      { watch: [() => currentActiveWorkspace.value?.id] },
-    )
-    if (data.value) {
-      projects.value = data.value.map((project: any) => ({
+const projects = computed(() => {
+  return data.value
+    ? data.value.map((project: any) => ({
         ...project,
         dueDate: project.dueDate ? new Date(project.dueDate) : null,
         createdAt: project.createdAt ? new Date(project.createdAt) : null,
         updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
       }))
-    }
-  }
+    : []
 })
 </script>
 
