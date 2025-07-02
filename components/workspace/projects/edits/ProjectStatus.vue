@@ -34,7 +34,7 @@ const onUpdateStatus = async (val: Status) => {
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
       <SelectContent
-        class="[&_*[role=option]>span>svg]:text-muted-foreground/80 [&_*[role=option]>span]:flex [&_*[role=option]>span]:gap-2"
+        class="[&_*[role=option]>span>svg]:text-muted-foreground/80 [&_*[role=option]>span]:flex [&_*[role=option]>span]:gap-2 dark:bg-[#1d1d1d]"
       >
         <SelectItem
           v-for="column in columns"

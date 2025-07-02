@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
+import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
+import type { Priority, Status } from '~/types'
+
 definePageMeta({
   middleware: ['authenticated'],
   layout: 'workspace',
@@ -58,16 +62,16 @@ defineOgImageComponent('UseOdama', {
 <template>
   <section class="grid gap-5">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <!-- <ProjectContentEditable
+      <ProjectContentEditable
         v-if="project"
         :project="{
           ...project,
-          createdAt: new Date(project.createdAt),
-          updatedAt: new Date(project.updatedAt),
-          dueDate: project.dueDate ? new Date(project.dueDate) : null,
+          createdAt: new Date(project.created_at),
+          updatedAt: new Date(project.updated_at),
+          dueDate: project.due_date ? new Date(project.due_date) : null,
+          workspaceId: project.workspace_id,
         }"
-      /> -->
-      {{ project }}
+      />
       <Button
         class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:-translate-y-1.5 w-full sm:w-auto flex-shrink-0"
       >
@@ -81,16 +85,18 @@ defineOgImageComponent('UseOdama', {
     </div>
 
     <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
-      <!-- <TasksTabs
+      <TasksTabs
+        v-if="project"
         :project="{
           id: Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!,
-          title: project?.title || '',
-          status: project?.status as Status,
-          priority: project?.priority as Priority,
-          dueDate: project?.dueDate ? new Date(project.dueDate) : null,
+          title: project.title,
+          status: project.status as Status,
+          priority: project.priority as Priority,
+          dueDate: project.due_date ? new Date(project.due_date) : null,
+          workspaceId: project.workspace_id,
         }"
       />
-      <TaskStats :project-id="Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!" /> -->
+      <!-- <TaskStats :project-id="Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!" /> -->
     </div>
   </section>
 </template>

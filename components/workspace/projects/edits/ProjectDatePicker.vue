@@ -36,7 +36,7 @@ const onSelect = (val?: DateValue) => {
         {{ parsed ? df.format(parsed.toDate(getLocalTimeZone())) : "N/A" }}
       </button>
     </PopoverTrigger>
-    <PopoverContent class="w-auto p-0">
+    <PopoverContent class="w-auto p-0 dark:bg-[#1d1d1d]">
       <Calendar
         :model-value="parsed"
         initial-focus

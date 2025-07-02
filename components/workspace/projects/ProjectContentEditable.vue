@@ -115,7 +115,7 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
         :src="`https://avatar.vercel.sh/vercel.svg?text=${project.title?.charAt(0)}`"
         :alt="project.title"
       />
-      <AvatarFallback>
+      <AvatarFallback class="rounded-md">
         {{ project.title?.slice(0, 2).toUpperCase() || 'PR' }}
       </AvatarFallback>
     </Avatar>
@@ -146,7 +146,7 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
         </div>
       </div>
 
-      <div class="text-sm text-muted-foreground flex items-center gap-x-3 -mt-1">
+      <div class="text-sm text-muted-foreground flex items-center gap-x-3 -mt-2">
         <ProjectDueDate
           :due-date="project?.dueDate ? project.dueDate.toISOString() : undefined"
           :on-update-project-info="onUpdateProjectInfo"

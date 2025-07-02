@@ -62,6 +62,15 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^6.0.0
         version: 6.0.0(vite@6.3.5(@types/node@24.0.4)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0))(vue@3.5.17(typescript@5.8.3))
+      '@vue-dnd-kit/core':
+        specifier: ^1.6.0
+        version: 1.6.0(@vueuse/core@13.4.0(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))
+      '@vue-dnd-kit/devtools':
+        specifier: ^1.1.0
+        version: 1.1.0(@vue-dnd-kit/core@1.6.0(@vueuse/core@13.4.0(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3)))(rollup@4.44.1)(vue@3.5.17(typescript@5.8.3))
+      '@vue-dnd-kit/utilities':
+        specifier: 0.0.8-beta
+        version: 0.0.8-beta(vue@3.5.17(typescript@5.8.3))
       '@vue-email/components':
         specifier: ^0.0.21
         version: 0.0.21(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3))
@@ -2291,6 +2300,28 @@ packages:
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0
       vue: ^3.2.25
+
+  '@vue-dnd-kit/core@0.0.21':
+    resolution: {integrity: sha512-IjWi8ask1Q0gFFFAYqE+1ytE9R/3p/bfARWjYSfJs9gJhm2k4WIsjrvswAJhUZ43dcrSTzxZ5v/fTCiInhYaPw==}
+    peerDependencies:
+      vue: ^3.5.13
+
+  '@vue-dnd-kit/core@1.6.0':
+    resolution: {integrity: sha512-HEt7kF72PPzoYJa0l2YnrLEnsclpKZVHvAvG/pqEmLplrH4ItScrxfw/6vg+YwO0sb9MSLWV4joL5p02zqhz3A==}
+    peerDependencies:
+      '@vueuse/core': ^13.1.0
+      vue: ^3.5.13
+
+  '@vue-dnd-kit/devtools@1.1.0':
+    resolution: {integrity: sha512-T4gsJQIygula3VSvD1z82nd1KUWACglw4vjmtiL6kkijozT2T/BJfR6es1cYjuYmtJJVrWZ46e+UBy/6UYMiwg==}
+    peerDependencies:
+      '@vue-dnd-kit/core': workspace:*
+      vue: ^3.0.0
+
+  '@vue-dnd-kit/utilities@0.0.8-beta':
+    resolution: {integrity: sha512-gZ7duAoz9lGpY1gj+7D7kyhY5ckO9YU0DF3HfPuPb9S8D/rUuwh3DFY4rEPkaSnpSNhYukR32OUpM2qzUzoFOg==}
+    peerDependencies:
+      vue: ^3.5.13
 
   '@vue-email/body@0.0.3':
     resolution: {integrity: sha512-JxZb1upJTnt6tLKszqHfrCWTpioWuG7eZXneUmCBr0YVt6gI781dSAgUQASTBprENnO+M2sNsarszoo7jGZNOQ==}
@@ -9291,6 +9322,29 @@ snapshots:
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.19
       vite: 6.3.5(@types/node@24.0.4)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0)
+      vue: 3.5.17(typescript@5.8.3)
+
+  '@vue-dnd-kit/core@0.0.21(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
+      vue: 3.5.17(typescript@5.8.3)
+
+  '@vue-dnd-kit/core@1.6.0(@vueuse/core@13.4.0(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
+      '@vueuse/core': 13.4.0(vue@3.5.17(typescript@5.8.3))
+      vue: 3.5.17(typescript@5.8.3)
+
+  '@vue-dnd-kit/devtools@1.1.0(@vue-dnd-kit/core@1.6.0(@vueuse/core@13.4.0(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3)))(rollup@4.44.1)(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
+      '@rollup/plugin-terser': 0.4.4(rollup@4.44.1)
+      '@vue-dnd-kit/core': 1.6.0(@vueuse/core@13.4.0(vue@3.5.17(typescript@5.8.3)))(vue@3.5.17(typescript@5.8.3))
+      '@vue/devtools-api': 6.6.4
+      vue: 3.5.17(typescript@5.8.3)
+    transitivePeerDependencies:
+      - rollup
+
+  '@vue-dnd-kit/utilities@0.0.8-beta(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
+      '@vue-dnd-kit/core': 0.0.21(vue@3.5.17(typescript@5.8.3))
       vue: 3.5.17(typescript@5.8.3)
 
   '@vue-email/body@0.0.3(vue@3.5.17(typescript@5.8.3))':

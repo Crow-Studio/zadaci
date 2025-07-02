@@ -134,7 +134,7 @@ export interface WorkspaceBreadcrumb {
   children: WorkspaceBreadcrumb[] | null
 }
 
-export interface IProject { id: string, title: string, status: Status, priority: Priority, dueDate: Date | null }
+export interface IProject { id: string, title: string, status: Status, priority: Priority, dueDate: Date | null, workspaceId: string }
 
 export interface Workspace {
   id: string

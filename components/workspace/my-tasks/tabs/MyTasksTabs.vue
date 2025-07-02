@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
     default-value="board"
     class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6"
   >
-    <TabsList class="rounded-md p-1">
+    <TabsList class="rounded-md p-1 w-full md:w-fit">
       <TabsTrigger
         value="board"
         class="data-[state=active]:bg-brand dark:data-[state=active]:bg-brand data-[state=active]:text-white data-[state=inactive]:text-muted-foreground cursor-pointer rounded"

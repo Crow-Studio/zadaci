@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TasksBoardsView from './TasksBoardsView.vue'
+// import TasksBoardsView from './TasksBoardsView.vue'
 import TasksCalendarView from './TasksCalendarView.vue'
 import TasksListView from './TasksListView.vue'
 import TasksTableView from './TasksTableView.vue'
@@ -16,7 +16,7 @@ const props = defineProps<{
     default-value="board"
     class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6"
   >
-    <TabsList class="rounded-md p-1">
+    <TabsList class="rounded-md p-1 w-full md:w-fit">
       <TabsTrigger
         value="board"
         class="data-[state=active]:bg-brand dark:data-[state=active]:bg-brand data-[state=active]:text-white data-[state=inactive]:text-muted-foreground cursor-pointer rounded"
@@ -59,9 +59,9 @@ const props = defineProps<{
       </TabsTrigger>
     </TabsList>
     <TabsContent value="board">
-      <TasksBoardsView
+      <!-- <TasksBoardsView
         :project="props?.project"
-      />
+      /> -->
     </TabsContent>
     <TabsContent value="list">
       <TasksListView :project-id="props?.project.id" />
