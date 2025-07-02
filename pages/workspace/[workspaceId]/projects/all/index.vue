@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
 import { Avatar, AvatarImage, AvatarFallback } from '~/components/ui/avatar'
+import ProjectStats from '~/components/workspace/projects/ProjectStats.vue'
 import ProjectTabs from '~/components/workspace/projects/ProjectTabs.vue'
 
 definePageMeta({
@@ -109,7 +110,7 @@ const onAddNewProject = () => {
       </div>
       <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
         <ProjectTabs />
-        <!-- <ProjectStats /> -->
+        <ProjectStats />
       </div>
     </div>
   </section>

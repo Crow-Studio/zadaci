@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
+import MyTasksStats from '~/components/workspace/my-tasks/tabs/MyTasksStats.vue'
 import MyTasksTabs from '~/components/workspace/my-tasks/tabs/MyTasksTabs.vue'
 
 definePageMeta({
@@ -94,8 +95,8 @@ onMounted(() => {
         </Button>
       </div>
       <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
-        <MyTasksTabs />
-        <!-- <ProjectStats /> -->
+        <MyTasksTabs :workspace-id="currentActiveWorkspace?.id!" />
+        <MyTasksStats :workspace-id="currentActiveWorkspace?.id!" />
       </div>
     </div>
   </section>

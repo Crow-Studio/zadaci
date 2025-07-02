@@ -1,38 +1,40 @@
 <script setup lang="ts">
 import { useDroppable } from '@vue-dnd-kit/core'
-import Project from './Project.vue'
-import Draggable from './Draggable.vue'
+import MyTaskDraggable from './MyTaskDraggable.vue'
+import MyTask from './MyTask.vue'
 import { Button } from '~/components/ui/button'
-import type { DBProject, IProjectColumn } from '~/types'
-import { createProjectDropHandler } from '~/lib/projects'
+import type { IProjectColumn, Task as ITask } from '~/types'
+import { createTaskDropHandler } from '~/lib/tasks'
+import { ScrollArea } from '~/components/ui/scroll-area'
 
 const props = defineProps<{
   column: IProjectColumn
-  data: DBProject[]
-  onDrop: (item: DBProject, index?: number) => void
+  data: ITask[]
+  onDrop: (item: ITask, index?: number) => void
 }>()
 
 const modalStore = useModalStore()
+// const workspaceStore = useWorkspaceStore()
 
-const { elementRef: columnRef, isOvered, isAllowed, isLazyAllowed } = useDroppable(createProjectDropHandler(props.data, props.onDrop))
+const { elementRef: myTaskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDroppable(
+  createTaskDropHandler(props.data, props.onDrop, props.column.name),
+)
 
-const onAddNewProject = () => {
-  modalStore?.onOpen('addNewProject')
+const onAddNewTask = () => {
+  modalStore?.onOpen('addNewTask')
   modalStore?.setIsOpen(true)
 }
 
-const onEditProject = (project: DBProject) => {
-  modalStore?.onOpen('editProject')
+const onEditTask = (task: ITask) => {
+  modalStore?.onOpen('editProjectTask')
   modalStore?.setIsOpen(true)
-  modalStore?.setModalData({
-    project,
-  })
+  console.log(task)
 }
 </script>
 
 <template>
   <div
-    ref="columnRef"
+    ref="myTaskColumnRef"
     class="bg-muted rounded-md w-[350px] flex-shrink-0 self-start grid gap-1"
   >
     <div class="px-3 py-2">
@@ -40,10 +42,9 @@ const onEditProject = (project: DBProject) => {
         <div class="flex items-center gap-x-2">
           <Icon :name="props.column.icon" />
           <p>
-            {{ props.column.name }}
+            {{ props.column.name }} {{ props.data.length ? `(${props.data.length})` : '' }}
           </p>
         </div>
-        <Icon name="uis:ellipsis-v" />
       </div>
       <p class="text-xs italic text-muted-foreground">
         {{ props.column.description }}
@@ -53,17 +54,18 @@ const onEditProject = (project: DBProject) => {
       class="max-h-[610px] overflow-y-auto px-3"
     >
       <div
-        v-for="(project, index) in props.data"
-        :key="project.id"
+        v-for="(task, index) in props.data"
+        :key="`${task.id}-${index}`"
         class="my-2"
-        @click.stop.prevent="onEditProject(project)"
+        @click.stop.prevent="onEditTask(task)"
       >
-        <Draggable
+        <MyTaskDraggable
           :index="index"
           :source="props.data"
+          :task="task"
         >
-          <Project :project="project" />
-        </Draggable>
+          <MyTask :task="task" />
+        </MyTaskDraggable>
       </div>
       <div
         v-if="isOvered && isAllowed && isLazyAllowed && props.data.length <= 0"
@@ -75,13 +77,13 @@ const onEditProject = (project: DBProject) => {
         class="w-full gap-2 cursor-pointer dark:hover:bg-[#343434]"
         size="sm"
         variant="outline"
-        @click="onAddNewProject"
+        @click="onAddNewTask"
       >
         <Icon
           name="hugeicons:plus-sign"
           class="size-4"
         />
-        Add Project
+        Add Task
       </Button>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import BoardProjectsView from './BoardProjectsView.vue'
+import BoardProjectsView from './BoardProjectsView.vue'
 // import ListProjectsView from './ListProjectsView.vue'
 // import TableProjectsView from './TableProjectsView .vue'
 // import CalendarProjectsView from './CalendarProjectsView.vue'
@@ -54,7 +54,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
       </TabsTrigger>
     </TabsList>
     <TabsContent value="board">
-      <!-- <BoardProjectsView /> -->
+      <BoardProjectsView />
     </TabsContent>
     <TabsContent value="list">
       <!-- <ListProjectsView /> -->

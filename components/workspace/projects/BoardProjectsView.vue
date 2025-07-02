@@ -5,6 +5,8 @@ import ProjectColumn from './ProjectColumn.vue'
 import type { DBProject, Status } from '~/types'
 import { columns } from '~/types'
 
+const workspaceStore = useWorkspaceStore()
+
 const projects = ref<Record<string, DBProject[]>>({
   'IDEA': [],
   'TODO': [],
@@ -14,8 +16,12 @@ const projects = ref<Record<string, DBProject[]>>({
   'ABANDONED': [],
 })
 
-const { data } = await useAsyncData('board_view_projects', () =>
-  useRequestFetch()('/api/workspace/project/all'),
+const currentActiveWorkspace = computed(() => {
+  return workspaceStore.activeWorkspace
+})
+
+const { data } = await useAsyncData(`board_view_projects_${currentActiveWorkspace.value?.id}`, () =>
+  useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
 )
 
 function mapProjectsByStatus(data: DBProject[]) {
@@ -37,7 +43,8 @@ function mapProjectsByStatus(data: DBProject[]) {
   Object.keys(grouped).forEach((key) => {
     (grouped[key] ?? []).sort((a, b) => {
       if (!a.updatedAt || !b.updatedAt) return 0
-      return b.updatedAt.getTime() - a.updatedAt.getTime()
+      return (b.updatedAt instanceof Date ? b.updatedAt.getTime() : new Date(b.updatedAt).getTime())
+        - (a.updatedAt instanceof Date ? a.updatedAt.getTime() : new Date(a.updatedAt).getTime())
     })
   })
 
@@ -51,9 +58,6 @@ onMounted(() => {
       createdAt: new Date(project.createdAt),
       updatedAt: new Date(project.updatedAt),
       dueDate: project.dueDate ? new Date(project.dueDate) : null,
-      user: {
-        avatar: project.user?.profilePictureUrl || '',
-      },
     }))
     mapProjectsByStatus(normalized)
   }
@@ -66,9 +70,6 @@ watch(data, () => {
       createdAt: new Date(project.createdAt),
       updatedAt: new Date(project.updatedAt),
       dueDate: project.dueDate ? new Date(project.dueDate) : null,
-      user: {
-        avatar: project.user?.profilePictureUrl || '',
-      },
     }))
     mapProjectsByStatus(normalized)
   }
@@ -97,12 +98,12 @@ async function handleDrop(columnKey: Status, project: DBProject, index?: number)
   })
 
   try {
-    await $fetch(`/api/workspace/project/${project.id}/update-status`, {
+    await $fetch(`/api/workspace/${currentActiveWorkspace.value?.id}/project/${project.id}/update-status`, {
       method: 'PATCH',
       body: { status: columnKey },
     })
 
-    await refreshNuxtData(['sidebar_projects', 'board_view_projects', 'all_project_stats', 'mobile_sidebar_projects'])
+    await refreshNuxtData([`sidebar_projects_${currentActiveWorkspace.value?.id}`, `board_view_projects_${currentActiveWorkspace.value?.id}`, `all_project_stats_${currentActiveWorkspace.value?.id}`, `mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`])
   }
   catch (error: any) {
     const errorMessage = error.response

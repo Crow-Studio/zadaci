@@ -1,9 +1,10 @@
 <script setup lang="ts">
-// import BoardProjectsView from './BoardProjectsView.vue'
-// import ListProjectsView from './ListProjectsView.vue'
-// import TableProjectsView from './TableProjectsView .vue'
-// import CalendarProjectsView from './CalendarProjectsView.vue'
+import MyTasksBoardsView from './MyTasksBoardsView.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
+const props = defineProps<{
+  workspaceId: string
+}>()
 </script>
 
 <template>
@@ -54,7 +55,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
       </TabsTrigger>
     </TabsList>
     <TabsContent value="board">
-      <!-- <BoardProjectsView /> -->
+      <MyTasksBoardsView :workspace-id="props?.workspaceId" />
     </TabsContent>
     <TabsContent value="list">
       <!-- <ListProjectsView /> -->

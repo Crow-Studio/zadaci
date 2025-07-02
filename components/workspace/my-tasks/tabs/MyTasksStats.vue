@@ -6,10 +6,8 @@ import {
   subWeeks,
 } from 'date-fns'
 import { ref, watchEffect } from 'vue'
-import { Loader2 } from 'lucide-vue-next'
 import { Button } from '~/components/ui/button'
 import { useAsyncData, refreshNuxtData } from '#app'
-import { cn } from '~/lib/utils'
 
 interface DonutItem {
   color: string
@@ -17,16 +15,14 @@ interface DonutItem {
   value: number
 }
 
-const workspaceStore = useWorkspaceStore()
+const props = defineProps<{
+  workspaceId: string
+}>()
+
 const donutData = ref<DonutItem[]>([])
 const totalCompleted = ref(0)
 const totalInProgress = ref(0)
 const weeklyDifference = ref<number | null>(null)
-const isRefreshing = ref(false)
-
-const currentActiveWorkspace = computed(() => {
-  return workspaceStore.activeWorkspace
-})
 
 function isLastWeek(date: Date) {
   const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }) // Monday
@@ -34,17 +30,17 @@ function isLastWeek(date: Date) {
   return date >= lastWeekStart && date <= lastWeekEnd
 }
 
-const { data, status } = await useAsyncData(`all_project_stats_${currentActiveWorkspace.value?.id}`, () =>
-  useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
+const { data } = await useAsyncData(`all_my_tasks_stats_${props.workspaceId}`, () =>
+  useRequestFetch()(`/api/workspace/${props?.workspaceId}/my-tasks/all`),
 )
 
 watchEffect(() => {
   if (data.value && data.value.length > 0) {
-    const projects = data.value
+    const tasks = data.value
 
-    const completed = projects.filter(p => p.status === 'COMPLETED').length
-    const inProgress = projects.filter(p => p.status === 'IN PROGRESS').length
-    const total = projects.length
+    const completed = tasks.filter(p => p.status === 'COMPLETED').length
+    const inProgress = tasks.filter(p => p.status === 'IN PROGRESS').length
+    const total = tasks.length
 
     totalCompleted.value = completed
     totalInProgress.value = inProgress
@@ -62,13 +58,13 @@ watchEffect(() => {
       },
     ]
 
-    const completedThisWeek = projects.filter(
+    const completedThisWeek = tasks.filter(
       p =>
         p.status === 'COMPLETED'
         && isThisWeek(new Date(p.updatedAt)),
     ).length
 
-    const completedLastWeek = projects.filter(
+    const completedLastWeek = tasks.filter(
       p =>
         p.status === 'COMPLETED'
         && isLastWeek(new Date(p.updatedAt)),
@@ -94,33 +90,20 @@ watchEffect(() => {
   }
 })
 
-async function refreshStats() {
-  isRefreshing.value = true
-  try {
-    await refreshNuxtData(`all_project_stats_${currentActiveWorkspace.value?.id}`)
-  }
-  finally {
-    isRefreshing.value = false
-  }
+function refreshStats() {
+  refreshNuxtData(`all_my_tasks_stats_${props.workspaceId}`)
 }
 </script>
 
 <template>
-  <div class="md:col-span-2 p-3">
-    <div class="flex flex-col">
-      <div
-        class="flex items-center justify-between -mb-2.5"
-      >
+  <div class="md:col-span-2 p-3 self-start">
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center justify-between -mb-8">
         <h2 class="text-lg font-semibold">
-          Project Stats
+          My Tasks Stats
         </h2>
         <Button
-          :disabled="isRefreshing"
-          :class="cn(
-            'rounded-full cursor-pointer',
-            isRefreshing && 'animate-spin',
-          )
-          "
+          class="rounded-full cursor-pointer"
           variant="ghost"
           size="icon"
           @click="refreshStats"
@@ -129,28 +112,16 @@ async function refreshStats() {
         </Button>
       </div>
 
-      <div>
-        <div
-          v-if="status ==='pending' || status ==='idle'"
-          class="flex items-center py-16 gap-x-2 justify-center text-muted-foreground"
-        >
-          <Loader2 class="animate-spin" />
-          Loading Graph Data..
-        </div>
-        <DonutChart
-          v-else
-          :data="donutData.map(i => i.value)"
-          :height="275"
-          :labels="donutData"
-          :hide-legend="true"
-          :radius="0"
-          type="half"
-        />
-      </div>
+      <DonutChart
+        :data="donutData.map(i => i.value)"
+        :height="275"
+        :labels="donutData"
+        :hide-legend="true"
+        :radius="0"
+        type="half"
+      />
 
-      <div
-        class="grid grid-cols-2 -mt-6"
-      >
+      <div class="grid grid-cols-2 -mt-8">
         <div class="flex flex-col items-center">
           <div class="flex items-center gap-x-2">
             <div class="bg-green-500 size-1.5 rounded-full" />
@@ -193,7 +164,7 @@ async function refreshStats() {
                   : 'same'
             }}
           </strong>
-          of projects this week than last week.
+          of tasks this week than last week.
         </template>
         <template v-else>
           No comparison data available.
