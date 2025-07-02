@@ -43,16 +43,16 @@ async function updateField(field: string, event: Event) {
   }
 
   try {
-    await $fetch(`/api/workspace/project/${props.project.id}/update`, {
+    await $fetch(`/api/workspace/${props?.project.workspaceId}/project/${props.project.id}/update`, {
       method: 'PATCH',
       body: payload,
     })
 
     await refreshNuxtData([
-      'sidebar_projects',
-      'board_view_projects',
-      'all_project_stats',
-      'mobile_sidebar_projects',
+      `sidebar_projects_${props?.project.workspaceId}`,
+      `board_view_projects_${props?.project.workspaceId}`,
+      `all_project_stats_${props?.project.workspaceId}`,
+      `mobile_sidebar_projects_${props?.project.workspaceId}`,
       `project-${props.project.id}`,
     ])
 
@@ -80,16 +80,16 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
       description: props.project.description,
       dueDate: field === 'dueDate' ? value ? new Date(value as string) : undefined : props.project.dueDate,
     }
-    await $fetch(`/api/workspace/project/${props.project.id}/update`, {
+    await $fetch(`/api/workspace/${props?.project.workspaceId}/project/${props.project.id}/update`, {
       method: 'PATCH',
       body: payload,
     })
 
     await refreshNuxtData([
-      'sidebar_projects',
-      'board_view_projects',
-      'all_project_stats',
-      'mobile_sidebar_projects',
+      `sidebar_projects_${props?.project.workspaceId}`,
+      `board_view_projects_${props?.project.workspaceId}`,
+      `all_project_stats_${props?.project.workspaceId}`,
+      `mobile_sidebar_projects_${props?.project.workspaceId}`,
       `project-${props.project.id}`,
     ])
 
