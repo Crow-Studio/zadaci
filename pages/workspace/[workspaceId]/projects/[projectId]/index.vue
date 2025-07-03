@@ -3,6 +3,11 @@ import ProjectContentEditable from '~/components/workspace/projects/ProjectConte
 import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
 import TaskStats from '~/components/workspace/projects/tasks/TaskStats.vue'
 import type { Priority, Status } from '~/types'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '~/components/ui/avatar'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -11,6 +16,44 @@ definePageMeta({
 
 const route = useRoute()
 const workspaceStore = useWorkspaceStore()
+
+const AVATARS = [
+  {
+    src: 'https://pbs.twimg.com/profile_images/1909615404789506048/MTqvRsjo_400x400.jpg',
+    fallback: 'SK',
+    tooltip: 'Skyleen',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1593304942210478080/TUYae5z7_400x400.jpg',
+    fallback: 'CN',
+    tooltip: 'Shadcn',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1677042510839857154/Kq4tpySA_400x400.jpg',
+    fallback: 'AW',
+    tooltip: 'Adam Wathan',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1783856060249595904/8TfcCN0r_400x400.jpg',
+    fallback: 'GR',
+    tooltip: 'Guillermo Rauch',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1534700564810018816/anAuSfkp_400x400.jpg',
+    fallback: 'JH',
+    tooltip: 'Jhey',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1783856060249595904/8TfcCN0r_400x400.jpg',
+    fallback: 'GR',
+    tooltip: 'Guillermo Rauch',
+  },
+  {
+    src: 'https://pbs.twimg.com/profile_images/1534700564810018816/anAuSfkp_400x400.jpg',
+    fallback: 'JH',
+    tooltip: 'Jhey',
+  },
+]
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -71,18 +114,47 @@ defineOgImageComponent('UseOdama', {
           updatedAt: new Date(project.updated_at),
           dueDate: project.due_date ? new Date(project.due_date) : null,
           workspaceId: project.workspace_id,
+          members: project.members,
         }"
       />
-      <Button
-        class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:-translate-y-1.5 w-full sm:w-auto flex-shrink-0"
-      >
-        <!-- @click="onAddNewTask" -->
-        <Icon
-          name="hugeicons:task-add-01"
-          class="size-4"
-        />
-        New Task
-      </Button>
+      <div class="flex items-center gap-x-10">
+        <div class="flex items-center space-x-3">
+          <div class="flex -space-x-2">
+            <Avatar
+              v-for="(avatar, index) in AVATARS.slice(0, 5)"
+              :key="index"
+              class="w-8 h-8 border-2 border-white rounded-full"
+            >
+              <AvatarImage :src="avatar.src" />
+              <AvatarFallback>{{ avatar.fallback }}</AvatarFallback>
+            </Avatar>
+
+            <div
+              v-if="AVATARS.length > 5"
+              class="w-8 h-8 flex items-center justify-center bg-gray-200 text-sm text-gray-700 rounded-full border-2 border-white"
+            >
+              {{ AVATARS.length - 5 }}+
+            </div>
+          </div>
+
+          <Button
+            class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:scale-105 w-full sm:w-auto flex-shrink-0"
+          >
+            + Add Member
+          </Button>
+        </div>
+
+        <Button
+          class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:scale-105 w-full sm:w-auto flex-shrink-0"
+        >
+          <!-- @click="onAddNewTask" -->
+          <Icon
+            name="hugeicons:task-add-01"
+            class="size-4"
+          />
+          New Task
+        </Button>
+      </div>
     </div>
 
     <div

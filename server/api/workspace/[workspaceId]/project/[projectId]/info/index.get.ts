@@ -37,15 +37,46 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // get project info based on project id
-    const project = await useDrizzle().query.projectTable.findFirst({
-      where: table => and(
-        eq(table.id, projectId),
-        eq(table.workspace_id, workspaceId),
-      ),
-    })
+    // fetch project
+    const [project] = await useDrizzle()
+      .select({
+        id: tables.projectTable.id,
+        title: tables.projectTable.title,
+        description: tables.projectTable.description,
+        status: tables.projectTable.status,
+        priority: tables.projectTable.priority,
+        due_date: tables.projectTable.due_date,
+        created_at: tables.projectTable.created_at,
+        updated_at: tables.projectTable.updated_at,
+        workspace_id: tables.projectTable.workspace_id,
+      })
+      .from(tables.projectTable)
+      .where(and(
+        eq(tables.projectTable.id, projectId),
+        eq(tables.projectTable.workspace_id, workspaceId),
+      ))
 
-    return project
+    if (!project) {
+      throw createError({ statusCode: 404, statusMessage: 'Project not found' })
+    }
+
+    // fetch members
+    const members = await useDrizzle()
+      .select({
+        member_id: tables.workspaceMembersTable.id,
+        email: tables.userTable.email,
+        username: tables.userTable.username,
+        avatar: tables.userTable.profile_picture_url,
+      })
+      .from(tables.projectMembers)
+      .innerJoin(tables.workspaceMembersTable, eq(tables.projectMembers.member_id, tables.workspaceMembersTable.id))
+      .innerJoin(tables.userTable, eq(tables.workspaceMembersTable.user_id, tables.userTable.id))
+      .where(eq(tables.projectMembers.project_id, projectId))
+
+    return {
+      ...project,
+      members,
+    }
   }
 
   catch (error: any) {

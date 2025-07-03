@@ -310,4 +310,12 @@ export interface DBProject {
   workspaceId: string
   createdAt: Date | string
   updatedAt: Date | string
+  members: ProjectMembers[]
+}
+
+export interface ProjectMembers {
+  email: string
+  username: string
+  avatar: string | null
+  member_id: string
 }
