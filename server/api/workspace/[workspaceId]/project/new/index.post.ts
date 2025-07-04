@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from 'uuid'
 import { eq, and, inArray } from 'drizzle-orm'
-import { type Teammate, type Priority, type Status, validStatuses, validPriorities } from '~/types'
+import { type Priority, type Status, validStatuses, validPriorities, type ProjectMembers } from '~/types'
 
 export default defineEventHandler(async (event) => {
   try {
     const session = await requireUserSession(event)
     const workspaceId = getRouterParam(event, 'workspaceId')
 
-    const { title, status, dueDate, description, priority, assignees } = await readBody(event) as {
+    const { title, status, dueDate, description, priority, members } = await readBody(event) as {
       description: string
       dueDate: Date | undefined
       title: string
       status: Status
       priority: Priority
-      assignees: Teammate[]
+      members: ProjectMembers[]
     }
 
     if (!session) {
@@ -65,29 +65,15 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (assignees !== undefined) {
-      if (!Array.isArray(assignees)) {
-        throw createError({
-          statusMessage: 'Assignees must be an array!',
-          statusCode: 400,
-        })
-      }
+    if (!members || !Array.isArray(members) || members.length === 0) {
+      throw createError({ statusCode: 400, statusMessage: 'At least one member is required!' })
+    }
 
-      for (const assignee of assignees) {
-        if (!assignee || typeof assignee !== 'object') {
-          throw createError({
-            statusMessage: 'Invalid assignee format!',
-            statusCode: 400,
-          })
-        }
-
-        if (typeof assignee.id !== 'string' || !assignee.id) {
-          throw createError({
-            statusMessage: 'Each assignee must have a valid id!',
-            statusCode: 400,
-          })
-        }
-      }
+    for (const member of members) {
+      if (!member || typeof member !== 'object')
+        throw createError({ statusMessage: 'Invalid member format!', statusCode: 400 })
+      if (typeof member.member_id !== 'string' || !member.member_id)
+        throw createError({ statusMessage: 'Each member must have a valid id!', statusCode: 400 })
     }
 
     const parsedDueDate = dueDate ? new Date(dueDate) : undefined
@@ -97,6 +83,23 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Invalid due date!',
         statusCode: 400,
       })
+    }
+
+    const memberIds = members.map(m => m.member_id)
+
+    // 🔍 Validate that all members exist in workspace_members of the same workspace
+    const validMembers = await useDrizzle().query.workspaceMembersTable.findMany({
+      where: and(
+        inArray(tables.workspaceMembersTable.id, memberIds),
+        eq(tables.workspaceMembersTable.workspace_id, workspaceId),
+      ),
+      columns: { id: true },
+    })
+
+    const validIds = validMembers.map(m => m.id)
+    const invalid = memberIds.filter(id => !validIds.includes(id))
+    if (invalid.length) {
+      throw createError({ statusCode: 400, statusMessage: `Invalid members (not in workspace): ${invalid.join(', ')}` })
     }
 
     await useDrizzle().transaction(async (tx) => {
@@ -113,63 +116,20 @@ export default defineEventHandler(async (event) => {
         updated_at: new Date(),
       }).returning()
 
-      let assigneeIds: string[] = []
+      if (members && members.length > 0) {
+        const now = new Date()
+        const newMembers = members.map(m => ({
+          id: uuidv4(),
+          project_id: project.id,
+          member_id: m.member_id,
+          created_at: now,
+          updated_at: now,
+        }))
 
-      if (assignees && assignees.length > 0) {
-        assigneeIds = assignees.map(assignee => assignee.id).filter(Boolean)
-
-        if (assigneeIds.length > 0) {
-          // Validate that all assignees exist in the workspace
-          const existingMembers = await tx
-            .select({ id: tables.userTable.id })
-            .from(tables.userTable)
-            .innerJoin(
-              tables.workspaceMembersTable,
-              eq(tables.workspaceMembersTable.user_id, tables.userTable.id),
-            )
-            .where(
-              and(
-                inArray(tables.userTable.id, assigneeIds),
-                eq(tables.workspaceMembersTable.workspace_id, workspaceId),
-              ),
-            )
-
-          const existingMemberIds = existingMembers.map(m => m.id)
-          const invalidAssignees = assigneeIds.filter(id => !existingMemberIds.includes(id))
-
-          if (invalidAssignees.length > 0) {
-            throw createError({
-              statusMessage: 'Some assignees are not valid workspace members!',
-              statusCode: 400,
-            })
-          }
-
-          // Get workspace member IDs for the assignees
-          const workspaceMemberRecords = await tx
-            .select({ id: tables.workspaceMembersTable.id })
-            .from(tables.workspaceMembersTable)
-            .where(
-              and(
-                inArray(tables.workspaceMembersTable.user_id, assigneeIds),
-                eq(tables.workspaceMembersTable.workspace_id, workspaceId),
-              ),
-            )
-
-          const projectMembersToInsert = workspaceMemberRecords.map(member => ({
-            id: uuidv4(),
-            project_id: project.id,
-            member_id: member.id,
-            created_at: new Date(),
-            updated_at: new Date(),
-          }))
-
-          if (projectMembersToInsert.length > 0) {
-            await tx.insert(tables.projectMembers).values(projectMembersToInsert)
-          }
-        }
+        await tx.insert(tables.projectMembers).values(newMembers)
       }
 
-      // todo: Send email notifications to assignees
+      // todo: Send email notifications to members
     })
 
     return {

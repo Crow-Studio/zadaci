@@ -24,6 +24,8 @@ const { data } = await useAsyncData(`board_view_projects_${currentActiveWorkspac
   useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
 )
 
+console.log(data)
+
 function mapProjectsByStatus(data: DBProject[]) {
   const grouped = Object.fromEntries(Object.keys(projects.value).map(k => [k, [] as DBProject[]]))
 

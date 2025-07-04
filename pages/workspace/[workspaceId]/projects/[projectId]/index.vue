@@ -179,7 +179,10 @@ defineOgImageComponent('UseOdama', {
           <ProjectMembers
             :members="members"
           />
-          <ActionTooltip label="Add / Remove members">
+          <ActionTooltip
+            label="Add / Remove members"
+            side="top"
+          >
             <AddProjectMembers
               :on-remove-member="onRemoveMember"
               :on-add-member="onAddMember"
@@ -188,7 +191,10 @@ defineOgImageComponent('UseOdama', {
             />
           </ActionTooltip>
         </div>
-        <ActionTooltip label="Add new task">
+        <ActionTooltip
+          label="Add new task"
+          side="top"
+        >
           <Button
             class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-full sm:w-auto flex-shrink-0"
           >

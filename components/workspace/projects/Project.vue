@@ -3,6 +3,12 @@ import { format, isBefore, isPast } from 'date-fns'
 import { Badge } from '~/components/ui/badge'
 import { cn } from '~/lib/utils'
 import type { DBProject } from '~/types'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '~/components/ui/avatar'
+import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
 
 const props = defineProps<{
   project: DBProject
@@ -70,6 +76,29 @@ const props = defineProps<{
         <p>
           {{ props?.project.dueDate ? format(new Date(2017, 10, 6), 'd MMM') : 'Due' }}
         </p>
+      </div>
+      <div class="flex -space-x-2">
+        <ActionTooltip
+          v-for="(member, index) in props?.project.members.slice(0, 5)"
+          :key="member.member_id"
+          :label="member.username"
+        >
+          <Avatar
+            class="size-5 border-2 border-white rounded-full cursor-pointer"
+            :style="{ zIndex: 10 - index }"
+          >
+            <AvatarImage :src="member.avatar!" />
+            <AvatarFallback>{{ member.username.charAt(0) }}</AvatarFallback>
+          </Avatar>
+        </ActionTooltip>
+
+        <div
+          v-if="props?.project.members.length > 5"
+          class="size-5 flex items-center justify-center bg-gray-200 text-sm text-gray-700 rounded-full border-2 border-white"
+          :style="{ zIndex: 5 }"
+        >
+          {{ props?.project.members.length - 5 }}+
+        </div>
       </div>
     </div>
   </div>

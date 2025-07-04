@@ -18,6 +18,7 @@ const props = defineProps<{
       v-for="(member, index) in props.members.slice(0, 5)"
       :key="member.member_id"
       :label="member.username"
+      side="top"
     >
       <Avatar
         class="size-9 border-2 border-white rounded-full cursor-pointer"

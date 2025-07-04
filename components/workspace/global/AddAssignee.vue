@@ -12,12 +12,12 @@ import {
   CommandItem,
   CommandList,
 } from '~/components/ui/command'
-import type { Teammate } from '~/types'
+import type { ProjectMembers } from '~/types'
 
 const props = defineProps<{
-  assignees: Teammate[]
-  onAddAssiginees: (payload: Teammate) => void
-  onRemoveAssignee: (payload: Teammate) => void
+  assignees: ProjectMembers[]
+  onAddAssiginees: (payload: ProjectMembers) => void
+  onRemoveAssignee: (payload: ProjectMembers) => void
 }>()
 
 const workspaceStore = useWorkspaceStore()
@@ -62,9 +62,9 @@ const teammates = computed(() => {
 })
 
 const onSelectAssignee = (currentValue: ListboxItemSelectEvent<AcceptableValue>) => {
-  const assignee = currentValue.detail.value as Teammate
+  const assignee = currentValue.detail.value as ProjectMembers
 
-  const alreadyExists = props?.assignees.find(a => a.id === assignee.id)
+  const alreadyExists = props?.assignees.find(a => a.member_id === assignee.member_id)
 
   if (alreadyExists) {
     props?.onRemoveAssignee(assignee)
@@ -84,7 +84,7 @@ const onSelectAssignee = (currentValue: ListboxItemSelectEvent<AcceptableValue>)
           variant="outline"
           role="combobox"
           :aria-expanded="open"
-          class="bg-background font-normal hover:bg-background cursor-pointer w-full px-3 justify-between"
+          class="bg-background font-normal hover:bg-background cursor-pointer w-full px-3 justify-between dark:border dark:border-ring"
         >
           <span class="text-muted-foreground">Select teammate</span>
           <ChevronDown
@@ -120,7 +120,7 @@ const onSelectAssignee = (currentValue: ListboxItemSelectEvent<AcceptableValue>)
                 </Avatar>
                 <span class="leading-none">{{ teammate.username }}</span>
                 <Check
-                  v-if="props.assignees.some(a => a.id === teammate.user_id)"
+                  v-if="props.assignees.some(a => a.member_id === teammate.member_id)"
                   :size="16"
                   stroke-width="2"
                   class="ml-auto"

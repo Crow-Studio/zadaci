@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
-import { Loader2 } from 'lucide-vue-next'
+import { Loader2, X } from 'lucide-vue-next'
 import isEqual from 'lodash/isEqual'
+import AddAssignee from '../global/AddAssignee.vue'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import DatePicker from '~/components/workspace/DatePicker.vue'
-import { columns, newProjectSchema, priorityOptions, type DBProject } from '~/types'
+import { columns, newProjectSchema, priorityOptions, type DBProject, type ProjectMembers } from '~/types'
 import {
   FormControl,
   FormField,
@@ -29,18 +30,44 @@ const form = useForm({
   validationSchema: newProjectSchema,
 })
 
+const assignees = useState('assignees_project', () => {
+  return props?.project
+    ? props?.project.members.map(member => ({
+        member_id: member.member_id,
+        avatar: member.avatar,
+        email: member.email,
+        username: member.username,
+      }))
+    : []
+})
+
+const onAddAssiginees = (payload: ProjectMembers) => {
+  const newAssignees = [
+    ...assignees.value,
+    payload,
+  ]
+  assignees.value = newAssignees
+}
+
+const onRemoveAssignee = (payload: ProjectMembers) => {
+  const newAssignees = assignees.value.filter(a => a.member_id !== payload.member_id)
+  assignees.value = newAssignees
+}
+
 const initialProject = ref<{
   title: string
   status: string
   priority: string
   description: string
   dueDate: string | undefined
+  members: ProjectMembers[]
 }>({
   title: '',
   status: '',
   priority: '',
   description: '',
   dueDate: undefined,
+  members: [],
 })
 
 const isDeletingProject = ref(false)
@@ -52,6 +79,7 @@ const isFormChanged = computed(() => {
     priority: form.values.priority,
     description: form.values.description,
     dueDate: form.values.dueDate,
+    members: assignees.value,
   }
   return !isEqual(initialProject.value, current)
 })
@@ -63,6 +91,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       ...values,
       description: values.description ? values.description : '',
       dueDate: values.dueDate ? new Date(values.dueDate) : undefined,
+      members: assignees.value,
     }
 
     const res = await $fetch(`/api/workspace/${props?.project.workspaceId}/project/${props?.project.id}/update`, {
@@ -105,6 +134,7 @@ onMounted(() => {
     priority: props?.project?.priority || 'LOW',
     description: props?.project?.description || '',
     dueDate: formatDateForPicker(props?.project?.dueDate),
+    members: assignees.value,
   }
 })
 
@@ -257,6 +287,47 @@ const navigateToProject = (path: string) => {
           <FormMessage />
         </FormItem>
       </FormField>
+      <div class="grid gap-2">
+        <Label>Members</Label>
+        <div class="grid gap-y-2">
+          <div
+            v-if="assignees.length > 0"
+            class="flex items-center gap-x-2 w-full flex-wrap"
+          >
+            <div
+              v-for="teammate in assignees"
+              :key="teammate.member_id"
+              class="relative"
+            >
+              <div class="size-10 overflow-hidden">
+                <Avatar
+                  class="size-full absolute inset-0 object-cover"
+                >
+                  <AvatarImage
+                    :src="teammate.avatar!"
+                    :alt="teammate.username"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </div>
+              <Button
+                size="icon"
+                variant="destructive"
+                class="absolute cursor-pointer -right-1 -top-1 size-6 rounded-full border-2 border-background"
+                aria-label="Remove teammate"
+                @click="onRemoveAssignee(teammate)"
+              >
+                <X :size="16" />
+              </Button>
+            </div>
+          </div>
+          <AddAssignee
+            :assignees="assignees"
+            :on-add-assiginees="onAddAssiginees"
+            :on-remove-assignee="onRemoveAssignee"
+          />
+        </div>
+      </div>
       <FormField
         v-slot="{ componentField }"
         name="description"

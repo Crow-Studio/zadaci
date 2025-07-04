@@ -1,4 +1,5 @@
-import { eq, and } from 'drizzle-orm'
+import { eq, and, inArray } from 'drizzle-orm'
+import type { ProjectMembers } from '~/types'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -21,6 +22,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // First, get all projects for the user in the workspace
     const projects = await useDrizzle()
       .select({
         id: tables.projectTable.id,
@@ -49,7 +51,67 @@ export default defineEventHandler(async (event) => {
         ),
       )
 
-    return projects
+    // Remove duplicates and get unique project IDs
+    const uniqueProjects = projects.reduce((acc, project) => {
+      if (!acc.find(p => p.id === project.id)) {
+        acc.push(project)
+      }
+      return acc
+    }, [] as typeof projects)
+
+    if (uniqueProjects.length === 0) {
+      return []
+    }
+
+    const projectIds = uniqueProjects.map(p => p.id)
+
+    // Get all members for these projects
+    const membersRaw = await useDrizzle()
+      .select({
+        projectId: tables.projectMembers.project_id,
+        email: tables.userTable.email,
+        avatar: tables.userTable.profile_picture_url,
+        username: tables.userTable.username,
+        member_id: tables.workspaceMembersTable.id,
+      })
+      .from(tables.projectMembers)
+      .innerJoin(
+        tables.workspaceMembersTable,
+        eq(tables.workspaceMembersTable.id, tables.projectMembers.member_id),
+      )
+      .innerJoin(
+        tables.userTable,
+        eq(tables.userTable.id, tables.workspaceMembersTable.user_id),
+      )
+      .where(
+        and(
+          eq(tables.workspaceMembersTable.workspace_id, workspaceId),
+          inArray(tables.projectMembers.project_id, projectIds),
+        ),
+      )
+
+    // Create a map to group members by project
+    const membersByProject = new Map<string, ProjectMembers[]>()
+
+    for (const member of membersRaw) {
+      if (!membersByProject.has(member.projectId)) {
+        membersByProject.set(member.projectId, [])
+      }
+      membersByProject.get(member.projectId)?.push({
+        email: member.email,
+        avatar: member.avatar,
+        username: member.username,
+        member_id: member.member_id,
+      })
+    }
+
+    // Combine projects with their members
+    const projectsWithMembers = uniqueProjects.map(project => ({
+      ...project,
+      members: membersByProject.get(project.id) || [],
+    }))
+
+    return projectsWithMembers
   }
 
   catch (error: any) {

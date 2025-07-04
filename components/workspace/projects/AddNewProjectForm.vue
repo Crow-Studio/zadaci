@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import DatePicker from '~/components/workspace/DatePicker.vue'
-import type { Teammate } from '~/types'
+import type { ProjectMembers } from '~/types'
 import { columns, newProjectSchema, priorityOptions } from '~/types'
 import {
   FormControl,
@@ -34,9 +34,9 @@ const form = useForm({
   validationSchema: newProjectSchema,
 })
 
-const assignees = ref<Teammate[]>([])
+const assignees = ref<ProjectMembers[]>([])
 
-const onAddAssiginees = (payload: Teammate) => {
+const onAddAssiginees = (payload: ProjectMembers) => {
   const newAssignees = [
     ...assignees.value,
     payload,
@@ -44,8 +44,8 @@ const onAddAssiginees = (payload: Teammate) => {
   assignees.value = newAssignees
 }
 
-const onRemoveAssignee = (payload: Teammate) => {
-  const newAssignees = assignees.value.filter(a => a.id !== payload.id)
+const onRemoveAssignee = (payload: ProjectMembers) => {
+  const newAssignees = assignees.value.filter(a => a.member_id !== payload.member_id)
   assignees.value = newAssignees
 }
 
@@ -54,7 +54,7 @@ const onSubmit = form.handleSubmit(async (values) => {
   try {
     if (assignees.value.length <= 0) {
       props?.onSetIsAddNewProject(false)
-      return toast.error('Atleast one assignee is required!', {
+      return toast.error('Atleast one member is required!', {
         position: 'top-center',
       })
     }
@@ -62,7 +62,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       ...values,
       description: values.description ? values.description : '',
       dueDate: values.dueDate ? new Date(values.dueDate) : undefined,
-      assignees: assignees.value,
+      members: assignees.value,
     }
 
     const res = await $fetch(`/api/workspace/${activeWorkspace.value?.id}/project/new`, {
@@ -227,7 +227,7 @@ const onCloseModal = () => {
         </FormItem>
       </FormField>
       <div class="grid gap-2">
-        <Label>Assignee</Label>
+        <Label>Members</Label>
         <div class="grid gap-y-2">
           <div
             v-if="assignees.length > 0"
@@ -235,7 +235,7 @@ const onCloseModal = () => {
           >
             <div
               v-for="teammate in assignees"
-              :key="teammate.id"
+              :key="teammate.member_id"
               class="relative"
             >
               <div class="size-10 overflow-hidden">
