@@ -2,8 +2,10 @@
 import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
 import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
 import TaskStats from '~/components/workspace/projects/tasks/TaskStats.vue'
-import type { Priority, Status } from '~/types'
+import type { ProjectMembers as IProjectMembers, Priority, Status } from '~/types'
 import ProjectMembers from '~/components/workspace/projects/ProjectMembers.vue'
+import AddProjectMembers from '~/components/workspace/projects/AddProjectMembers.vue'
+import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -16,6 +18,23 @@ const workspaceStore = useWorkspaceStore()
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
+
+const members = ref<IProjectMembers[]>([])
+
+const onAddMember = (payload: IProjectMembers) => {
+  const newMembers = [
+    ...members.value,
+    payload,
+  ]
+  members.value = newMembers
+  console.log(members.value)
+}
+
+const onRemoveMember = (payload: IProjectMembers) => {
+  const newMembers = members.value.filter(member => member.member_id !== payload.member_id)
+  members.value = newMembers
+  console.log(members.value)
+}
 
 const { data: project, status } = await useAsyncData(
   `project-${route.params.projectId}`,
@@ -46,6 +65,7 @@ watchEffect(async () => {
           },
         ],
       })
+      members.value = project.value.members
     }
   }
 })
@@ -72,7 +92,7 @@ defineOgImageComponent('UseOdama', {
           updatedAt: new Date(project.updated_at),
           dueDate: project.due_date ? new Date(project.due_date) : null,
           workspaceId: project.workspace_id,
-          members: project.members,
+          members,
         }"
       />
       <div class="flex md:items-center flex-col md:flex-row md:justify-between xl:justify-start gap-2 sm:gap-x-10">
@@ -80,25 +100,27 @@ defineOgImageComponent('UseOdama', {
           v-if="project?.members"
           class="flex items-center justify-between sm:justify-start gap-2"
         >
-          <ProjectMembers :members="project.members" />
-
-          <Button
-            class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-fit flex-shrink-0"
-          >
-            + Add Member
-          </Button>
+          <ProjectMembers :members="members" />
+          <ActionTooltip label="Add / Remove members">
+            <AddProjectMembers
+              :on-remove-member="onRemoveMember"
+              :on-add-member="onAddMember"
+              :members="members"
+            />
+          </ActionTooltip>
         </div>
-
-        <Button
-          class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-full sm:w-auto flex-shrink-0"
-        >
-          <!-- @click="onAddNewTask" -->
-          <Icon
-            name="hugeicons:task-add-01"
-            class="size-4"
-          />
-          New Task
-        </Button>
+        <ActionTooltip label="Add new task">
+          <Button
+            class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-full sm:w-auto flex-shrink-0"
+          >
+            <!-- @click="onAddNewTask" -->
+            <Icon
+              name="hugeicons:task-add-01"
+              class="size-4"
+            />
+            New Task
+          </Button>
+        </ActionTooltip>
       </div>
     </div>
 

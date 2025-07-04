@@ -22,22 +22,28 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
+import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
 </script>
 
 <template>
   <Dialog>
-    <DialogTrigger class="inline-flex items-center cursor-pointer gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground px-2 sm:px-4 py-2 relative h-8 justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 w-fit sm:w-40">
-      <span class="flex items-center gap-x-2">
-        <Icon name="hugeicons:search-01" />
-        <span class="hidden md:inline-flex">
-          Search
+    <ActionTooltip
+      label="Search (⌘K)"
+      as-child
+    >
+      <DialogTrigger class="inline-flex items-center cursor-pointer gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground px-2 sm:px-4 py-2 relative h-8 justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 w-fit sm:w-40">
+        <span class="flex items-center gap-x-2">
+          <Icon name="hugeicons:search-01" />
+          <span class="hidden md:inline-flex">
+            Search
+          </span>
         </span>
-      </span>
-      <kbd class="hidden items-center pointer-events-none select-none gap-1 p-1 rounded border border-border bg-muted font-sans font-medium min-h-4 text-[10px] h-4 px-1 absolute right-[0.3rem] top-[0.4rem] opacity-100 sm:flex">⌘ K</kbd>
-    </DialogTrigger>
+        <kbd class="hidden items-center pointer-events-none select-none gap-1 p-1 rounded border border-border bg-muted font-sans font-medium min-h-4 text-[10px] h-4 px-1 absolute right-[0.3rem] top-[0.4rem] opacity-100 sm:flex">⌘ K</kbd>
+      </DialogTrigger>
+    </ActionTooltip>
 
     <DialogContent class="p-0 max-w-[640px] gap-0">
-      <Command class="rounded-lg border-0 shadow-none">
+      <Command class="rounded-lg border-0 shadow-none dark:bg-[#1d1d1d]">
         <CommandInput
           placeholder="Type a command or search..."
           class="h-12 text-base rounded-none shadow-none"

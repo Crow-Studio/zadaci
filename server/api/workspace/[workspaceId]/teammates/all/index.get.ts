@@ -37,7 +37,8 @@ export default defineEventHandler(async (event) => {
         email: tables.userTable.email,
         avatar: tables.userTable.profile_picture_url,
         username: tables.userTable.username,
-        id: tables.userTable.id,
+        user_id: tables.userTable.id,
+        member_id: tables.workspaceMembersTable.id,
       })
       .from(tables.workspaceMembersTable)
       .innerJoin(tables.userTable, eq(tables.userTable.id, tables.workspaceMembersTable.user_id))
