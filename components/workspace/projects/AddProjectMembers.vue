@@ -18,6 +18,7 @@ const props = defineProps<{
   members: ProjectMembers[]
   onAddMember: (payload: ProjectMembers) => void
   onRemoveMember: (payload: ProjectMembers) => void
+  isAddNewMember: boolean
 }>()
 
 const workspaceStore = useWorkspaceStore()
@@ -54,6 +55,7 @@ const onSelectAssignee = (currentValue: ListboxItemSelectEvent<AcceptableValue>)
     <Popover v-model:open="open">
       <PopoverTrigger as-child>
         <Button
+          :disabled="props?.isAddNewMember"
           class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-fit flex-shrink-0"
           :aria-expanded="open"
         >

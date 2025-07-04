@@ -40,6 +40,7 @@ async function updateField(field: string, event: Event) {
     priority: field === 'priority' ? value : props.project.priority,
     description: props.project.description,
     dueDate: props.project.dueDate ? new Date(props.project.dueDate) : undefined,
+    members: props?.project.members,
   }
 
   try {
@@ -79,6 +80,7 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
       priority: field === 'priority' ? value : props.project.priority,
       description: props.project.description,
       dueDate: field === 'dueDate' ? value ? new Date(value as string) : undefined : props.project.dueDate,
+      members: props?.project.members,
     }
     await $fetch(`/api/workspace/${props?.project.workspaceId}/project/${props.project.id}/update`, {
       method: 'PATCH',

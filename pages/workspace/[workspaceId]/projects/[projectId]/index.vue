@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { toast } from 'vue-sonner'
 import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
 import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
 import TaskStats from '~/components/workspace/projects/tasks/TaskStats.vue'
@@ -20,20 +21,95 @@ const currentActiveWorkspace = computed(() => {
 })
 
 const members = ref<IProjectMembers[]>([])
+const isAddNewMember = ref(false)
 
-const onAddMember = (payload: IProjectMembers) => {
+const onAddMember = async (payload: IProjectMembers) => {
   const newMembers = [
     ...members.value,
     payload,
   ]
-  members.value = newMembers
-  console.log(members.value)
+  isAddNewMember.value = true
+  toast.promise(
+    (async () => {
+      const payload = {
+        title: project?.value?.title,
+        status: project?.value?.status,
+        priority: project?.value?.priority,
+        description: project?.value?.description,
+        dueDate: project?.value?.due_date ? new Date(project?.value?.due_date) : undefined,
+        members: newMembers,
+      }
+      const res = await $fetch(
+        `/api/workspace/${project?.value?.workspace_id}/project/${project?.value?.id}/update`,
+        {
+          method: 'PATCH',
+          body: payload,
+        },
+      )
+      return res
+    })(),
+    {
+      loading: 'Adding new project member..',
+      success: async (data: { message: string }) => {
+        members.value = newMembers
+        isAddNewMember.value = false
+        return data.message
+      },
+
+      error: (error: any) => {
+        isAddNewMember.value = false
+        const errorMessage = error.response
+          ? error.response._data.statusMessage
+          : error.message
+
+        return errorMessage
+      },
+      position: 'top-center',
+    },
+  )
 }
 
-const onRemoveMember = (payload: IProjectMembers) => {
+const onRemoveMember = async (payload: IProjectMembers) => {
   const newMembers = members.value.filter(member => member.member_id !== payload.member_id)
-  members.value = newMembers
-  console.log(members.value)
+  isAddNewMember.value = true
+  toast.promise(
+    (async () => {
+      const payload = {
+        title: project?.value?.title,
+        status: project?.value?.status,
+        priority: project?.value?.priority,
+        description: project?.value?.description,
+        dueDate: project?.value?.due_date ? new Date(project?.value?.due_date) : undefined,
+        members: newMembers,
+      }
+      const res = await $fetch(
+        `/api/workspace/${project?.value?.workspace_id}/project/${project?.value?.id}/update`,
+        {
+          method: 'PATCH',
+          body: payload,
+        },
+      )
+      return res
+    })(),
+    {
+      loading: 'Removing project member..',
+      success: async (data: { message: string }) => {
+        members.value = newMembers
+        isAddNewMember.value = false
+        return data.message
+      },
+
+      error: (error: any) => {
+        isAddNewMember.value = false
+        const errorMessage = error.response
+          ? error.response._data.statusMessage
+          : error.message
+
+        return errorMessage
+      },
+      position: 'top-center',
+    },
+  )
 }
 
 const { data: project, status } = await useAsyncData(
@@ -100,12 +176,15 @@ defineOgImageComponent('UseOdama', {
           v-if="project?.members"
           class="flex items-center justify-between sm:justify-start gap-2"
         >
-          <ProjectMembers :members="members" />
+          <ProjectMembers
+            :members="members"
+          />
           <ActionTooltip label="Add / Remove members">
             <AddProjectMembers
               :on-remove-member="onRemoveMember"
               :on-add-member="onAddMember"
               :members="members"
+              :is-add-new-member="isAddNewMember"
             />
           </ActionTooltip>
         </div>
