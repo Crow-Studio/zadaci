@@ -8,6 +8,7 @@ import {
 } from '@internationalized/date'
 
 import { computed } from 'vue'
+import { format } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
@@ -33,7 +34,7 @@ const onSelect = (val?: DateValue) => {
       <button
         class="w-full flex cursor-pointer text-primary"
       >
-        {{ parsed ? df.format(parsed.toDate(getLocalTimeZone())) : "N/A" }}
+        {{ parsed ? format(new Date(df.format(parsed.toDate(getLocalTimeZone()))), 'MMM e') : "N/A" }}
       </button>
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0 dark:bg-[#1d1d1d]">

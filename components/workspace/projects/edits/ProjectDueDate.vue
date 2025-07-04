@@ -18,7 +18,7 @@ const onUpdateProjectDueDate = async (date: string | undefined) => {
 
 <template>
   <div class="flex items-center gap-x-2">
-    Due:
+    <span class="hidden sm:block">Due:</span>
     <ProjectDatePicker
       :value="dueDate ? formatDateForPicker(dueDate) : undefined"
       :on-update-project-due-date="onUpdateProjectDueDate"

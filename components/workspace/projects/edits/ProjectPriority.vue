@@ -17,7 +17,9 @@ const onUpdatePriority = async (val: Priority) => {
 
 <template>
   <div class="flex items-center gap-x-2">
-    <p>Priority:</p>
+    <p class="hidden sm:block">
+      Priority:
+    </p>
     <Select
       :default-value="priority"
       @update:model-value="(val) => onUpdatePriority(val as Priority)"

@@ -47,7 +47,7 @@ const isOpenSidebar = computed(() => {
         <WorkspaceHeader />
 
         <div class="overflow-y-auto flex-1">
-          <div class="px-3">
+          <div class="px-2 sm:px-3">
             <slot />
           </div>
         </div>

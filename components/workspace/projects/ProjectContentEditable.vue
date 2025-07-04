@@ -155,7 +155,9 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
         <div class="bg-primary size-1 rounded-full" />
 
         <div class="flex items-center gap-x-2">
-          <p>Status:</p>
+          <p class="hidden sm:block">
+            Status:
+          </p>
           <ProjectStatus
             :status="project.status"
             :on-update-project-info="onUpdateProjectInfo"
