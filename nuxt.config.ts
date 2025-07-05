@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     'nuxt-charts',
     '@vueuse/nuxt',
+    '@polar-sh/nuxt',
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/tailwind.css'],

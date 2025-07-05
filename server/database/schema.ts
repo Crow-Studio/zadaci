@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -14,6 +15,8 @@ import {
 export const userRoleEnum = pgEnum('user_role', ['OWNER', 'MEMBER', 'GUEST'])
 export const statusEnum = pgEnum('status', ['IDEA', 'TODO', 'IN PROGRESS', 'IN REVIEW', 'COMPLETED', 'ABANDONED'])
 export const priorityEnum = pgEnum('priority', ['HIGH', 'MEDIUM', 'LOW', 'NONE'])
+export const subscriptionPlanEnum = pgEnum('plan', ['FREE', 'PRO'])
+export const subscriptionStatusEnum = pgEnum('subscription_status', ['INACTIVE', 'ACTIVE'])
 
 export const userTable = pgTable('user', {
   id: text('id').primaryKey(),
@@ -43,6 +46,25 @@ export const workspaceTable = pgTable('workspace', {
   image_url: text('image_url').notNull(),
   invite_code: text('invite_code').notNull().unique(),
   user_id: text('user_id').notNull().references(() => userTable.id),
+  subscription_plan: subscriptionPlanEnum('subscription_plan').default('FREE'),
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull(),
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull(),
+})
+
+export const subscriptionTable = pgTable('subscription', {
+  id: text('id').primaryKey(),
+  workspace_id: text('workspace_id').notNull().references(() => workspaceTable.id, { onDelete: 'cascade' }),
+  subscription_status: subscriptionStatusEnum('subscription_status').default('INACTIVE'),
+  expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull(),
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull(),
+})
+
+export const billingEventsTable = pgTable('billing_events', {
+  id: text('id').primaryKey(),
+  workspace_id: text('workspace_id').notNull().references(() => workspaceTable.id, { onDelete: 'cascade' }),
+  event_type: varchar('event_type', { length: 255 }),
+  payload: jsonb('payload').notNull(),
   created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull(),
   updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull(),
 })
@@ -197,6 +219,25 @@ export const workspaceRelations = relations(workspaceTable, ({ one, many }) => (
   owner: one(userTable, { fields: [workspaceTable.user_id], references: [userTable.id] }),
   members: many(workspaceMembersTable),
   projects: many(projectTable),
+  subscription: one(subscriptionTable, {
+    fields: [workspaceTable.id],
+    references: [subscriptionTable.workspace_id],
+  }),
+  billingEvents: many(billingEventsTable),
+}))
+
+export const subscriptionRelations = relations(subscriptionTable, ({ one }) => ({
+  workspace: one(workspaceTable, {
+    fields: [subscriptionTable.workspace_id],
+    references: [workspaceTable.id],
+  }),
+}))
+
+export const billingEventsRelations = relations(billingEventsTable, ({ one }) => ({
+  workspace: one(workspaceTable, {
+    fields: [billingEventsTable.workspace_id],
+    references: [workspaceTable.id],
+  }),
 }))
 
 export const workspaceMembersRelations = relations(workspaceMembersTable, ({ one, many }) => ({
