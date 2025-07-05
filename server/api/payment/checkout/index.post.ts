@@ -1,4 +1,3 @@
-// server/routes/api/checkout.post.ts
 export default defineEventHandler((event) => {
   const checkoutHandler = Checkout({
     accessToken: process.env.POLAR_ACCESS_TOKEN,

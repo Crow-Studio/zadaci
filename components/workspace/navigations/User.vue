@@ -2,6 +2,7 @@
 import {
   ChevronsUpDown,
   LogOut,
+  SparklesIcon,
 } from 'lucide-vue-next'
 import {
   Avatar,
@@ -81,6 +82,11 @@ const onOpenSignoutModal = () => {
           </div>
         </div>
       </DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem>
+        <SparklesIcon />
+        Upgrade to Pro
+      </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem
         class="cursor-pointer dark:hover:bg-[#343434]"
