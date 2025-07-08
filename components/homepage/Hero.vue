@@ -90,7 +90,7 @@ onUnmounted(() => {
         >
           <div class="px-6 py-12 text-center">
             <motion.h1
-              class="text-4xl md:text-6xl font-bold mb-6 leading-tight"
+              class="text-4xl md:text-6xl font-bold font-instrument-serif mb-6 leading-tight"
               :variants="itemVariants"
             >
               Say Hello

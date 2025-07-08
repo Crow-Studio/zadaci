@@ -19,19 +19,40 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 
-const { user } = useUserSession()
-
 withDefaults(defineProps<{
   side?: 'right' | 'top' | 'bottom' | 'left'
 }>(), {
   side: 'right',
 })
 
+const { polarProductId } = useRuntimeConfig()
+const { user } = useUserSession()
+
 const modalStore = useModalStore()
+const workspaceStore = useWorkspaceStore()
+
+const currentActiveWorkspace = computed(() => {
+  return workspaceStore?.activeWorkspace
+})
 
 const onOpenSignoutModal = () => {
   modalStore?.setIsOpen(true)
   modalStore?.onOpen('signout')
+}
+
+const onUpgradeToPro = async () => {
+  const params = new URLSearchParams({
+    products: polarProductId as string,
+    customerId: currentActiveWorkspace.value?.id as string,
+    metadata: JSON.stringify({ workspace_id: currentActiveWorkspace.value?.id }),
+  })
+
+  await fetch(`/api/payments/checkout?${params}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 }
 </script>
 
@@ -83,7 +104,10 @@ const onOpenSignoutModal = () => {
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
+      <DropdownMenuItem
+        class="cursor-pointer dark:hover:bg-[#343434]"
+        @click="onUpgradeToPro"
+      >
         <SparklesIcon />
         Upgrade to Pro
       </DropdownMenuItem>

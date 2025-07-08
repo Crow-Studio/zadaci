@@ -45,6 +45,13 @@ export default defineNuxtConfig({
         redirectURL: process.env.NUXT_OAUTH_GOOGLE_REDIRECT_URL,
       },
     },
+    private: {
+      polarAccessToken: process.env.POLAR_ACCESS_TOKEN,
+      polarCheckoutSuccessUrl: process.env.POLAR_CHECKOUT_SUCCESS_URL,
+      polarServer: process.env.POLAR_SERVER,
+    },
+    polarProductId: process.env.POLAR_PRODUCT_ID,
+    polarWebhookSecret: process.env.POLAR_WEBHOOK_SECRET,
   },
   future: {
     compatibilityVersion: 4,
@@ -95,6 +102,7 @@ export default defineNuxtConfig({
     families: [
       { name: 'Geist', provider: 'google' },
       { name: 'Bebas Neue', provider: 'google' },
+      { name: 'Instrument Serif', provider: 'google' },
       {
         name: 'Regarn',
         src: { url: '/fonts/Regarn-Regular.woff', format: 'woff' },
