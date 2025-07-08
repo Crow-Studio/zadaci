@@ -53,7 +53,9 @@ const onUpgradeToPro = async () => {
       },
     })
 
-    console.log(res.url)
+    if (res.url) {
+      window.location.href = res.url
+    }
   }
   catch (error: any) {
     // Handle error (optional: log or show notification)

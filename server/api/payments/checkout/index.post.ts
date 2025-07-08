@@ -38,25 +38,68 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // check if workspace exists
+  const workspace = await useDrizzle().query.workspaceTable.findFirst({
+    where: table => and(
+      eq(table.id, workspaceId),
+      eq(table.user_id, session.user.id),
+    ),
+  })
+
+  if (!workspace) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid workspace!',
+    })
+  }
+
   const polar = new Polar({
     accessToken: polarAccessToken,
     server: polarServer as 'sandbox' | 'production',
   })
 
-  const customer = await polar.customers.create({
-    email: session.user.email,
-    name: session.user.username,
-    metadata: { workspace_id: workspaceId },
+  // fetch customer
+  const polarCustomer = await useDrizzle().query.polarCustomers.findFirst({
+    where: table => eq(table.workspaceId, workspace.id),
   })
 
-  console.log(customer)
+  if (!polarCustomer) {
+    // create new cusomer
+    const customer = await polar.customers.create({
+      email: session.user.email,
+      name: session.user.username,
+      metadata: { workspace_id: workspaceId },
+    })
+
+    // save new cusomer in the db
+    await useDrizzle().insert(tables.polarCustomers).values({
+      id: customer.id,
+      email: customer.email,
+      workspaceId: workspace.id,
+      createdAt: customer.createdAt,
+      deletedAt: customer.deletedAt,
+      name: customer.name,
+      organizationId: customer.organizationId,
+    })
+
+    const res = await polar.checkouts.create({
+      products: [productId],
+      successUrl: polarCheckoutSuccessUrl,
+      customerId: customer.id,
+      metadata: {
+        workspace_id: workspace.id,
+      },
+    })
+
+    return res
+  }
 
   const res = await polar.checkouts.create({
     products: [productId],
     successUrl: polarCheckoutSuccessUrl,
-    customerId: customer.id,
+    customerId: polarCustomer?.id,
     metadata: {
-      workspace_id: workspaceId,
+      workspace_id: workspace.id,
     },
   })
 
