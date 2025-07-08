@@ -25,7 +25,6 @@ withDefaults(defineProps<{
   side: 'right',
 })
 
-const { polarProductId } = useRuntimeConfig()
 const { user } = useUserSession()
 
 const modalStore = useModalStore()
@@ -35,24 +34,31 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore?.activeWorkspace
 })
 
+const { data: productId, status } = await useFetch('/api/polar/products', {
+  lazy: true,
+})
+
 const onOpenSignoutModal = () => {
   modalStore?.setIsOpen(true)
   modalStore?.onOpen('signout')
 }
 
 const onUpgradeToPro = async () => {
-  const params = new URLSearchParams({
-    products: polarProductId as string,
-    customerId: currentActiveWorkspace.value?.id as string,
-    metadata: JSON.stringify({ workspace_id: currentActiveWorkspace.value?.id }),
-  })
+  try {
+    const res = await $fetch(`/api/payments/checkout`, {
+      method: 'POST',
+      body: {
+        productId: productId.value as string,
+        workspaceId: currentActiveWorkspace.value?.id as string,
+      },
+    })
 
-  await fetch(`/api/payments/checkout?${params}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+    console.log(res.url)
+  }
+  catch (error: any) {
+    // Handle error (optional: log or show notification)
+    console.error('Upgrade to Pro failed:', error)
+  }
 }
 </script>
 
@@ -106,6 +112,7 @@ const onUpgradeToPro = async () => {
       <DropdownMenuSeparator />
       <DropdownMenuItem
         class="cursor-pointer dark:hover:bg-[#343434]"
+        :disabled="status ==='pending' || status ==='idle'"
         @click="onUpgradeToPro"
       >
         <SparklesIcon />

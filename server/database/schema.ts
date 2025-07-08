@@ -51,6 +51,16 @@ export const workspaceTable = pgTable('workspace', {
   updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull(),
 })
 
+export const polarCustomers = pgTable('polar_customers', {
+  id: uuid('id').primaryKey(),
+  workspaceId: text('workspace_id').notNull().references(() => workspaceTable.id, { onDelete: 'cascade' }),
+  email: varchar('email', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }),
+  organizationId: uuid('organization_id'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
+})
+
 export const subscriptionTable = pgTable('subscription', {
   id: text('id').primaryKey(),
   workspace_id: text('workspace_id').notNull().references(() => workspaceTable.id, { onDelete: 'cascade' }),
@@ -224,6 +234,14 @@ export const workspaceRelations = relations(workspaceTable, ({ one, many }) => (
     references: [subscriptionTable.workspace_id],
   }),
   billingEvents: many(billingEventsTable),
+  customers: many(polarCustomers),
+}))
+
+export const polarCustomerRelations = relations(polarCustomers, ({ one }) => ({
+  workspace: one(workspaceTable, {
+    fields: [polarCustomers.workspaceId],
+    references: [workspaceTable.id],
+  }),
 }))
 
 export const subscriptionRelations = relations(subscriptionTable, ({ one }) => ({

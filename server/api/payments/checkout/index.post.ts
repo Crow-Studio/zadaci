@@ -1,37 +1,64 @@
-export default defineEventHandler((event) => {
+import { Polar } from '@polar-sh/sdk'
+
+export default defineEventHandler(async (event) => {
   const {
     private: { polarAccessToken, polarCheckoutSuccessUrl, polarServer },
   } = useRuntimeConfig()
 
-  console.log('=== POLAR DEBUG START ===')
+  const session = await requireUserSession(event)
 
-  // 1. Check all environment variables
-  console.log('Environment variables:')
-  console.log('- POLAR_ACCESS_TOKEN exists:', !!polarAccessToken)
-  console.log('- POLAR_ACCESS_TOKEN length:', polarAccessToken?.length || 0)
-  console.log('- POLAR_ACCESS_TOKEN prefix:', polarAccessToken?.substring(0, 15) || 'MISSING')
-  console.log('- POLAR_SUCCESS_URL:', polarCheckoutSuccessUrl)
-  console.log('- POLAR_SERVER:', polarServer)
-  console.log('- NODE_ENV:', process.env.NODE_ENV)
+  const { productId, workspaceId } = await readBody<{ productId: string, workspaceId: string }>(event)
 
-  // 2. Check the request data
-  const query = getQuery(event)
-  console.log('Request query:', query)
+  if (!session) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Unauthorized!',
+    })
+  }
 
-  // 3. Test the token directly first
-  const token = polarAccessToken
-  if (!token) {
+  if (!workspaceId || typeof workspaceId !== 'string') {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid or missing workspaceId!',
+    })
+  }
+
+  if (!productId || typeof productId !== 'string') {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid or missing productId!',
+    })
+  }
+
+  if (!polarAccessToken) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Configuration Error',
       message: 'POLAR_ACCESS_TOKEN is not set',
     })
   }
-  const checkoutHandler = Checkout({
+
+  const polar = new Polar({
     accessToken: polarAccessToken,
-    successUrl: polarCheckoutSuccessUrl,
     server: polarServer as 'sandbox' | 'production',
   })
 
-  return checkoutHandler(event)
+  const customer = await polar.customers.create({
+    email: session.user.email,
+    name: session.user.username,
+    metadata: { workspace_id: workspaceId },
+  })
+
+  console.log(customer)
+
+  const res = await polar.checkouts.create({
+    products: [productId],
+    successUrl: polarCheckoutSuccessUrl,
+    customerId: customer.id,
+    metadata: {
+      workspace_id: workspaceId,
+    },
+  })
+
+  return res
 })

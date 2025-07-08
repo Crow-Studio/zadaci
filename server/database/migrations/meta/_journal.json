@@ -15,6 +15,13 @@
       "when": 1751697915624,
       "tag": "0001_freezing_kree",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751966426578,
+      "tag": "0002_flowery_prodigy",
+      "breakpoints": true
     }
   ]
 }

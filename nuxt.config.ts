@@ -89,6 +89,9 @@ export default defineNuxtConfig({
     build: {
       sourcemap: false, // Disable sourcemaps entirely for production
     },
+    server: {
+      allowedHosts: ['9a7549781176.ngrok-free.app'],
+    },
   },
   auth: {
     webAuthn: true,

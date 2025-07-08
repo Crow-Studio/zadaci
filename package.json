@@ -27,6 +27,7 @@
     "@oslojs/otp": "^1.1.0",
     "@pinia/nuxt": "0.11.1",
     "@polar-sh/nuxt": "^0.3.3",
+    "@polar-sh/sdk": "^0.34.3",
     "@simplewebauthn/browser": "^11.0.0",
     "@simplewebauthn/server": "^11.0.0",
     "@tailwindcss/vite": "^4.1.10",
