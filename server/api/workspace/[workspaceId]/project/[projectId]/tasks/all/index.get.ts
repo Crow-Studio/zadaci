@@ -2,40 +2,26 @@ export default defineEventHandler(async (event) => {
   try {
     const session = await requireUserSession(event)
     const workspaceId = getRouterParam(event, 'workspaceId')
-
     const projectId = getRouterParam(event, 'projectId')
 
     if (!session) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized!',
-      })
+      throw createError({ statusCode: 401, statusMessage: 'Unauthorized!' })
     }
 
     if (!workspaceId || typeof workspaceId !== 'string') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'WorkspaceID is required!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Workspace ID is required!' })
     }
 
     if (!projectId || typeof projectId !== 'string') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'ProjectID is required!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Project ID is required!' })
     }
 
     // check if workspace exists
     const workspace = await useDrizzle().query.workspaceTable.findFirst({
       where: table => eq(table.id, workspaceId),
     })
-
     if (!workspace) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid Workspace!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Invalid workspace!' })
     }
 
     // check if project exists
@@ -45,20 +31,25 @@ export default defineEventHandler(async (event) => {
         eq(table.workspace_id, workspaceId),
       ),
     })
-
     if (!project) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid Project!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Invalid project!' })
     }
 
-    // retrieve all tasks for the project with subtasks
+    // retrieve all tasks for the project with subtasks and assignees
     const tasks = await useDrizzle().query.tasksTable.findMany({
       where: table => eq(table.project_id, projectId),
       orderBy: (table, { desc }) => desc(table.created_at),
       with: {
         subtasks: true,
+        assignees: {
+          with: {
+            member: {
+              with: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     })
 
@@ -79,13 +70,19 @@ export default defineEventHandler(async (event) => {
         createdAt: subtask.created_at.toISOString(),
         updatedAt: subtask.updated_at.toISOString(),
       })),
+      assignees: task.assignees.map(assignee => ({
+        member_id: assignee.member.id,
+        username: assignee.member.user.username,
+        email: assignee.member.user.email,
+        avatar: assignee.member.user.profile_picture_url,
+      })),
     }))
   }
   catch (error: any) {
     const errorMessage = error.error ? error.error.message : error.message
     throw createError({
-      statusCode: error.statusCode ? error.statusCode : 500,
-      statusMessage: `Retrieve Tasks Error: ${errorMessage}!`,
+      statusCode: error.statusCode || 500,
+      statusMessage: `Retrieve project tasks error: ${errorMessage}!`,
     })
   }
 })

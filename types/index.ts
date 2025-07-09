@@ -269,6 +269,7 @@ export interface Task {
   dueDate: Date | null | string
   projectId: string
   subtasks: Subtask[]
+  assignees: ProjectMembers[]
 }
 
 export interface Subtask {
