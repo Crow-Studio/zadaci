@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import {
-  Calculator,
-  Calendar,
-  Smile,
-  Home,
-  FileText,
-  Blocks,
-  Palette,
-} from 'lucide-vue-next'
-import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from '~/components/ui/dialog'
 
 import {
   Command,
@@ -21,24 +12,96 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from '~/components/ui/command'
+
 import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
+
+const workspaceStore = useWorkspaceStore()
+const modalStore = useModalStore()
+
+const isOpen = ref(false)
+
+const currentActiveWorkspace = computed(() => {
+  return workspaceStore.activeWorkspace
+})
+
+const { data } = await useAsyncData(
+  () => `sidebar_projects_${currentActiveWorkspace.value?.id}`,
+  () => {
+    if (currentActiveWorkspace.value?.id) {
+      return useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value.id}/user/projects/all`)
+    }
+    return Promise.resolve([])
+  },
+  { watch: [() => currentActiveWorkspace.value?.id] },
+)
+
+const projects = computed(() => {
+  return data.value
+    ? data.value.map((project: any) => ({
+        ...project,
+        dueDate: project.dueDate ? new Date(project.dueDate) : null,
+        createdAt: project.createdAt ? new Date(project.createdAt) : null,
+        updatedAt: project.updatedAt ? new Date(project.updatedAt) : null,
+      }))
+    : []
+})
+
+const onCommandSelect = (value: string) => {
+  const workspaceId = currentActiveWorkspace.value?.id
+  if (!workspaceId) return
+
+  if (value === 'dashboard') {
+    navigateTo(`/workspace/${workspaceId}/dashboard`)
+  }
+  else if (value === 'my-tasks') {
+    navigateTo(`/workspace/${workspaceId}/my-tasks`)
+  }
+  else if (value === 'new-project') {
+    modalStore?.onOpen('addNewProject')
+    modalStore?.setIsOpen(true)
+  }
+  else if (value === 'all-projects') {
+    navigateTo(`/workspace/${workspaceId}/projects/all`)
+  }
+  else {
+    const project = projects.value.find(p => p.title === value)
+    if (project) {
+      navigateTo(`/workspace/${workspaceId}/projects/${project.id}`)
+    }
+  }
+
+  isOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault()
+      isOpen.value = true
+    }
+  })
+})
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="isOpen">
     <ActionTooltip
       label="Search (⌘K)"
       as-child
     >
-      <DialogTrigger class="inline-flex items-center cursor-pointer gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground px-2 sm:px-4 py-2 relative h-8 justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 w-fit sm:w-40">
+      <DialogTrigger
+        class="inline-flex items-center cursor-pointer gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground px-2 sm:px-4 py-2 relative h-8 justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 w-fit sm:w-40"
+      >
         <span class="flex items-center gap-x-2">
           <Icon name="hugeicons:search-01" />
           <span class="hidden md:inline-flex">
             Search
           </span>
         </span>
-        <kbd class="hidden items-center pointer-events-none select-none gap-1 p-1 rounded border border-border bg-muted font-sans font-medium min-h-4 text-[10px] h-4 px-1 absolute right-[0.3rem] top-[0.4rem] opacity-100 sm:flex">⌘ K</kbd>
+        <kbd
+          class="hidden items-center pointer-events-none select-none gap-1 p-1 rounded border border-border bg-muted font-sans font-medium min-h-4 text-[10px] h-4 px-1 absolute right-[0.3rem] top-[0.4rem] opacity-100 sm:flex"
+        >⌘ K</kbd>
       </DialogTrigger>
     </ActionTooltip>
 
@@ -56,60 +119,73 @@ import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
             class="px-2 py-3"
           >
             <CommandItem
-              value="home"
+              value="dashboard"
               class="px-3 py-2 rounded-md cursor-pointer"
+              @select="onCommandSelect('dashboard')"
             >
-              <Home class="mr-3 h-4 w-4" />
-              <span>Home</span>
+              <Icon
+                name="solar:home-angle-2-outline"
+                class="mr-3"
+                size="18"
+              />
+              <span>Dashboard</span>
             </CommandItem>
             <CommandItem
-              value="docs"
+              value="my-tasks"
               class="px-3 py-2 rounded-md cursor-pointer"
+              @select="onCommandSelect('my-tasks')"
             >
-              <FileText class="mr-3 h-4 w-4" />
-              <span>Docs</span>
-            </CommandItem>
-            <CommandItem
-              value="blocks"
-              class="px-3 py-2 rounded-md cursor-pointer"
-            >
-              <Blocks class="mr-3 h-4 w-4" />
-              <span>Blocks</span>
-            </CommandItem>
-            <CommandItem
-              value="themes"
-              class="px-3 py-2 rounded-md cursor-pointer"
-            >
-              <Palette class="mr-3 h-4 w-4" />
-              <span>Themes</span>
+              <Icon
+                name="hugeicons:task-01"
+                class="mr-3"
+                size="18"
+              />
+              <span>My Tasks</span>
             </CommandItem>
           </CommandGroup>
 
           <CommandGroup
-            heading="Getting Started"
+            heading="Projects"
             class="px-2 py-3"
           >
             <CommandItem
-              value="calendar"
+              value="new-project"
               class="px-3 py-2 rounded-md cursor-pointer"
+              @select="onCommandSelect('new-project')"
             >
-              <Calendar class="mr-3 h-4 w-4" />
-              <span>Calendar</span>
+              <Icon
+                name="solar:add-folder-outline"
+                class="mr-3"
+                size="18"
+              />
+              <span>New Project</span>
             </CommandItem>
             <CommandItem
-              value="search"
+              value="all-projects"
               class="px-3 py-2 rounded-md cursor-pointer"
+              @select="onCommandSelect('all-projects')"
             >
-              <Smile class="mr-3 h-4 w-4" />
-              <span>Search Emoji</span>
+              <Icon
+                name="solar:folder-with-files-outline"
+                class="mr-3"
+                size="18"
+              />
+              <span>All Projects</span>
             </CommandItem>
+
             <CommandItem
-              disabled
-              value="calculator"
-              class="px-3 py-2 rounded-md opacity-50 cursor-not-allowed"
+              v-for="project in projects"
+              :key="project.id"
+              :value="project.title"
+              class="px-3 py-2 rounded-md cursor-pointer"
+              @select="onCommandSelect(project.title)"
             >
-              <Calculator class="mr-3 h-4 w-4" />
-              <span>Calculator</span>
+              <Icon
+                name="solar:folder-with-files-outline"
+                class="mr-3"
+                size="18"
+              />
+              <span>{{ project.title }}</span>
             </CommandItem>
           </CommandGroup>
         </CommandList>
