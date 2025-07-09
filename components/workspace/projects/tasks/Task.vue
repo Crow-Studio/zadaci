@@ -102,7 +102,10 @@ const props = defineProps<{
         <p v-if="props?.task.subtasks.length > 0">
           {{ props?.task.subtasks.filter(s => s.is_completed).length }} / {{ props?.task.subtasks.length }}
         </p>
-        <div class="bg-muted-foreground size-1 rounded-full" />
+        <div
+          v-if="props?.task.subtasks.length > 0"
+          class="bg-muted-foreground size-1 rounded-full"
+        />
         <div class="flex -space-x-2">
           <ActionTooltip
             v-for="(member, index) in props?.task.assignees.slice(0, 5)"

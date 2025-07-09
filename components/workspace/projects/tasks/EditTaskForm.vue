@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
-import { Loader2 } from 'lucide-vue-next'
+import { Loader2, X } from 'lucide-vue-next'
 import isEqual from 'lodash/isEqual'
+import AddTaskAssignees from './AddTaskAssignees.vue'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import DatePicker from '~/components/workspace/DatePicker.vue'
-import { columns, newTaskSchema, priorityOptions, type Task } from '~/types'
+import { columns, newTaskSchema, priorityOptions, type ProjectMembers, type Task } from '~/types'
 import {
   FormControl,
   FormField,
@@ -17,6 +18,8 @@ import {
 import { Label } from '~/components/ui/label'
 import { Checkbox } from '~/components/ui/checkbox'
 import { formatDateForPicker } from '~/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Button } from '~/components/ui/button'
 
 const props = defineProps<{
   onClose: () => void
@@ -26,9 +29,39 @@ const props = defineProps<{
   task: Task
 }>()
 
+const workspaceStore = useWorkspaceStore()
+
 const form = useForm({
   validationSchema: newTaskSchema,
 })
+
+const currentActiveWorkspace = computed(() => {
+  return workspaceStore?.activeWorkspace
+})
+
+const assignees = useState('task_project_assignees', () => {
+  return props?.task.assignees
+    ? props?.task.assignees.map(assignee => ({
+        member_id: assignee.member_id,
+        avatar: assignee.avatar,
+        email: assignee.email,
+        username: assignee.username,
+      }))
+    : []
+})
+
+const onAddAssiginees = (payload: ProjectMembers) => {
+  const newAssignees = [
+    ...assignees.value,
+    payload,
+  ]
+  assignees.value = newAssignees
+}
+
+const onRemoveAssignee = (payload: ProjectMembers) => {
+  const newAssignees = assignees.value.filter(a => a.member_id !== payload.member_id)
+  assignees.value = newAssignees
+}
 
 const subtasks = ref([{ name: '', is_completed: false }])
 
@@ -41,6 +74,7 @@ const initialTask = ref<{
   description: string
   dueDate: string | undefined
   subtasks: { name: string, is_completed: boolean }[]
+  assignees: ProjectMembers[]
 }>({
   name: '',
   status: '',
@@ -48,6 +82,7 @@ const initialTask = ref<{
   description: '',
   dueDate: undefined,
   subtasks: [],
+  assignees: [],
 })
 
 const isFormChanged = computed(() => {
@@ -57,7 +92,8 @@ const isFormChanged = computed(() => {
     priority: form.values.priority,
     description: form.values.description,
     dueDate: form.values.dueDate,
-    subtasks: subtasks.value.filter(s => s.name), // Skip empty subtasks
+    subtasks: subtasks.value.filter(s => s.name),
+    assignees: assignees.value,
   }
   return !isEqual(initialTask.value, current)
 })
@@ -125,6 +161,7 @@ onMounted(() => {
       name: s.name,
       is_completed: Boolean(s.is_completed),
     })) || [],
+    assignees: assignees.value,
   }
 })
 
@@ -136,14 +173,16 @@ const onSubmit = form.handleSubmit(async (values) => {
       description: values.description ? values.description : '',
       dueDate: values.dueDate ? new Date(values.dueDate) : undefined,
       subtasks: values.subtasks ? values.subtasks.filter(task => task.name) : [],
+      assignees: assignees.value,
     }
 
-    const res = await $fetch(`/api/workspace/project/${props?.projectId}/task/${props?.task.id}/update`, {
+    const res = await $fetch(`/api/workspace/${currentActiveWorkspace?.value?.id}/project/${props?.projectId}/tasks/${props?.task.id}/update`, {
       method: 'PATCH',
       body: newFormValues,
     })
 
-    await refreshNuxtData(['all_project_stats', `board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`, 'all_project_task_stats'])
+    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`])
+
     form.resetForm()
     onCloseModal()
 
@@ -167,11 +206,11 @@ const onSubmit = form.handleSubmit(async (values) => {
 const onDeleteTask = async () => {
   isDeletingTask.value = true
   try {
-    const res = await $fetch(`/api/workspace/project/${props?.projectId}/task/${props?.task.id}/delete`, {
+    const res = await $fetch(`/api/workspace/${currentActiveWorkspace?.value?.id}/project/${props?.projectId}/tasks/${props?.task.id}/delete`, {
       method: 'DELETE',
     })
 
-    await refreshNuxtData(['all_project_stats', `board_view_project_tasks_${props?.projectId}`, 'all_project_task_stats', `all_project_task_stats_${props.projectId}`])
+    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`])
     form.resetForm()
     onCloseModal()
 
@@ -328,6 +367,48 @@ const onCloseModal = () => {
           <FormMessage />
         </FormItem>
       </FormField>
+      <div class="grid gap-2">
+        <Label>Assignees</Label>
+        <div class="grid gap-y-2">
+          <div
+            v-if="assignees.length > 0"
+            class="flex items-center gap-x-2 w-full flex-wrap"
+          >
+            <div
+              v-for="assignee in assignees"
+              :key="assignee.member_id"
+              class="relative"
+            >
+              <div class="size-10 overflow-hidden">
+                <Avatar
+                  class="size-full absolute inset-0 object-cover"
+                >
+                  <AvatarImage
+                    :src="assignee.avatar!"
+                    :alt="assignee.username"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </div>
+              <Button
+                size="icon"
+                variant="destructive"
+                class="absolute cursor-pointer -right-1 -top-1 size-6 rounded-full border-2 border-background"
+                aria-label="Remove teammate"
+                @click="onRemoveAssignee(assignee)"
+              >
+                <X :size="16" />
+              </Button>
+            </div>
+          </div>
+          <AddTaskAssignees
+            :assignees="assignees"
+            :on-add-assiginees="onAddAssiginees"
+            :on-remove-assignee="onRemoveAssignee"
+            :project-id="props?.projectId"
+          />
+        </div>
+      </div>
       <FormField
         v-slot="{ componentField }"
         name="description"
