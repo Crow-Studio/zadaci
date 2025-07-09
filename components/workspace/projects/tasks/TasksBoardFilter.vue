@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Calendar, Users, ChevronDown, X, Activity, AlertCircle } from 'lucide-vue-next'
+import { Calendar, Users, ChevronDown, Activity, AlertCircle, Check } from 'lucide-vue-next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { IProject, Task } from '~/types'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '~/components/ui/command'
 
 const props = defineProps<{
   tasks: Record<string, Task[]>
@@ -34,23 +36,23 @@ const selectedPriorities = ref<string[]>([])
 
 // Due date options
 const dueDateOptions = [
-  { value: 'late', label: 'Late', icon: Calendar },
-  { value: 'today', label: 'Today', icon: Calendar },
-  { value: 'tomorrow', label: 'Tomorrow', icon: Calendar },
-  { value: 'thisWeek', label: 'This week', icon: Calendar },
-  { value: 'nextWeek', label: 'Next week', icon: Calendar },
-  { value: 'future', label: 'Future', icon: Calendar },
-  { value: 'noDate', label: 'No date', icon: Calendar },
+  { value: 'late', label: 'Late', icon: 'hugeicons:alert-01' },
+  { value: 'today', label: 'Today', icon: 'hugeicons:calendar-01' },
+  { value: 'tomorrow', label: 'Tomorrow', icon: 'hugeicons:calendar-02' },
+  { value: 'thisWeek', label: 'This week', icon: 'hugeicons:calendar-03' },
+  { value: 'nextWeek', label: 'Next week', icon: 'hugeicons:calendar-minus-02' },
+  { value: 'future', label: 'Future', icon: 'hugeicons:calendar-love-02' },
+  { value: 'noDate', label: 'No date', icon: 'hugeicons:calendar-04' },
 ]
 
 // Status options
 const statusOptions = [
-  { value: 'IDEA', label: 'Idea', color: 'bg-gray-500' },
-  { value: 'TODO', label: 'To Do', color: 'bg-blue-500' },
-  { value: 'IN PROGRESS', label: 'In Progress', color: 'bg-yellow-500' },
-  { value: 'IN REVIEW', label: 'In Review', color: 'bg-purple-500' },
-  { value: 'COMPLETED', label: 'Completed', color: 'bg-green-500' },
-  { value: 'ABANDONED', label: 'Abandoned', color: 'bg-red-500' },
+  { value: 'IDEA', label: 'Idea', icon: 'hugeicons:ai-idea' },
+  { value: 'TODO', label: 'To Do', icon: 'solar:clipboard-outline' },
+  { value: 'IN PROGRESS', label: 'In Progress', icon: 'solar:alarm-outline' },
+  { value: 'IN REVIEW', label: 'In Review', icon: 'solar:minimalistic-magnifer-bug-outline' },
+  { value: 'COMPLETED', label: 'Completed', icon: 'solar:check-circle-outline' },
+  { value: 'ABANDONED', label: 'Abandoned', icon: 'solar:trash-bin-trash-outline' },
 ]
 
 // Priority options
@@ -224,59 +226,16 @@ function togglePriorityFilter(value: string) {
     selectedPriorities.value.push(value)
   }
 }
-
-// Remove specific filters
-function removeDueDateFilter(value: string) {
-  const index = selectedDueDates.value.indexOf(value)
-  if (index > -1) {
-    selectedDueDates.value.splice(index, 1)
-  }
-}
-
-function removeAssigneeFilter(value: string) {
-  const index = selectedAssignees.value.indexOf(value)
-  if (index > -1) {
-    selectedAssignees.value.splice(index, 1)
-  }
-}
-
-function removeStatusFilter(value: string) {
-  const index = selectedStatuses.value.indexOf(value)
-  if (index > -1) {
-    selectedStatuses.value.splice(index, 1)
-  }
-}
-
-function removePriorityFilter(value: string) {
-  const index = selectedPriorities.value.indexOf(value)
-  if (index > -1) {
-    selectedPriorities.value.splice(index, 1)
-  }
-}
-
-// Get options by value
-function getStatusOption(value: string) {
-  return statusOptions.find(option => option.value === value)
-}
-
-function getPriorityOption(value: string) {
-  return priorityOptions.find(option => option.value === value)
-}
-
-// Get assignee by ID
-function getAssigneeById(id: string) {
-  return assignees.value.find(assignee => assignee.id === id)
-}
 </script>
 
 <template>
-  <div class="flex items-center gap-2 mb-4">
+  <div class="flex items-center gap-2 mb-4 bg-transparent">
     <!-- Filter Dropdown -->
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
         <Button
           variant="outline"
-          class="gap-2"
+          class="gap-2 cursor-pointer"
         >
           <span>Filters</span>
           <Badge
@@ -289,18 +248,27 @@ function getAssigneeById(id: string) {
           <ChevronDown class="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent class="w-56">
-        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+      <DropdownMenuContent class="w-56 dark:bg-[#1d1d1d]">
+        <DropdownMenuLabel class="flex items-center justify-between">
+          <p>Filter by</p>
+          <button
+            v-if="activeFiltersCount > 0"
+            class="cursor-pointer text-rose-600"
+            @click="clearAllFilters"
+          >
+            Clear all
+          </button>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <!-- Status Filter -->
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger class="cursor-pointer">
             <Activity class="h-4 w-4 mr-2" />
             <span>Status</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuSubContent>
+            <DropdownMenuSubContent class="dark:bg-[#1d1d1d] grid gap-0.5 w-48">
               <DropdownMenuItem
                 v-for="option in statusOptions"
                 :key="option.value"
@@ -308,17 +276,16 @@ function getAssigneeById(id: string) {
                 :class="{ 'bg-accent': selectedStatuses.includes(option.value) }"
                 @click="toggleStatusFilter(option.value)"
               >
-                <div
-                  :class="option.color"
-                  class="h-3 w-3 rounded-full mr-2"
+                <Icon
+                  :name="option.icon"
+                  class="mr-1"
+                  size="18"
                 />
                 <span>{{ option.label }}</span>
-                <div
+                <Check
                   v-if="selectedStatuses.includes(option.value)"
                   class="ml-auto"
-                >
-                  <div class="h-2 w-2 rounded-full bg-blue-600" />
-                </div>
+                />
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -326,12 +293,12 @@ function getAssigneeById(id: string) {
 
         <!-- Priority Filter -->
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger class="cursor-pointer">
             <AlertCircle class="h-4 w-4 mr-2" />
             <span>Priority</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuSubContent>
+            <DropdownMenuSubContent class="dark:bg-[#1d1d1d] grid gap-0.5 w-48">
               <DropdownMenuItem
                 v-for="option in priorityOptions"
                 :key="option.value"
@@ -344,12 +311,10 @@ function getAssigneeById(id: string) {
                   class="h-3 w-3 rounded-full mr-2"
                 />
                 <span>{{ option.label }}</span>
-                <div
-                  v-if="selectedPriorities.includes(option.value)"
+                <Check
+                  v-if="selectedStatuses.includes(option.value)"
                   class="ml-auto"
-                >
-                  <div class="h-2 w-2 rounded-full bg-blue-600" />
-                </div>
+                />
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -357,12 +322,12 @@ function getAssigneeById(id: string) {
 
         <!-- Due Date Filter -->
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger class="cursor-pointer">
             <Calendar class="h-4 w-4 mr-2" />
             <span>Due date</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuSubContent>
+            <DropdownMenuSubContent class="dark:bg-[#1d1d1d] grid gap-0.5 w-48">
               <DropdownMenuItem
                 v-for="option in dueDateOptions"
                 :key="option.value"
@@ -370,17 +335,16 @@ function getAssigneeById(id: string) {
                 :class="{ 'bg-accent': selectedDueDates.includes(option.value) }"
                 @click="toggleDueDateFilter(option.value)"
               >
-                <component
-                  :is="option.icon"
-                  class="h-4 w-4 mr-2"
+                <Icon
+                  :name="option.icon"
+                  class="mr-1"
+                  size="18"
                 />
                 <span>{{ option.label }}</span>
-                <div
-                  v-if="selectedDueDates.includes(option.value)"
+                <Check
+                  v-if="selectedStatuses.includes(option.value)"
                   class="ml-auto"
-                >
-                  <div class="h-2 w-2 rounded-full bg-blue-600" />
-                </div>
+                />
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -388,110 +352,51 @@ function getAssigneeById(id: string) {
 
         <!-- Assignment Filter -->
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger class="cursor-pointer">
             <Users class="h-4 w-4 mr-2" />
             <span>Assignment</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <DropdownMenuItem
-                v-for="assignee in assignees"
-                :key="assignee.id"
-                class="cursor-pointer"
-                :class="{ 'bg-accent': selectedAssignees.includes(assignee.id) }"
-                @click="toggleAssigneeFilter(assignee.id)"
-              >
-                <div class="flex items-center gap-2">
-                  <div class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center text-xs">
-                    {{ assignee.username.charAt(0).toUpperCase() }}
-                  </div>
-                  <span>{{ assignee.username }}</span>
-                </div>
-                <div
-                  v-if="selectedAssignees.includes(assignee.id)"
-                  class="ml-auto"
-                >
-                  <div class="h-2 w-2 rounded-full bg-blue-600" />
-                </div>
-              </DropdownMenuItem>
+            <DropdownMenuSubContent class="dark:bg-[#1d1d1d] grid gap-0.5">
+              <Command class="bg-transparent">
+                <CommandInput placeholder="Search people.." />
+                <CommandList>
+                  <CommandEmpty class="p-3">
+                    No results found.
+                  </CommandEmpty>
+                  <CommandGroup heading="Assignees">
+                    <CommandItem
+                      v-for="assignee in assignees"
+                      :key="assignee.member_id"
+                      :value="assignee"
+                      class="cursor-pointer"
+                      :class="{ 'bg-accent': selectedAssignees.includes(assignee.id) }"
+                    >
+                      <DropdownMenuItem
+                        class="p-0 w-full cursor-pointer"
+                        @click="toggleAssigneeFilter(assignee.id)"
+                      >
+                        <Avatar class="size-6">
+                          <AvatarImage
+                            :src="assignee.avatar"
+                            :alt="assignee.username"
+                          />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <span class="leading-none">{{ assignee.username }}</span>
+                        <Check
+                          v-if="selectedAssignees.includes(assignee.id)"
+                          class="ml-auto"
+                        />
+                      </DropdownMenuItem>
+                    </CommandItem>
+                  </CommandGroup>
+                </CommandList>
+              </Command>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
       </DropdownMenuContent>
     </DropdownMenu>
-
-    <!-- Clear All Filters -->
-    <Button
-      v-if="activeFiltersCount > 0"
-      variant="ghost"
-      size="sm"
-      class="text-blue-600 hover:text-blue-800"
-      @click="clearAllFilters"
-    >
-      Clear all
-    </Button>
-
-    <!-- Active Filter Badges -->
-    <div class="flex items-center gap-2 flex-wrap">
-      <Badge
-        v-for="statusValue in selectedStatuses"
-        :key="`status-${statusValue}`"
-        variant="secondary"
-        class="gap-1"
-      >
-        <div
-          :class="getStatusOption(statusValue)?.color"
-          class="h-2 w-2 rounded-full"
-        />
-        {{ getStatusOption(statusValue)?.label }}
-        <X
-          class="h-3 w-3 cursor-pointer"
-          @click="removeStatusFilter(statusValue)"
-        />
-      </Badge>
-
-      <Badge
-        v-for="priorityValue in selectedPriorities"
-        :key="`priority-${priorityValue}`"
-        variant="secondary"
-        class="gap-1"
-      >
-        <div
-          :class="getPriorityOption(priorityValue)?.color"
-          class="h-2 w-2 rounded-full"
-        />
-        {{ getPriorityOption(priorityValue)?.label }}
-        <X
-          class="h-3 w-3 cursor-pointer"
-          @click="removePriorityFilter(priorityValue)"
-        />
-      </Badge>
-
-      <Badge
-        v-for="dueDateValue in selectedDueDates"
-        :key="`date-${dueDateValue}`"
-        variant="secondary"
-        class="gap-1"
-      >
-        {{ dueDateOptions.find(opt => opt.value === dueDateValue)?.label }}
-        <X
-          class="h-3 w-3 cursor-pointer"
-          @click="removeDueDateFilter(dueDateValue)"
-        />
-      </Badge>
-
-      <Badge
-        v-for="assigneeId in selectedAssignees"
-        :key="`assignee-${assigneeId}`"
-        variant="secondary"
-        class="gap-1"
-      >
-        {{ getAssigneeById(assigneeId)?.username }}
-        <X
-          class="h-3 w-3 cursor-pointer"
-          @click="removeAssigneeFilter(assigneeId)"
-        />
-      </Badge>
-    </div>
   </div>
 </template>
