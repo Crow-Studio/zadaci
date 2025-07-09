@@ -91,7 +91,7 @@ export function mapTasksByStatus(data: any[], tasks: globalThis.Ref<Record<strin
   tasks.value = grouped
 }
 
-export async function taskHandleDrop(columnKey: Status, task: Task, tasks: globalThis.Ref<Record<string, Task[]>, Record<string, Task[]>>, projectId: string, index?: number) {
+export async function taskHandleDrop(columnKey: Status, task: Task, tasks: globalThis.Ref<Record<string, Task[]>, Record<string, Task[]>>, workspaceId: string, projectId: string, index?: number) {
   const targetList = tasks.value[columnKey]
   if (!targetList) {
     return
@@ -126,12 +126,12 @@ export async function taskHandleDrop(columnKey: Status, task: Task, tasks: globa
     targetList.push(updatedTask)
   }
   try {
-    await $fetch(`/api/workspace/project/${projectId}/task/${task.id}`, {
+    await $fetch(`/api/workspace/${workspaceId}/project/${projectId}/tasks/${task.id}`, {
       method: 'PATCH',
       body: { status: columnKey },
     })
 
-    await refreshNuxtData([`board_view_project_tasks_${projectId}`, `all_project_task_stats_${projectId}`, 'all_project_task_stats'])
+    await refreshNuxtData([`all_project_task_stats_${projectId}`, `board_view_project_tasks_${projectId}`])
   }
   catch (error: any) {
     const errorMessage = error.response

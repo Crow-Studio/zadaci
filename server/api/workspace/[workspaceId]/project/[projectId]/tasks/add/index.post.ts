@@ -74,7 +74,10 @@ export default defineEventHandler(async (event) => {
 
     // Verify that the project exists
     const project = await useDrizzle().query.projectTable.findFirst({
-      where: table => eq(table.id, projectId),
+      where: table => and(
+        eq(table.id, projectId),
+        eq(table.workspace_id, workspaceId),
+      ),
     })
     if (!project) throw createError({ statusCode: 400, statusMessage: 'Invalid project!' })
 
@@ -143,15 +146,15 @@ export default defineEventHandler(async (event) => {
     await useDrizzle().insert(tables.taskAssigneesTable).values(assigneeValues)
 
     // Save task activity if status is final
-    if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
-      await useDrizzle().insert(tables.tasksActivityTable).values({
-        id: uuidv4(),
-        task_id: task.id,
-        changed_by: session.user.id,
-        status,
-        changed_at: new Date(),
-      })
-    }
+    // if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
+    //   await useDrizzle().insert(tables.tasksActivityTable).values({
+    //     id: uuidv4(),
+    //     task_id: task.id,
+    //     changed_by: session.user.id,
+    //     status,
+    //     changed_at: new Date(),
+    //   })
+    // }
 
     return {
       message: 'Task created successfully',
