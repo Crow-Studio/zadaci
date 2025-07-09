@@ -15,6 +15,7 @@ definePageMeta({
 
 const route = useRoute()
 const workspaceStore = useWorkspaceStore()
+const modalStore = useModalStore()
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -155,6 +156,27 @@ defineOgImageComponent('UseOdama', {
   description:
     'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
 })
+
+const onAddNewTask = () => {
+  if (project.value) {
+    modalStore?.onOpen('addNewTask')
+    modalStore?.setIsOpen(true)
+    modalStore?.setModalData({
+      project: {
+        createdAt: new Date(project.value.created_at),
+        updatedAt: new Date(project.value.updated_at),
+        dueDate: project.value.due_date ? new Date(project.value.due_date) : null,
+        workspaceId: project.value.workspace_id,
+        members: members.value,
+        id: project.value.id,
+        title: project.value.title,
+        description: project.value.description,
+        status: project.value.status,
+        priority: project.value.priority,
+      },
+    })
+  }
+}
 </script>
 
 <template>
@@ -197,8 +219,8 @@ defineOgImageComponent('UseOdama', {
         >
           <Button
             class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out sm:hover:scale-105 w-full sm:w-auto flex-shrink-0"
+            @click="onAddNewTask"
           >
-            <!-- @click="onAddNewTask" -->
             <Icon
               name="hugeicons:task-add-01"
               class="size-4"

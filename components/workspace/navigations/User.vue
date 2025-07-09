@@ -4,6 +4,7 @@ import {
   LogOut,
   SparklesIcon,
 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import {
   Avatar,
   AvatarFallback,
@@ -44,23 +45,36 @@ const onOpenSignoutModal = () => {
 }
 
 const onUpgradeToPro = async () => {
-  try {
-    const res = await $fetch(`/api/payments/checkout`, {
-      method: 'POST',
-      body: {
-        productId: productId.value as string,
-        workspaceId: currentActiveWorkspace.value?.id as string,
+  toast.promise(
+    (async () => {
+      const res = await $fetch(`/api/payments/checkout`, {
+        method: 'POST',
+        body: {
+          productId: productId.value as string,
+          workspaceId: currentActiveWorkspace.value?.id as string,
+        },
+      })
+      return { ...res, message: 'Checkout created successfully.' }
+    })(),
+    {
+      loading: 'Creating payment checkout..',
+      success: (data: { message: string, url: string }) => {
+        if (data.url) {
+          window.location.href = data.url
+        }
+        return data.message
       },
-    })
 
-    if (res.url) {
-      window.location.href = res.url
-    }
-  }
-  catch (error: any) {
-    // Handle error (optional: log or show notification)
-    console.error('Upgrade to Pro failed:', error)
-  }
+      error: (error: any) => {
+        const errorMessage = error.response
+          ? error.response._data.statusMessage
+          : error.message
+
+        return errorMessage
+      },
+      position: 'top-center',
+    },
+  )
 }
 </script>
 

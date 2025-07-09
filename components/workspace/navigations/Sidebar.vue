@@ -214,7 +214,7 @@ const projects = computed(() => {
             <button
               v-for="project in projects"
               :key="project.id"
-              class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+              class="flex w-full items-center capitalize gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
               @click="onNavigateToPage({
                 name: `${currentActiveWorkspace?.name}`,
                 path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,

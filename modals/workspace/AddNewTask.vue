@@ -13,8 +13,8 @@ const isModalOpen = computed(() => {
   return modalStore?.type === 'addNewTask' && modalStore?.isOpen
 })
 
-const projectId = computed(() => {
-  return modalStore?.data?.projectId
+const project = computed(() => {
+  return modalStore?.data?.project
 })
 
 const isAddNewTask = ref(false)
@@ -56,7 +56,7 @@ const onClose = () => {
         :on-set-is-add-new-task="onSetIsAddNewTask"
         :is-add-new-task="isAddNewTask"
         :on-close="onClose"
-        :project-id="projectId!"
+        :project="project ?? null"
       />
     </SheetContent>
   </Sheet>
