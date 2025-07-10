@@ -1,55 +1,28 @@
 <script setup lang="ts">
 import TasksColumn from './TasksColumn.vue'
 import TasksBoardFilter from './TasksBoardFilter.vue'
-import { mapTasksByStatus, taskHandleDrop } from '~/lib/tasks'
+import { taskHandleDrop } from '~/lib/tasks'
 import { taskColumns, type IProject, type Status, type Task } from '~/types'
 
 const props = defineProps<{
   project: IProject
+  tasks: Record<string, Task[]>
+  filteredTasks: Record<string, Task[]>
+  handleTasksFiltered: (newFilteredTasks: Record<string, Task[]>) => void
 }>()
 
-const tasks = ref<Record<string, Task[]>>({
-  'IDEA': [],
-  'TODO': [],
-  'IN PROGRESS': [],
-  'IN REVIEW': [],
-  'COMPLETED': [],
-  'ABANDONED': [],
-})
+const localTasks = ref<Record<string, Task[]>>({ ...props.tasks })
 
-// Add filtered tasks state
-const filteredTasks = ref<Record<string, Task[]>>({
-  'IDEA': [],
-  'TODO': [],
-  'IN PROGRESS': [],
-  'IN REVIEW': [],
-  'COMPLETED': [],
-  'ABANDONED': [],
-})
-
-const { data } = await useAsyncData(`board_view_project_tasks_${props?.project.id}`, () =>
-  useRequestFetch()(`/api/workspace/${props.project.workspaceId}/project/${props?.project.id}/tasks/all`),
+watch(
+  () => props.tasks,
+  (newTasks) => {
+    localTasks.value = { ...newTasks }
+  },
+  { immediate: true, deep: true },
 )
 
-watchEffect(() => {
-  if (data.value) {
-    mapTasksByStatus(data.value, tasks)
-  }
-})
-
-watch(data, () => {
-  if (data.value) {
-    mapTasksByStatus(data.value, tasks)
-  }
-}, { immediate: true })
-
-// Handle filter changes
-function handleTasksFiltered(newFilteredTasks: Record<string, Task[]>) {
-  filteredTasks.value = newFilteredTasks
-}
-
 async function handleDrop(columnKey: Status, task: Task, index?: number) {
-  taskHandleDrop(columnKey, task, tasks, props.project.workspaceId, props?.project.id, index)
+  taskHandleDrop(columnKey, task, localTasks, props.project.workspaceId, props?.project.id, index)
 }
 </script>
 
@@ -59,7 +32,7 @@ async function handleDrop(columnKey: Status, task: Task, index?: number) {
     <TasksBoardFilter
       :tasks="tasks"
       :project="props.project"
-      @tasks-filtered="handleTasksFiltered"
+      @tasks-filtered="props?.handleTasksFiltered"
     />
 
     <div class="flex overflow-x-scroll gap-5 my-2 scrollbar-hide">

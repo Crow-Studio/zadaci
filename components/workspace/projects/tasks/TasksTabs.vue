@@ -3,11 +3,14 @@ import TasksBoardsView from './TasksBoardsView.vue'
 import TasksCalendarView from './TasksCalendarView.vue'
 import TasksListView from './TasksListView.vue'
 import TasksTableView from './TasksTableView.vue'
-import type { IProject } from '~/types'
+import type { IProject, Task } from '~/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const props = defineProps<{
   project: IProject
+  tasks: Record<string, Task[]>
+  filteredTasks: Record<string, Task[]>
+  handleTasksFiltered: (newFilteredTasks: Record<string, Task[]>) => void
 }>()
 </script>
 
@@ -61,6 +64,9 @@ const props = defineProps<{
     <TabsContent value="board">
       <TasksBoardsView
         :project="props?.project"
+        :tasks="tasks"
+        :filtered-tasks="filteredTasks"
+        :handle-tasks-filtered="handleTasksFiltered"
       />
     </TabsContent>
     <TabsContent value="list">

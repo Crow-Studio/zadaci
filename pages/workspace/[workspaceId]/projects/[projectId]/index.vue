@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
-import TasksTabs from '~/components/workspace/projects/tasks/TasksTabs.vue'
-import TaskStats from '~/components/workspace/projects/tasks/TaskStats.vue'
 import type { ProjectMembers as IProjectMembers, Priority, Status } from '~/types'
 import ProjectMembers from '~/components/workspace/projects/ProjectMembers.vue'
 import AddProjectMembers from '~/components/workspace/projects/AddProjectMembers.vue'
 import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
+import ProjectTaskWrapper from '~/components/workspace/projects/ProjectTaskWrapper.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -231,24 +230,18 @@ const onAddNewTask = () => {
       </div>
     </div>
 
-    <div
+    <ProjectTaskWrapper
       v-if="project"
-      class="grid md:grid-cols-4 xl:grid-cols-8 gap-10"
-    >
-      <TasksTabs
-        :project="{
-          id: Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!,
-          title: project.title,
-          status: project.status as Status,
-          priority: project.priority as Priority,
-          dueDate: project.due_date ? new Date(project.due_date) : null,
-          workspaceId: project.workspace_id,
-        }"
-      />
-      <TaskStats
-        :workspace-id="project.workspace_id"
-        :project-id="project.id"
-      />
-    </div>
+      :project="{
+        id: Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!,
+        title: project.title,
+        status: project.status as Status,
+        priority: project.priority as Priority,
+        dueDate: project.due_date ? new Date(project.due_date) : null,
+        workspaceId: project.workspace_id,
+      }"
+      :workspace-id="project.workspace_id"
+      :project-id="project.id"
+    />
   </section>
 </template>
