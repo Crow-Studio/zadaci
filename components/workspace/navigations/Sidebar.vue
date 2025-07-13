@@ -24,36 +24,10 @@ const onAddNewProject = () => {
   modalStore?.setIsOpen(true)
 }
 
-const { data: rawWorkspaces, status } = await useAsyncData('workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`), {
-  transform(input) {
-    return {
-      input,
-      fetchedAt: new Date(),
-    }
-  },
-  getCachedData(key, nuxtApp) {
-    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-    // If data is not fetched yet
-    if (!data) {
-      // Fetch the first time
-      return
-    }
-
-    // Check if the data is older than 5 minutes
-    const expirationDate = new Date(data.fetchedAt)
-    expirationDate.setTime(expirationDate.getTime() + 5 * 60 * 1000) // 5 minutes TTL
-    const isExpired = expirationDate.getTime() < Date.now()
-    if (isExpired) {
-      // Refetch the data
-      return
-    }
-
-    return data
-  },
-})
+const { data: rawWorkspaces, status } = await useAsyncData('workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`))
 
 const workspaces = computed(() => {
-  return rawWorkspaces.value?.input?.map(workspace => ({
+  return rawWorkspaces.value?.map(workspace => ({
     ...workspace,
     updatedAt: workspace.updatedAt || '',
   })) || []

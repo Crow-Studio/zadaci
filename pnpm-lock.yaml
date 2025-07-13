@@ -210,6 +210,9 @@ importers:
       '@iconify-json/solar':
         specifier: ^1.2.2
         version: 1.2.2
+      '@iconify-json/uis':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@types/lodash':
         specifier: ^4.17.20
         version: 4.17.20
@@ -934,6 +937,9 @@ packages:
 
   '@iconify-json/solar@1.2.2':
     resolution: {integrity: sha512-lcTb6DWL4HZObiY1W3fHfuxxuQHUc6CFHFeywKEx7Ry0k+dU6POZCMC7oVLr0F8vuf+KgaQ3oOoGO/yFzOwrNg==}
+
+  '@iconify-json/uis@1.2.3':
+    resolution: {integrity: sha512-YWXy/gvHD3V7s8LqY6i4l5DBVHUTGe3txmIu6ubOi11Esb+gjav92zElS/68I+ReR+D8JXYGbiBbGz45gCzZwQ==}
 
   '@iconify/collections@1.0.562':
     resolution: {integrity: sha512-fNGc0xWMInNR3snWMCq6jvrydZTmeRai0u2pEq2gqVrsu51nNBJ10Fgc4lLnDtwN0rcHfIHl8OWxVk6hRMxeNQ==}
@@ -7627,6 +7633,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/solar@1.2.2':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/uis@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
 
