@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import MyTasksColumn from './MyTasksColumn.vue'
-import { taskColumns, type Status, type Task } from '~/types'
+import { taskColumns, type MyTask, type Status } from '~/types'
 import { mapMyTasksByStatus, myTaskHandleDrop } from '~/lib/my-tasks'
 
 const props = defineProps<{
   workspaceId: string
 }>()
 
-const tasks = ref<Record<string, Task[]>>({
+const tasks = ref<Record<string, MyTask[]>>({
   'IDEA': [],
   'TODO': [],
   'IN PROGRESS': [],
@@ -32,8 +32,7 @@ watch(data, () => {
   }
 }, { immediate: true })
 
-async function handleDrop(columnKey: Status, task: Task, index?: number) {
-  console.log(task.projectId)
+async function handleDrop(columnKey: Status, task: MyTask, index?: number) {
   myTaskHandleDrop(columnKey, task, tasks, props?.workspaceId, index)
 }
 </script>

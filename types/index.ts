@@ -272,6 +272,21 @@ export interface Task {
   assignees: ProjectMembers[]
 }
 
+export interface MyTask {
+  name: string
+  status: Status
+  priority: Priority
+  id: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  description: string | null
+  dueDate: Date | null | string
+  projectId: string
+  subtasks: Subtask[]
+  assignees: ProjectMembers[]
+  project: IProject
+}
+
 export interface Subtask {
   name: string
   id: string

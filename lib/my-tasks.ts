@@ -1,8 +1,8 @@
 import type { IDnDPayload, IDnDStore } from '@vue-dnd-kit/core'
 import { toast } from 'vue-sonner'
-import type { Status, Task } from '~/types'
+import type { Status, MyTask } from '~/types'
 
-export function createMyTaskDropHandler(targetList: Task[], onDrop: (item: Task, index?: number) => void, columnId: string) {
+export function createMyTaskDropHandler(targetList: MyTask[], onDrop: (item: MyTask, index?: number) => void, columnId: string) {
   return {
     data: {
       source: targetList,
@@ -57,8 +57,8 @@ export function createMyTaskDropHandler(targetList: Task[], onDrop: (item: Task,
   }
 }
 
-export function mapMyTasksByStatus(data: any[], tasks: globalThis.Ref<Record<string, Task[]>, Record<string, Task[]>>) {
-  const grouped = Object.fromEntries(Object.keys(tasks.value).map(k => [k, [] as Task[]]))
+export function mapMyTasksByStatus(data: any[], tasks: globalThis.Ref<Record<string, MyTask[]>, Record<string, MyTask[]>>) {
+  const grouped = Object.fromEntries(Object.keys(tasks.value).map(k => [k, [] as MyTask[]]))
 
   for (const task of data) {
     const key = task.status.toUpperCase()
@@ -74,7 +74,7 @@ export function mapMyTasksByStatus(data: any[], tasks: globalThis.Ref<Record<str
           createdAt: new Date(subtask.createdAt),
           updatedAt: new Date(subtask.updatedAt),
         })),
-      } as Task)
+      } as MyTask)
     }
   }
 
@@ -91,7 +91,7 @@ export function mapMyTasksByStatus(data: any[], tasks: globalThis.Ref<Record<str
   tasks.value = grouped
 }
 
-export async function myTaskHandleDrop(columnKey: Status, task: Task, tasks: globalThis.Ref<Record<string, Task[]>, Record<string, Task[]>>, workspaceId: string, index?: number) {
+export async function myTaskHandleDrop(columnKey: Status, task: MyTask, tasks: globalThis.Ref<Record<string, MyTask[]>, Record<string, MyTask[]>>, workspaceId: string, index?: number) {
   const targetList = tasks.value[columnKey]
   if (!targetList) {
     return

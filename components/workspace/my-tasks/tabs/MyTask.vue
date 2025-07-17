@@ -4,11 +4,11 @@ import ActionTooltip from '../../global/ActionTooltip.vue'
 import { Badge } from '~/components/ui/badge'
 import { Checkbox } from '~/components/ui/checkbox'
 import { cn } from '~/lib/utils'
-import type { Task } from '~/types'
+import type { MyTask } from '~/types'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 
 const props = defineProps<{
-  task: Task
+  task: MyTask
 }>()
 </script>
 

@@ -3,18 +3,18 @@ import { useDroppable } from '@vue-dnd-kit/core'
 import MyTaskDraggable from './MyTaskDraggable.vue'
 import MyTask from './MyTask.vue'
 import { Button } from '~/components/ui/button'
-import type { IProjectColumn, Task as ITask } from '~/types'
+import type { IProjectColumn, MyTask as IMyTask } from '~/types'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { createMyTaskDropHandler } from '~/lib/my-tasks'
 
 const props = defineProps<{
   column: IProjectColumn
-  data: ITask[]
-  onDrop: (item: ITask, index?: number) => void
+  data: IMyTask[]
+  onDrop: (item: IMyTask, index?: number) => void
 }>()
 
 const modalStore = useModalStore()
-// const workspaceStore = useWorkspaceStore()
+const workspaceStore = useWorkspaceStore()
 
 const { elementRef: myTaskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDroppable(
   createMyTaskDropHandler(props.data, props.onDrop, props.column.name),
@@ -25,14 +25,14 @@ const onAddNewTask = () => {
   modalStore?.setIsOpen(true)
 }
 
-const onEditTask = (task: ITask) => {
+const onEditTask = (task: IMyTask) => {
   modalStore?.onOpen('editProjectTask')
   modalStore?.setIsOpen(true)
   console.log(task)
-  // workspaceStore?.onSetTask({
-  //   data: task,
-  //   project: task.pr,
-  // })
+  workspaceStore?.onSetTask({
+    data: task,
+    project: task.project,
+  })
 }
 </script>
 
