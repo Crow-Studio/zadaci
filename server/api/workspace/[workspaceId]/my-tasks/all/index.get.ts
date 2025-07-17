@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
                 },
               },
             },
+            project: true,
           },
         },
       },
@@ -73,6 +74,14 @@ export default defineEventHandler(async (event) => {
             username: ta.member.user.username,
             avatar: ta.member.user.profile_picture_url,
           })),
+          project: {
+            id: task.project.id,
+            title: task.project.title,
+            status: task.project.status,
+            priority: task.project.priority,
+            dueDate: task.project.due_date,
+            workspaceId: task.project.id,
+          },
         }
       })
 

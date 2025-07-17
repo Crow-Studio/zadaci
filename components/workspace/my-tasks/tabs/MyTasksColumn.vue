@@ -4,8 +4,8 @@ import MyTaskDraggable from './MyTaskDraggable.vue'
 import MyTask from './MyTask.vue'
 import { Button } from '~/components/ui/button'
 import type { IProjectColumn, Task as ITask } from '~/types'
-import { createTaskDropHandler } from '~/lib/tasks'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { createMyTaskDropHandler } from '~/lib/my-tasks'
 
 const props = defineProps<{
   column: IProjectColumn
@@ -17,7 +17,7 @@ const modalStore = useModalStore()
 // const workspaceStore = useWorkspaceStore()
 
 const { elementRef: myTaskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDroppable(
-  createTaskDropHandler(props.data, props.onDrop, props.column.name),
+  createMyTaskDropHandler(props.data, props.onDrop, props.column.name),
 )
 
 const onAddNewTask = () => {
@@ -29,6 +29,10 @@ const onEditTask = (task: ITask) => {
   modalStore?.onOpen('editProjectTask')
   modalStore?.setIsOpen(true)
   console.log(task)
+  // workspaceStore?.onSetTask({
+  //   data: task,
+  //   project: task.pr,
+  // })
 }
 </script>
 
