@@ -31,7 +31,6 @@ async function handleDrop(columnKey: Status, task: Task, index?: number) {
     <!-- Add the filter component -->
     <TasksBoardFilter
       :tasks="tasks"
-      :project="props.project"
       @tasks-filtered="props?.handleTasksFiltered"
     />
 

@@ -15,16 +15,16 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import type { Task } from '~/types'
+import type { MyTask } from '~/types'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '~/components/ui/command'
 
 const props = defineProps<{
-  tasks: Record<string, Task[]>
+  tasks: Record<string, MyTask[]>
 }>()
 
 const emit = defineEmits<{
-  'tasks-filtered': [filteredTasks: Record<string, Task[]>]
+  'tasks-filtered': [filteredTasks: Record<string, MyTask[]>]
 }>()
 
 // Filter states
@@ -95,7 +95,7 @@ const filteredTasks = computed(() => {
     return props.tasks
   }
 
-  const filtered: Record<string, Task[]> = {}
+  const filtered: Record<string, MyTask[]> = {}
 
   Object.entries(props.tasks).forEach(([status, tasks]) => {
     filtered[status] = tasks.filter((task) => {
@@ -228,7 +228,7 @@ function togglePriorityFilter(value: string) {
 </script>
 
 <template>
-  <div class="flex items-center gap-2 mb-4 bg-transparent">
+  <div class="flex items-center gap-2 bg-transparent justify-end">
     <!-- Filter Dropdown -->
     <DropdownMenu>
       <DropdownMenuTrigger as-child>

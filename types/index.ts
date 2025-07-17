@@ -120,6 +120,7 @@ export interface ModalData {
   encodedCredentialIds?: string[]
   projectId?: string
   project?: DBProject | null
+  members?: ProjectMembers[]
 }
 
 export interface ModalStore {

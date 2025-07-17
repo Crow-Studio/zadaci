@@ -10,7 +10,7 @@ const props = defineProps<{
 <template>
   <Tabs
     default-value="board"
-    class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6"
+    class="w-full overflow-x-hidden"
   >
     <TabsList class="rounded-md p-1 w-full md:w-fit">
       <TabsTrigger

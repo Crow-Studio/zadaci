@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
-import MyTasksStats from '~/components/workspace/my-tasks/tabs/MyTasksStats.vue'
 import MyTasksTabs from '~/components/workspace/my-tasks/tabs/MyTasksTabs.vue'
 
 definePageMeta({
@@ -75,40 +74,26 @@ onMounted(() => {
       v-else
       class="grid gap-5"
     >
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div class="flex items-center gap-x-3">
-          <Avatar class="w-12 h-12 sm:w-14 sm:h-14 rounded-md flex-shrink-0">
-            <AvatarImage
-              :src="currentActiveWorkspace?.imageUrl!"
-              :alt="currentActiveWorkspace?.name!"
-            />
-            <AvatarFallback class="rounded-md">
-              CN
-            </AvatarFallback>
-          </Avatar>
-          <div class="min-w-0 flex-1">
-            <h1 class="text-lg sm:text-xl font-semibold truncate">
-              My Tasks
-            </h1>
-            <p class="text-xs sm:text-sm text-muted-foreground truncate">
-              Overview of all your tasks in <span class="capitalize">{{ currentActiveWorkspace?.name }}</span> Workspace.
-            </p>
-          </div>
-        </div>
-        <Button
-          class="cursor-pointer bg-brand text-white hover:bg-brand-secondary transition-all duration-500 ease-in-out hover:-translate-y-1.5 w-full sm:w-auto flex-shrink-0"
-        >
-          <Icon
-            name="hugeicons:task-add-01"
-            class="size-5"
+      <div class="flex items-center gap-x-3">
+        <Avatar class="w-12 h-12 sm:w-14 sm:h-14 rounded-md flex-shrink-0">
+          <AvatarImage
+            :src="currentActiveWorkspace?.imageUrl!"
+            :alt="currentActiveWorkspace?.name!"
           />
-          New Task
-        </Button>
+          <AvatarFallback class="rounded-md">
+            CN
+          </AvatarFallback>
+        </Avatar>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg sm:text-xl font-semibold truncate">
+            My Tasks
+          </h1>
+          <p class="text-xs sm:text-sm text-muted-foreground truncate">
+            Overview of all your tasks in <span class="capitalize">{{ currentActiveWorkspace?.name }}</span> Workspace.
+          </p>
+        </div>
       </div>
-      <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
-        <MyTasksTabs :workspace-id="currentActiveWorkspace?.id!" />
-        <MyTasksStats :workspace-id="currentActiveWorkspace?.id!" />
-      </div>
+      <MyTasksTabs :workspace-id="currentActiveWorkspace?.id!" />
     </div>
   </section>
 </template>

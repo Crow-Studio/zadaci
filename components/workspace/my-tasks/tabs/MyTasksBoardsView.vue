@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MyTasksColumn from './MyTasksColumn.vue'
+import MyTasksBoardsFilter from './MyTasksBoardsFilter.vue'
 import { taskColumns, type MyTask, type Status } from '~/types'
 import { mapMyTasksByStatus, myTaskHandleDrop } from '~/lib/my-tasks'
 
@@ -8,6 +9,15 @@ const props = defineProps<{
 }>()
 
 const tasks = ref<Record<string, MyTask[]>>({
+  'IDEA': [],
+  'TODO': [],
+  'IN PROGRESS': [],
+  'IN REVIEW': [],
+  'COMPLETED': [],
+  'ABANDONED': [],
+})
+
+const filteredTasks = ref<Record<string, MyTask[]>>({
   'IDEA': [],
   'TODO': [],
   'IN PROGRESS': [],
@@ -35,18 +45,26 @@ watch(data, () => {
 async function handleDrop(columnKey: Status, task: MyTask, index?: number) {
   myTaskHandleDrop(columnKey, task, tasks, props?.workspaceId, index)
 }
+
+function handleTasksFiltered(newFilteredTasks: Record<string, MyTask[]>) {
+  filteredTasks.value = newFilteredTasks
+}
 </script>
 
 <template>
-  <div>
+  <div class="space-y-2">
+    <MyTasksBoardsFilter
+      :tasks="tasks"
+      @tasks-filtered="handleTasksFiltered"
+    />
     <div
-      class="flex overflow-x-scroll gap-5 my-2 scrollbar-hide"
+      class="flex overflow-x-scroll gap-5 scrollbar-hide"
     >
       <MyTasksColumn
         v-for="column in taskColumns"
         :key="column.name"
         :column="column"
-        :data="tasks[column.name.toUpperCase()] ?? []"
+        :data="filteredTasks[column.name.toUpperCase()] ?? []"
         :on-drop="(task, index) => handleDrop(column.name.toUpperCase() as Status, task, index)"
       />
     </div>

@@ -2,7 +2,6 @@
 import { useDroppable } from '@vue-dnd-kit/core'
 import MyTaskDraggable from './MyTaskDraggable.vue'
 import MyTask from './MyTask.vue'
-import { Button } from '~/components/ui/button'
 import type { IProjectColumn, MyTask as IMyTask } from '~/types'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { createMyTaskDropHandler } from '~/lib/my-tasks'
@@ -19,11 +18,6 @@ const workspaceStore = useWorkspaceStore()
 const { elementRef: myTaskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDroppable(
   createMyTaskDropHandler(props.data, props.onDrop, props.column.name),
 )
-
-const onAddNewTask = () => {
-  modalStore?.onOpen('addNewTask')
-  modalStore?.setIsOpen(true)
-}
 
 const onEditTask = (task: IMyTask) => {
   modalStore?.onOpen('editProjectTask')
@@ -75,20 +69,10 @@ const onEditTask = (task: IMyTask) => {
         v-if="isOvered && isAllowed && isLazyAllowed && props.data.length <= 0"
         class="text-sm font-medium bg-background/50 my-2 p-9 rounded-md"
       />
+      <div
+        v-else-if="props.data.length ===0 && isAllowed"
+        class="text-sm font-medium my-2 p-5 rounded-md"
+      />
     </ScrollArea>
-    <div class="px-3 pb-2">
-      <Button
-        class="w-full gap-2 cursor-pointer dark:hover:bg-[#343434]"
-        size="sm"
-        variant="outline"
-        @click="onAddNewTask"
-      >
-        <Icon
-          name="hugeicons:plus-sign"
-          class="size-4"
-        />
-        Add Task
-      </Button>
-    </div>
   </div>
 </template>

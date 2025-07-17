@@ -25,16 +25,7 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
-const { data } = await useAsyncData(
-  () => `sidebar_projects_${currentActiveWorkspace.value?.id}`,
-  () => {
-    if (currentActiveWorkspace.value?.id) {
-      return useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value.id}/user/projects/all`)
-    }
-    return Promise.resolve([])
-  },
-  { watch: [() => currentActiveWorkspace.value?.id] },
-)
+const { data } = await useAsyncData(`search_bar_sidebar_projects_${currentActiveWorkspace.value?.id}`, () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
 
 const projects = computed(() => {
   return data.value
