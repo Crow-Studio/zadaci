@@ -9,8 +9,10 @@ definePageMeta({
   layout: 'workspace',
 })
 
+const nuxtApp = useNuxtApp()
 const modalStore = useModalStore()
 const workspaceStore = useWorkspaceStore()
+const isAppLoading = ref(true)
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -37,23 +39,32 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  workspaceStore?.onSetWorkspaceBreadcrumb({
-    name: `${currentActiveWorkspace.value?.name}`,
-    path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
-    children: [
-      {
-        name: 'Projects',
-        path: `/workspace/${currentActiveWorkspace.value?.id}/projects/all`,
+  if (nuxtApp._loadingIndicatorDeps) {
+    if (!workspace.value) {
+      workspaceStore?.onSetActiveWorkspace(null)
+      navigateTo('/workspace/onboarding')
+    }
+    else {
+      isAppLoading.value = false
+      workspaceStore?.onSetWorkspaceBreadcrumb({
+        name: `${currentActiveWorkspace.value?.name}`,
+        path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
         children: [
           {
-            name: 'All',
+            name: 'Projects',
             path: `/workspace/${currentActiveWorkspace.value?.id}/projects/all`,
-            children: null,
+            children: [
+              {
+                name: 'All',
+                path: `/workspace/${currentActiveWorkspace.value?.id}/projects/all`,
+                children: null,
+              },
+            ],
           },
         ],
-      },
-    ],
-  })
+      })
+    }
+  }
 })
 
 const onAddNewProject = () => {
@@ -65,12 +76,11 @@ const onAddNewProject = () => {
 <template>
   <section>
     <div
-      v-if="status ==='idle' || status === 'pending'"
-      class="min-h-[55vh] grid place-content-center"
+      v-if="status ==='idle' || status === 'pending' || isAppLoading"
+      class="min-h-[70vh] grid place-content-center"
     >
       <div class="flex items-center gap-x-2 text-muted-foreground text-sm">
         <Loader2 class="animate-spin size-5" />
-        <p>Loading...</p>
       </div>
     </div>
     <div

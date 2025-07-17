@@ -1,4 +1,4 @@
-import { inArray } from 'drizzle-orm'
+import { inArray, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -24,13 +24,22 @@ export default defineEventHandler(async (event) => {
       return [] // User is not in any workspace
     }
 
-    // Get all tasks assigned to the user via task_assignees
+    // Get all tasks assigned to the user
     const taskAssignees = await db.query.taskAssigneesTable.findMany({
       where: table => inArray(table.member_id, memberIds),
       with: {
         task: {
           with: {
             subtasks: true,
+            assignees: {
+              with: {
+                member: {
+                  with: {
+                    user: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -57,6 +66,12 @@ export default defineEventHandler(async (event) => {
             is_completed: subtask.is_completed,
             createdAt: subtask.created_at.toISOString(),
             updatedAt: subtask.updated_at.toISOString(),
+          })),
+          assignees: task.assignees.map(ta => ({
+            member_id: ta.member.id,
+            email: ta.member.user.email,
+            username: ta.member.user.username,
+            avatar: ta.member.user.profile_picture_url,
           })),
         }
       })

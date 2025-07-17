@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { format, isBefore, isPast } from 'date-fns'
+import ActionTooltip from '../../global/ActionTooltip.vue'
 import { Badge } from '~/components/ui/badge'
 import { Checkbox } from '~/components/ui/checkbox'
 import { cn } from '~/lib/utils'
 import type { Task } from '~/types'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 
 const props = defineProps<{
   task: Task
@@ -96,9 +98,38 @@ const props = defineProps<{
         </p>
       </div>
 
-      <p v-if="props?.task.subtasks.length > 0">
-        {{ props?.task.subtasks.filter(s => s.is_completed).length }} / {{ props?.task.subtasks.length }}
-      </p>
+      <div class="flex items-center gap-x-2">
+        <p v-if="props?.task.subtasks.length > 0">
+          {{ props?.task.subtasks.filter(s => s.is_completed).length }} / {{ props?.task.subtasks.length }}
+        </p>
+        <div
+          v-if="props?.task.subtasks.length > 0"
+          class="bg-muted-foreground size-1 rounded-full"
+        />
+        <div class="flex -space-x-2">
+          <ActionTooltip
+            v-for="(member, index) in props?.task.assignees.slice(0, 5)"
+            :key="member.member_id"
+            :label="member.username"
+          >
+            <Avatar
+              class="size-5 border border-muted rounded-full cursor-pointer"
+              :style="{ zIndex: 10 - index }"
+            >
+              <AvatarImage :src="member.avatar!" />
+              <AvatarFallback>{{ member.username.charAt(0) }}</AvatarFallback>
+            </Avatar>
+          </ActionTooltip>
+
+          <div
+            v-if="props?.task.assignees.length > 5"
+            class="size-5 flex items-center justify-center bg-gray-200 text-sm text-gray-700 rounded-full border-2 border-white"
+            :style="{ zIndex: 5 }"
+          >
+            {{ props?.task.assignees.length - 5 }}+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
