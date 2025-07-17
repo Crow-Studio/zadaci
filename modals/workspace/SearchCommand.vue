@@ -25,7 +25,33 @@ const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
-const { data } = await useAsyncData(`search_bar_sidebar_projects_${currentActiveWorkspace.value?.id}`, () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`))
+const { data } = await useAsyncData(`search_bar_sidebar_projects_${currentActiveWorkspace.value?.id}`, () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`), {
+  transform(input) {
+    return {
+      input,
+      fetchedAt: new Date(),
+    }
+  },
+  getCachedData(key, nuxtApp) {
+    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    // If data is not fetched yet
+    if (!data) {
+      // Fetch the first time
+      return
+    }
+
+    // Check if the data is older than 5 minutes
+    const expirationDate = new Date(data.fetchedAt)
+    expirationDate.setTime(expirationDate.getTime() + 3 * 60 * 1000) // 5 minutes TTL
+    const isExpired = expirationDate.getTime() < Date.now()
+    if (isExpired) {
+      // Refetch the data
+      return
+    }
+
+    return data
+  },
+})
 
 const projects = computed(() => {
   return data.value
