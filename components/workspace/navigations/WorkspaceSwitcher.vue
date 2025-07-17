@@ -39,7 +39,6 @@ const onSelectActiveWorkspace = async (w: Workspace) => {
     children: null,
   })
   await refreshNuxtData([`sidebar_projects_${w.id}`, `board_view_projects_${w.id}`, `all_project_stats_${w.id}`, `mobile_sidebar_projects_${w.id}`])
-  console.log('switching')
   navigateTo(`/workspace/${w.id}/dashboard`)
 }
 

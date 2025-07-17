@@ -126,7 +126,6 @@ export async function myTaskHandleDrop(columnKey: Status, task: MyTask, tasks: g
     targetList.push(updatedTask)
   }
   try {
-    console.log(task.projectId)
     await $fetch(`/api/workspace/${workspaceId}/project/${task.projectId}/tasks/${task.id}`, {
       method: 'PATCH',
       body: { status: columnKey },

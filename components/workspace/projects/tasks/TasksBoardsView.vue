@@ -2,10 +2,10 @@
 import TasksColumn from './TasksColumn.vue'
 import TasksBoardFilter from './TasksBoardFilter.vue'
 import { taskHandleDrop } from '~/lib/tasks'
-import { taskColumns, type IProject, type Status, type Task } from '~/types'
+import { taskColumns, type DBProject, type Status, type Task } from '~/types'
 
 const props = defineProps<{
-  project: IProject
+  project: DBProject
   tasks: Record<string, Task[]>
   filteredTasks: Record<string, Task[]>
   handleTasksFiltered: (newFilteredTasks: Record<string, Task[]>) => void

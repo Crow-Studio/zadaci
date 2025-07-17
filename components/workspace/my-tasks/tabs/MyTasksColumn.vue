@@ -22,7 +22,6 @@ const { elementRef: myTaskColumnRef, isOvered, isAllowed, isLazyAllowed } = useD
 const onEditTask = (task: IMyTask) => {
   modalStore?.onOpen('editProjectTask')
   modalStore?.setIsOpen(true)
-  console.log(task)
   workspaceStore?.onSetTask({
     data: task,
     project: task.project,

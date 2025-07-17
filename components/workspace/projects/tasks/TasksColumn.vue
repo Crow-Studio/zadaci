@@ -3,7 +3,7 @@ import { useDroppable } from '@vue-dnd-kit/core'
 import TaskDraggable from './TaskDraggable.vue'
 import Task from './Task.vue'
 import { Button } from '~/components/ui/button'
-import type { IProjectColumn, Task as ITask, IProject } from '~/types'
+import type { IProjectColumn, Task as ITask, DBProject } from '~/types'
 import { createTaskDropHandler } from '~/lib/tasks'
 import { ScrollArea } from '~/components/ui/scroll-area'
 
@@ -11,7 +11,7 @@ const props = defineProps<{
   column: IProjectColumn
   data: ITask[]
   onDrop: (item: ITask, index?: number) => void
-  project: IProject
+  project: DBProject
 }>()
 
 const modalStore = useModalStore()
@@ -22,10 +22,11 @@ const { elementRef: taskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDro
 )
 
 const onAddNewTask = () => {
+  console.log(props?.project)
   modalStore?.onOpen('addNewTask')
   modalStore?.setIsOpen(true)
   modalStore?.setModalData({
-    projectId: props.project.id,
+    project: props?.project,
   })
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import ProjectContentEditable from '~/components/workspace/projects/ProjectContentEditable.vue'
-import type { ProjectMembers as IProjectMembers, Priority, Status } from '~/types'
+import type { ProjectMembers as IProjectMembers } from '~/types'
 import ProjectMembers from '~/components/workspace/projects/ProjectMembers.vue'
 import AddProjectMembers from '~/components/workspace/projects/AddProjectMembers.vue'
 import ActionTooltip from '~/components/workspace/global/ActionTooltip.vue'
@@ -233,12 +233,16 @@ const onAddNewTask = () => {
     <ProjectTaskWrapper
       v-if="project"
       :project="{
-        id: Array.isArray(route.params.projectId) ? route.params.projectId[0]! : route.params.projectId!,
+        id: project.id,
         title: project.title,
-        status: project.status as Status,
-        priority: project.priority as Priority,
+        description: project.description,
+        status: project.status,
+        priority: project.priority,
+        createdAt: new Date(project.created_at),
+        updatedAt: new Date(project.updated_at),
         dueDate: project.due_date ? new Date(project.due_date) : null,
         workspaceId: project.workspace_id,
+        members,
       }"
       :workspace-id="project.workspace_id"
       :project-id="project.id"

@@ -2,12 +2,12 @@
 import TasksTabs from './tasks/TasksTabs.vue'
 import TaskStats from './tasks/TaskStats.vue'
 import { mapTasksByStatus } from '~/lib/tasks'
-import type { IProject, Task } from '~/types'
+import type { DBProject, Task } from '~/types'
 
 const props = defineProps<{
   workspaceId: string
   projectId: string
-  project: IProject
+  project: DBProject
 }>()
 
 const tasks = ref<Record<string, Task[]>>({
