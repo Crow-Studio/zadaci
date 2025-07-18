@@ -228,7 +228,7 @@ function togglePriorityFilter(value: string) {
 </script>
 
 <template>
-  <div class="flex items-center gap-2 bg-transparent justify-end">
+  <div class="bg-transparent">
     <!-- Filter Dropdown -->
     <DropdownMenu>
       <DropdownMenuTrigger as-child>

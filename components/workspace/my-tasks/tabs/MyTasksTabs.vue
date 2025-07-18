@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import MyTasksBoardsView from './MyTasksBoardsView.vue'
+import type { MyTask } from '~/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const props = defineProps<{
   workspaceId: string
+  tasks: Record<string, MyTask[]>
 }>()
 </script>
 
@@ -55,7 +57,10 @@ const props = defineProps<{
       </TabsTrigger>
     </TabsList>
     <TabsContent value="board">
-      <MyTasksBoardsView :workspace-id="props?.workspaceId" />
+      <MyTasksBoardsView
+        :workspace-id="props?.workspaceId"
+        :tasks="props.tasks"
+      />
     </TabsContent>
     <TabsContent value="list">
       <!-- <ListProjectsView /> -->

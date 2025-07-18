@@ -2,20 +2,22 @@
 import MyTasksColumn from './MyTasksColumn.vue'
 import MyTasksBoardsFilter from './MyTasksBoardsFilter.vue'
 import { taskColumns, type MyTask, type Status } from '~/types'
-import { mapMyTasksByStatus, myTaskHandleDrop } from '~/lib/my-tasks'
+import { myTaskHandleDrop } from '~/lib/my-tasks'
 
 const props = defineProps<{
   workspaceId: string
+  tasks: Record<string, MyTask[]>
 }>()
 
-const tasks = ref<Record<string, MyTask[]>>({
-  'IDEA': [],
-  'TODO': [],
-  'IN PROGRESS': [],
-  'IN REVIEW': [],
-  'COMPLETED': [],
-  'ABANDONED': [],
-})
+const localTasks = ref<Record<string, MyTask[]>>({ ...props.tasks })
+
+watch(
+  () => props.tasks,
+  (newTasks) => {
+    localTasks.value = { ...newTasks }
+  },
+  { immediate: true, deep: true },
+)
 
 const filteredTasks = ref<Record<string, MyTask[]>>({
   'IDEA': [],
@@ -26,24 +28,8 @@ const filteredTasks = ref<Record<string, MyTask[]>>({
   'ABANDONED': [],
 })
 
-const { data } = await useAsyncData(`board_view_my_tasks_${props.workspaceId}`, () =>
-  useRequestFetch()(`/api/workspace/${props.workspaceId}/my-tasks/all`),
-)
-
-watchEffect(() => {
-  if (data.value) {
-    mapMyTasksByStatus(data.value, tasks)
-  }
-})
-
-watch(data, () => {
-  if (data.value) {
-    mapMyTasksByStatus(data.value, tasks)
-  }
-}, { immediate: true })
-
 async function handleDrop(columnKey: Status, task: MyTask, index?: number) {
-  myTaskHandleDrop(columnKey, task, tasks, props?.workspaceId, index)
+  myTaskHandleDrop(columnKey, task, localTasks, props?.workspaceId, index)
 }
 
 function handleTasksFiltered(newFilteredTasks: Record<string, MyTask[]>) {
@@ -52,7 +38,9 @@ function handleTasksFiltered(newFilteredTasks: Record<string, MyTask[]>) {
 </script>
 
 <template>
-  <div class="space-y-2">
+  <div
+    class="space-y-2"
+  >
     <MyTasksBoardsFilter
       :tasks="tasks"
       @tasks-filtered="handleTasksFiltered"

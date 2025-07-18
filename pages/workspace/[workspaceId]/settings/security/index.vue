@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
-import MyTasksWrapper from '~/components/workspace/my-tasks/tabs/MyTasksWrapper.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
   layout: 'workspace',
 })
 
-const workspaceStore = useWorkspaceStore()
 const nuxtApp = useNuxtApp()
+const workspaceStore = useWorkspaceStore()
 const isAppLoading = ref(true)
 
 const currentActiveWorkspace = computed(() => {
@@ -17,12 +16,12 @@ const currentActiveWorkspace = computed(() => {
 
 useHead({
   title: currentActiveWorkspace.value
-    ? `${currentActiveWorkspace.value?.name} - My Tasks`
-    : 'My Tasks',
+    ? `${currentActiveWorkspace.value?.name} - Settings General`
+    : 'Settings General',
 })
 
 defineOgImageComponent('Zadaci', {
-  title: currentActiveWorkspace.value ? `${currentActiveWorkspace.value?.name} - My Tasks` : 'My Tasks',
+  title: currentActiveWorkspace.value ? `${currentActiveWorkspace.value?.name} - Settings General` : 'Settings General',
   description:
     'Zadaci is an all-in-one project management platform built to help you and your team get things done faster.',
 })
@@ -48,9 +47,15 @@ onMounted(() => {
         path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
         children: [
           {
-            name: 'My Tasks',
-            path: `/workspace/${currentActiveWorkspace.value?.id}/my-tasks`,
-            children: null,
+            name: 'Settings',
+            path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
+            children: [
+              {
+                name: 'General',
+                path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
+                children: null,
+              },
+            ],
           },
         ],
       })
@@ -67,33 +72,10 @@ onMounted(() => {
     >
       <div class="flex items-center gap-x-2 text-muted-foreground text-sm">
         <Loader2 class="animate-spin size-5" />
-        <p>Loading...</p>
       </div>
     </div>
-    <div
-      v-else
-      class="space-y-4"
-    >
-      <div class="flex items-center gap-x-3">
-        <Avatar class="w-12 h-12 sm:w-14 sm:h-14 rounded-md flex-shrink-0">
-          <AvatarImage
-            :src="currentActiveWorkspace?.imageUrl!"
-            :alt="currentActiveWorkspace?.name!"
-          />
-          <AvatarFallback class="rounded-md">
-            CN
-          </AvatarFallback>
-        </Avatar>
-        <div class="min-w-0 flex-1">
-          <h1 class="text-lg sm:text-xl font-semibold truncate">
-            My Tasks
-          </h1>
-          <p class="text-xs sm:text-sm text-muted-foreground truncate">
-            Overview of all your tasks in <span class="capitalize">{{ currentActiveWorkspace?.name }}</span> Workspace.
-          </p>
-        </div>
-      </div>
-      <MyTasksWrapper :workspace-id="currentActiveWorkspace?.id!" />
+    <div v-else>
+      Settings Security
     </div>
   </section>
 </template>

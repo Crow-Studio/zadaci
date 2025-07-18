@@ -19,6 +19,5 @@ import DeleteProject from '~/modals/workspace/DeleteProject.vue'
     <EditProject />
     <CreateWorkspace />
     <DeleteProject />
-    <AddNewMyTask />
   </div>
 </template>
