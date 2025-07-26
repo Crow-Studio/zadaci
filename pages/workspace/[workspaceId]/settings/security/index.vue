@@ -6,9 +6,7 @@ definePageMeta({
   layout: 'workspace',
 })
 
-const nuxtApp = useNuxtApp()
 const workspaceStore = useWorkspaceStore()
-const isAppLoading = ref(true)
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -35,31 +33,28 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  if (nuxtApp._loadingIndicatorDeps) {
-    if (!workspace.value) {
-      workspaceStore?.onSetActiveWorkspace(null)
-      navigateTo('/workspace/onboarding')
-    }
-    else {
-      isAppLoading.value = false
-      workspaceStore?.onSetWorkspaceBreadcrumb({
-        name: `${currentActiveWorkspace.value?.name}`,
-        path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
-        children: [
-          {
-            name: 'Settings',
-            path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
-            children: [
-              {
-                name: 'General',
-                path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
-                children: null,
-              },
-            ],
-          },
-        ],
-      })
-    }
+  if (!workspace.value) {
+    workspaceStore?.onSetActiveWorkspace(null)
+    navigateTo('/workspace/onboarding')
+  }
+  else {
+    workspaceStore?.onSetWorkspaceBreadcrumb({
+      name: `${currentActiveWorkspace.value?.name}`,
+      path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
+      children: [
+        {
+          name: 'Settings',
+          path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
+          children: [
+            {
+              name: 'General',
+              path: `/workspace/${currentActiveWorkspace.value?.id}/settings/general`,
+              children: null,
+            },
+          ],
+        },
+      ],
+    })
   }
 })
 </script>

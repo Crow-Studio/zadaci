@@ -18,33 +18,7 @@ defineOgImageComponent('UseOdama', {
 })
 
 const workspaceStore = useWorkspaceStore()
-const { data: onboarding, error, status } = await useAsyncData('user_workspaces', () => useRequestFetch()('/api/workspace/onboarding/details'), {
-  transform(input) {
-    return {
-      ...input,
-      fetchedAt: new Date(),
-    }
-  },
-  getCachedData(key, nuxtApp) {
-    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-    // If data is not fetched yet
-    if (!data) {
-      // Fetch the first time
-      return
-    }
-
-    // Check if the data is older than 5 minutes
-    const expirationDate = new Date(data.fetchedAt)
-    expirationDate.setTime(expirationDate.getTime() + 5 * 60 * 1000) // 5 minutes TTL
-    const isExpired = expirationDate.getTime() < Date.now()
-    if (isExpired) {
-      // Refetch the data
-      return
-    }
-
-    return data
-  },
-})
+const { data: onboarding, error, status } = await useAsyncData('user_workspaces', () => useRequestFetch()('/api/workspace/onboarding/details'))
 
 watch(onboarding, (val) => {
   if (val) {

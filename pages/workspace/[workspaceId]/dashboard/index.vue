@@ -7,9 +7,7 @@ definePageMeta({
   layout: 'workspace',
 })
 
-const nuxtApp = useNuxtApp()
 const workspaceStore = useWorkspaceStore()
-const isAppLoading = ref(true)
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -36,19 +34,16 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  if (nuxtApp._loadingIndicatorDeps) {
-    if (!workspace.value) {
-      workspaceStore?.onSetActiveWorkspace(null)
-      navigateTo('/workspace/onboarding')
-    }
-    else {
-      isAppLoading.value = false
-      workspaceStore?.onSetWorkspaceBreadcrumb({
-        name: 'Dashboard',
-        path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
-        children: null,
-      })
-    }
+  if (!workspace.value) {
+    workspaceStore?.onSetActiveWorkspace(null)
+    navigateTo('/workspace/onboarding')
+  }
+  else {
+    workspaceStore?.onSetWorkspaceBreadcrumb({
+      name: 'Dashboard',
+      path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
+      children: null,
+    })
   }
 })
 </script>
@@ -56,7 +51,7 @@ onMounted(() => {
 <template>
   <section class="">
     <div
-      v-if="status ==='idle' || status === 'pending' || isAppLoading"
+      v-if="status ==='idle' || status === 'pending'"
       class="min-h-[70vh] grid place-content-center"
     >
       <div class="flex items-center gap-x-2 text-muted-foreground text-base">

@@ -1,0 +1,58 @@
+<script setup lang="ts">
+import { Button } from '~/components/ui/button'
+
+const modalStore = useModalStore()
+const workspaceStore = useWorkspaceStore()
+
+const currentActiveWorkspace = computed(() => {
+  return workspaceStore.activeWorkspace
+})
+
+const onDeleteAccount = () => {
+  modalStore?.onOpen('deleteAccount')
+  modalStore?.setIsOpen(true)
+}
+
+const onTransferOnwership = () => {
+  modalStore?.onOpen('transferOwnership')
+  modalStore?.setIsOpen(true)
+}
+</script>
+
+<template>
+  <div class="flex flex-col gap-5 rounded-lg bg-rose-100 p-5 dark:bg-[#99004c] sm:items-center sm:justify-between lg:flex-row">
+    <div class="self-start">
+      <h1 class="text-base font-medium">
+        Delete Account
+      </h1>
+      <p class="text-sm text-muted-foreground sm:max-w-xl sm:text-balance md:w-full lg:max-w-3xl">
+        Deleting an account cannot be undone. <span v-if="currentActiveWorkspace?.userRole ==='OWNER'"> All your data would be irretriveable, if you're a workspace owner consider <strong class="text-primary">transferring workspace ownership</strong>. So that all workspace data is not deleted.</span><span v-else> All your data would be irretriveable.</span>
+      </p>
+    </div>
+    <div class="flex w-full flex-col gap-2 lg:w-fit lg:flex-row lg:items-center xl:gap-5">
+      <Button
+        v-if="currentActiveWorkspace?.userRole ==='OWNER'"
+        variant="outline"
+        class="w-full gap-1.5 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground lg:w-fit"
+        @click="onTransferOnwership"
+      >
+        <Icon
+          name="hugeicons:square-arrow-data-transfer-horizontal"
+          class="size-4"
+        />
+        Transfer ownership
+      </Button>
+      <Button
+        variant="destructive"
+        class="w-full gap-1.5 lg:w-fit"
+        @click="onDeleteAccount"
+      >
+        <Icon
+          name="hugeicons:delete-02"
+          class="size-4"
+        />
+        Delete Account
+      </Button>
+    </div>
+  </div>
+</template>

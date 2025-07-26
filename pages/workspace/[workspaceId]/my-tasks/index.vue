@@ -8,8 +8,6 @@ definePageMeta({
 })
 
 const workspaceStore = useWorkspaceStore()
-const nuxtApp = useNuxtApp()
-const isAppLoading = ref(true)
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -36,25 +34,22 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  if (nuxtApp._loadingIndicatorDeps) {
-    if (!workspace.value) {
-      workspaceStore?.onSetActiveWorkspace(null)
-      navigateTo('/workspace/onboarding')
-    }
-    else {
-      isAppLoading.value = false
-      workspaceStore?.onSetWorkspaceBreadcrumb({
-        name: `${currentActiveWorkspace.value?.name}`,
-        path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
-        children: [
-          {
-            name: 'My Tasks',
-            path: `/workspace/${currentActiveWorkspace.value?.id}/my-tasks`,
-            children: null,
-          },
-        ],
-      })
-    }
+  if (!workspace.value) {
+    workspaceStore?.onSetActiveWorkspace(null)
+    navigateTo('/workspace/onboarding')
+  }
+  else {
+    workspaceStore?.onSetWorkspaceBreadcrumb({
+      name: `${currentActiveWorkspace.value?.name}`,
+      path: `/workspace/${currentActiveWorkspace.value?.id}/dashboard`,
+      children: [
+        {
+          name: 'My Tasks',
+          path: `/workspace/${currentActiveWorkspace.value?.id}/my-tasks`,
+          children: null,
+        },
+      ],
+    })
   }
 })
 </script>
@@ -62,7 +57,7 @@ onMounted(() => {
 <template>
   <section>
     <div
-      v-if="status ==='idle' || status === 'pending' || isAppLoading"
+      v-if="status ==='idle' || status === 'pending'"
       class="min-h-[70vh] grid place-content-center"
     >
       <div class="flex items-center gap-x-2 text-muted-foreground text-sm">

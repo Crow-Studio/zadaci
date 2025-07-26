@@ -1,5 +1,4 @@
-import { eq } from 'drizzle-orm'
-import { useDrizzle } from '~/server/utils/drizzle'
+import { eq, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,46 +7,21 @@ export default defineEventHandler(async (event) => {
     const workspaceId = getRouterParam(event, 'workspaceId')
 
     if (!session) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized',
-      })
+      throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
     }
 
     if (!image || typeof image !== 'string') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Workspace image is required!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Workspace image is required!' })
     }
 
     if (!name || typeof name !== 'string') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Workspace name is required!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Workspace name is required!' })
     }
 
     if (!workspaceId || typeof workspaceId !== 'string') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'WorkspaceId is required!',
-      })
+      throw createError({ statusCode: 400, statusMessage: 'Workspace ID is required!' })
     }
 
-    // Check if workspace exists
-    const existingWorkspace = await useDrizzle().query.workspaceTable.findFirst({
-      where: table => eq(table.id, workspaceId),
-    })
-
-    if (!existingWorkspace) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Workspace not found!',
-      })
-    }
-
-    // Check if user is an owner in the workspace
     const userWorkspace = await useDrizzle().query.workspaceMembersTable.findFirst({
       where: table => and(
         eq(table.workspace_id, workspaceId),
@@ -56,29 +30,32 @@ export default defineEventHandler(async (event) => {
     })
 
     if (!userWorkspace || userWorkspace.role !== 'OWNER') {
-      throw createError({
-        statusCode: 403,
-        statusMessage: 'User is not authorized to update this workspace!',
-      })
+      throw createError({ statusCode: 403, statusMessage: 'Not authorized to update workspace!' })
     }
 
-    // update workspace details
-    const [workspace] = await useDrizzle().update(tables.workspaceTable).set({
+    const [updated] = await useDrizzle().update(tables.workspaceTable).set({
       name,
       image_url: image,
       updated_at: new Date(),
     }).where(eq(tables.workspaceTable.id, workspaceId)).returning()
 
     return {
-      workspace,
+      workspace: {
+        id: updated.id,
+        name: updated.name,
+        imageUrl: updated.image_url,
+        inviteCode: updated.invite_code,
+        userRole: userWorkspace.role,
+        createdAt: updated.created_at,
+        updatedAt: updated.updated_at,
+      },
       message: 'You\'ve successfully updated your workspace!',
     }
   }
   catch (error: any) {
-    const errorMessage = error ? error.statusMessage : error.message
     throw createError({
-      statusMessage: errorMessage,
-      statusCode: error.statusCode ? error.statusCode : 500,
+      statusCode: error.statusCode || 500,
+      statusMessage: error.statusMessage || error.message || 'Internal server error',
     })
   }
 })
