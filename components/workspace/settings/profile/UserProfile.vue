@@ -63,7 +63,7 @@ const uploadImageToCloudinary = async (image: string): Promise<string> => {
 
     return res.url
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.message
@@ -104,7 +104,7 @@ const onSubmit = form.handleSubmit(async (value) => {
       position: 'top-center',
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.message
