@@ -53,7 +53,7 @@ const onDeleteWorkspace = form.handleSubmit(async (value) => {
     // clear session
     return navigateTo(`/workspace/onboarding`)
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.statusMessage

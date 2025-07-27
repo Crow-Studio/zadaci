@@ -38,7 +38,7 @@ const onSendInvite = async () => {
       position: 'top-center',
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.statusMessage

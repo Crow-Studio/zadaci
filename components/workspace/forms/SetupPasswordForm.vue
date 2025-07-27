@@ -51,7 +51,7 @@ const onSetupPassword = form.handleSubmit(async (value) => {
     await refreshNuxtData('user_password_setting')
     onClose()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   catch (error: any) {
     const errorMessage = error.response
       ? error.response._data.statusMessage
