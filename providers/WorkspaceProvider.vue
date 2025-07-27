@@ -8,6 +8,7 @@ import EditProject from '~/modals/workspace/EditProject.vue'
 import CreateWorkspace from '~/modals/workspace/CreateWorkspace.vue'
 import DeleteProject from '~/modals/workspace/DeleteProject.vue'
 import DeleteWorkspace from '~/modals/workspace/DeleteWorkspace.vue'
+import TransferWorkspaceOwnership from '~/modals/workspace/TransferWorkspaceOwnership.vue'
 </script>
 
 <template>
@@ -21,5 +22,6 @@ import DeleteWorkspace from '~/modals/workspace/DeleteWorkspace.vue'
     <CreateWorkspace />
     <DeleteProject />
     <DeleteWorkspace />
+    <TransferWorkspaceOwnership />
   </div>
 </template>

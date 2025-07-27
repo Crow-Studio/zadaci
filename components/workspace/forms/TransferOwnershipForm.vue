@@ -87,7 +87,7 @@ const onTransferOwnership = async () => {
     </div>
     <div class="grid gap-1.5">
       <Button
-        class="gap-.1.5 w-full bg-brand text-white hover:bg-brand-secondary"
+        class="gap-.1.5 w-full bg-brand text-white hover:bg-brand-secondary cursor-pointer"
         :disabled="isTransferringOwnership"
         @click="onTransferOwnership"
       >
@@ -105,7 +105,7 @@ const onTransferOwnership = async () => {
       <Button
         type="button"
         variant="ghost"
-        class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all"
+        class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all cursor-pointer"
         :disabled="isTransferringOwnership"
         @click="props?.onClose"
       >

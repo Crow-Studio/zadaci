@@ -82,7 +82,7 @@ const onClose = () => {
 
         <div class="grid gap-2">
           <Button
-            class="w-full bg-brand text-white hover:bg-brand-secondary"
+            class="w-full bg-brand text-white hover:bg-brand-secondary cursor-pointer"
             @click="onInviteTeammates"
           >
             Invite Teammates
@@ -90,7 +90,7 @@ const onClose = () => {
           <Button
             type="button"
             variant="ghost"
-            class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all"
+            class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all cursor-pointer"
             @click="onClose"
           >
             Cancel
