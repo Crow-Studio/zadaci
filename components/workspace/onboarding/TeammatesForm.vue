@@ -77,7 +77,8 @@ const onSendInvites = async () => {
   }
 }
 
-const onDoItLater = () => {
+const onDoItLater = async () => {
+  await refreshNuxtData(['user_workspaces'])
   return navigateTo(`/workspace/${workspaceId.value}/dashboard`)
 }
 </script>
@@ -165,7 +166,7 @@ const onDoItLater = () => {
         <span class="font-semibold">Member</span> – Can manage projects, tasks, and team members.
       </p>
       <p>
-        <span class="font-semibold">Guest</span> – Can view assigned tasks and leave comments.
+        <span class="font-semibold">Guest</span> – Can view assigned tasks.
       </p>
     </div>
 
