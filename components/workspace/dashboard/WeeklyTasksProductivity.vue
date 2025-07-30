@@ -15,6 +15,7 @@ type ProductivityDataItem = {
 
 const selectedValue = ref<'on' | 'off'>('on') // 'on' = this week, 'off' = last week
 const productivityData = ref<ProductivityDataItem[]>([])
+const isFetchingData = ref(false)
 
 const normalizeData = (raw: Partial<ProductivityDataItem>[]): ProductivityDataItem[] => {
   return weekDays.map((day) => {
@@ -29,15 +30,20 @@ const normalizeData = (raw: Partial<ProductivityDataItem>[]): ProductivityDataIt
 }
 
 const fetchData = async () => {
+  isFetchingData.value = true
   try {
     const range = selectedValue.value === 'on' ? 'this' : 'last'
     const res = await $fetch(`/api/workspace/${workspaceId}/project/stats/tasks/productivity?range=${range}`, {
       method: 'GET',
     })
+
     productivityData.value = normalizeData(res)
   }
   catch (err) {
     console.error('Error loading productivity data', err)
+  }
+  finally {
+    isFetchingData.value = false
   }
 }
 
@@ -59,31 +65,39 @@ const yFormatter = (tick: number) => tick.toString()
       <h2 class="text-lg font-medium">
         Weekly Tasks Productivity Overview
       </h2>
-      <div class="inline-flex h-9 rounded-lg bg-input/50 p-0.5 w-full xl:w-auto">
-        <RadioGroup
-          v-model="selectedValue"
-          :data-state="selectedValue"
-          class="group relative inline-grid grid-cols-[1fr_1fr] items-center gap-0 text-sm font-medium after:absolute after:inset-y-0 after:w-1/2 after:rounded-md after:bg-background after:shadow-xs after:shadow-black/[.04] after:ring-offset-background after:transition-transform after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] has-focus-visible:after:ring-2 has-focus-visible:after:ring-ring has-focus-visible:after:ring-offset-2 data-[state=off]:after:translate-x-0 data-[state=on]:after:translate-x-full w-full xl:w-auto"
-        >
-          <label
-            class="relative z-10 inline-flex h-full min-w-8 cursor-pointer items-center justify-center whitespace-nowrap px-4 group-data-[state=on]:text-muted-foreground/70"
+      <div class="flex items-center gap-x-2">
+        <Icon
+          v-if="isFetchingData"
+          name="solar:refresh-outline"
+          class="animate-spin text-muted-foreground"
+          size="25"
+        />
+        <div class="inline-flex h-9 rounded-lg bg-input/50 p-0.5 w-full xl:w-auto">
+          <RadioGroup
+            v-model="selectedValue"
+            :data-state="selectedValue"
+            class="group relative inline-grid grid-cols-[1fr_1fr] items-center gap-0 text-sm font-medium after:absolute after:inset-y-0 after:w-1/2 after:rounded-md after:bg-background after:shadow-xs after:shadow-black/[.04] after:ring-offset-background after:transition-transform after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] has-focus-visible:after:ring-2 has-focus-visible:after:ring-ring has-focus-visible:after:ring-offset-2 data-[state=off]:after:translate-x-0 data-[state=on]:after:translate-x-full w-full xl:w-auto"
           >
-            Last week
-            <RadioGroupItem
-              value="off"
-              class="sr-only"
-            />
-          </label>
-          <label
-            class="relative z-10 inline-flex h-full min-w-8 cursor-pointer items-center justify-center whitespace-nowrap px-4 group-data-[state=off]:text-muted-foreground/70"
-          >
-            <span> This <span class="group-data-[state=on]:text-emerald-500">week</span> </span>
-            <RadioGroupItem
-              value="on"
-              class="sr-only"
-            />
-          </label>
-        </RadioGroup>
+            <label
+              class="relative z-10 inline-flex h-full min-w-8 cursor-pointer items-center justify-center whitespace-nowrap px-4 group-data-[state=on]:text-muted-foreground/70"
+            >
+              Last week
+              <RadioGroupItem
+                value="off"
+                class="sr-only"
+              />
+            </label>
+            <label
+              class="relative z-10 inline-flex h-full min-w-8 cursor-pointer items-center justify-center whitespace-nowrap px-4 group-data-[state=off]:text-muted-foreground/70"
+            >
+              <span> This <span class="group-data-[state=on]:text-emerald-500">week</span> </span>
+              <RadioGroupItem
+                value="on"
+                class="sr-only"
+              />
+            </label>
+          </RadioGroup>
+        </div>
       </div>
     </div>
     <div class="w-full overflow-hidden">

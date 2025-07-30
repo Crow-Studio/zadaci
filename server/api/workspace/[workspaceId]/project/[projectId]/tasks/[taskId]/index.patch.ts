@@ -1,4 +1,4 @@
-// import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { validStatuses, type Status } from '~/types'
 
 export default defineEventHandler(async (event) => {
@@ -66,16 +66,31 @@ export default defineEventHandler(async (event) => {
       eq(tables.tasksTable.project_id, projectId),
     )).returning()
 
-    // save the task activity if task is either status is changed to 'COMPLETED' or 'IN REVIEW' or 'ABANDONED'
-    // if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
-    //   await useDrizzle().insert(tables.tasksActivityTable).values({
-    //     id: uuidv4(),
-    //     task_id: taskId,
-    //     changed_by: session.user.id,
-    //     status,
-    //     changed_at: new Date(),
-    //   })
-    // }
+    // save the task activity if status is COMPLETED / IN REVIEW / ABANDONED
+    if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
+      const member = await useDrizzle().query.workspaceMembersTable.findFirst({
+        where: m => and(
+          eq(m.workspace_id, workspaceId),
+          eq(m.user_id, session.user.id),
+        ),
+        columns: { id: true },
+      })
+
+      if (!member) {
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'You are not a member of this workspace!',
+        })
+      }
+
+      await useDrizzle().insert(tables.tasksActivityTable).values({
+        id: uuidv4(),
+        task_id: taskId,
+        changed_by: member.id,
+        status,
+        changed_at: new Date(),
+      })
+    }
 
     return { message: 'Task status updated successfully!' }
   }

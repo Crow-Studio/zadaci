@@ -22,7 +22,6 @@ const { elementRef: taskColumnRef, isOvered, isAllowed, isLazyAllowed } = useDro
 )
 
 const onAddNewTask = () => {
-  console.log(props?.project)
   modalStore?.onOpen('addNewTask')
   modalStore?.setIsOpen(true)
   modalStore?.setModalData({

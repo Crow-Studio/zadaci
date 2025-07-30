@@ -128,6 +128,32 @@ export default defineEventHandler(async (event) => {
       eq(tables.tasksTable.project_id, projectId),
     )).returning()
 
+    // save the task activity if task is either status is changed to 'COMPLETED' or 'IN REVIEW' or 'ABANDONED'
+    if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
+      const member = await useDrizzle().query.workspaceMembersTable.findFirst({
+        where: m => and(
+          eq(m.workspace_id, workspaceId),
+          eq(m.user_id, session.user.id),
+        ),
+        columns: { id: true },
+      })
+
+      if (!member) {
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'You are not a member of this workspace!',
+        })
+      }
+
+      await useDrizzle().insert(tables.tasksActivityTable).values({
+        id: uuidv4(),
+        task_id: taskId,
+        changed_by: member.id,
+        status,
+        changed_at: new Date(),
+      })
+    }
+
     if (subtasks && subtasks.length > 0) {
       await useDrizzle().delete(tables.subtasksTable).where(eq(tables.subtasksTable.task_id, task.id))
 

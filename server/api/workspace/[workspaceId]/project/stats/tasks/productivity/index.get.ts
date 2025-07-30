@@ -31,7 +31,9 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const user = await useDrizzle().query.userTable.findFirst({
+    const db = useDrizzle()
+
+    const user = await db.query.userTable.findFirst({
       where: table => eq(table.id, session.user.id),
     })
 
@@ -48,11 +50,9 @@ export default defineEventHandler(async (event) => {
       : startOfWeek(baseDate, { weekStartsOn: 1 })
     const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 })
 
-    const db = useDrizzle()
-
     const result = await db
       .select({
-        day: sql`TO_CHAR(${tables.tasksActivityTable.changed_at}, 'Dy')`.as('day'),
+        day: sql`TRIM(TO_CHAR(${tables.tasksActivityTable.changed_at}, 'Dy'))`.as('day'),
         status: tables.tasksActivityTable.status,
         count: sql<number>`COUNT(*)`.as('count'),
       })
@@ -67,18 +67,17 @@ export default defineEventHandler(async (event) => {
       )
       .where(
         and(
-          eq(tables.tasksActivityTable.changed_by, session.user.id),
           between(tables.tasksActivityTable.changed_at, weekStart, weekEnd),
           eq(tables.projectTable.workspace_id, workspaceId),
         ),
       )
       .groupBy(
-        sql`TO_CHAR(${tables.tasksActivityTable.changed_at}, 'Dy')`,
+        sql`TRIM(TO_CHAR(${tables.tasksActivityTable.changed_at}, 'Dy'))`,
         tables.tasksActivityTable.status,
       )
 
     const merged = weekDays.map((day) => {
-      const dayData = result.filter(r => String(r.day).trim() === day)
+      const dayData = result.filter(r => String(r.day) === day)
 
       return {
         day,
@@ -93,7 +92,7 @@ export default defineEventHandler(async (event) => {
   catch (error: any) {
     const errorMessage = error.error ? error.error.message : error.message
     throw createError({
-      statusCode: error.statusCode ? error.statusCode : 500,
+      statusCode: error.statusCode || 500,
       statusMessage: `Tasks Weekly Productivity Stats Error: ${errorMessage}!`,
     })
   }
