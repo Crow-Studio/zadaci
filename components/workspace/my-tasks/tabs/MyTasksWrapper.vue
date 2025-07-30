@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
-import MyTasksTabs from './MyTasksTabs.vue'
+// import MyTasksTabs from './MyTasksTabs.vue'
+import MyTasksBoardsView from './MyTasksBoardsView.vue'
 import type { MyTask } from '~/types'
 import { mapMyTasksByStatus } from '~/lib/my-tasks'
 
@@ -48,7 +49,13 @@ watch(data, () => {
     <div
       v-else
     >
-      <MyTasksTabs
+      <!--  todo: would add tabs support for other views like list and calendar -->
+      <!-- <MyTasksTabs
+        v-if="data && data.length > 0"
+        :workspace-id="props?.workspaceId"
+        :tasks="tasks"
+      /> -->
+      <MyTasksBoardsView
         v-if="data && data.length > 0"
         :workspace-id="props?.workspaceId"
         :tasks="tasks"

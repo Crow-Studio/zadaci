@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import TasksTabs from './tasks/TasksTabs.vue'
+// import TasksTabs from './tasks/TasksTabs.vue'
 import TaskStats from './tasks/TaskStats.vue'
+import TasksBoardsView from './tasks/TasksBoardsView.vue'
 import { mapTasksByStatus } from '~/lib/tasks'
 import type { DBProject, Task } from '~/types'
 
@@ -52,12 +53,21 @@ function handleTasksFiltered(newFilteredTasks: Record<string, Task[]>) {
 
 <template>
   <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
-    <TasksTabs
+    <!--  todo: would add tabs support for other views like list and calendar -->
+    <!-- <TasksTabs
       :project="props?.project"
       :tasks="tasks"
       :filtered-tasks="filteredTasks"
       :handle-tasks-filtered="handleTasksFiltered"
-    />
+    /> -->
+    <div class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6">
+      <TasksBoardsView
+        :project="props?.project"
+        :tasks="tasks"
+        :filtered-tasks="filteredTasks"
+        :handle-tasks-filtered="handleTasksFiltered"
+      />
+    </div>
     <TaskStats
       :workspace-id="props.workspaceId"
       :project-id="props.projectId"
