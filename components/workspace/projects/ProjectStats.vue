@@ -6,7 +6,6 @@ import {
   subWeeks,
 } from 'date-fns'
 import { ref, watchEffect } from 'vue'
-import { Loader2 } from 'lucide-vue-next'
 import { Button } from '~/components/ui/button'
 import { useAsyncData, refreshNuxtData } from '#app'
 import { cn } from '~/lib/utils'
@@ -34,7 +33,7 @@ function isLastWeek(date: Date) {
   return date >= lastWeekStart && date <= lastWeekEnd
 }
 
-const { data, status } = await useAsyncData(`all_project_stats_${currentActiveWorkspace.value?.id}`, () =>
+const { data } = await useAsyncData(`all_project_stats_${currentActiveWorkspace.value?.id}`, () =>
   useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
 )
 
@@ -130,15 +129,7 @@ async function refreshStats() {
       </div>
 
       <div>
-        <div
-          v-if="status ==='pending' || status ==='idle'"
-          class="flex items-center py-16 gap-x-2 justify-center text-muted-foreground"
-        >
-          <Loader2 class="animate-spin" />
-          Loading Graph Data..
-        </div>
         <DonutChart
-          v-else
           :data="donutData.map(i => i.value)"
           :height="275"
           :labels="donutData"
