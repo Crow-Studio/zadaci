@@ -9,7 +9,6 @@ import {
 } from '~/components/ui/breadcrumb'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
-import SearchCommand from '~/modals/workspace/SearchCommand.vue'
 
 const workspaceStore = useWorkspaceStore()
 const modalStore = useModalStore()
@@ -108,6 +107,5 @@ const onToggleMobileSidebar = () => {
         </BreadcrumbList>
       </Breadcrumb>
     </div>
-    <SearchCommand />
   </div>
 </template>
