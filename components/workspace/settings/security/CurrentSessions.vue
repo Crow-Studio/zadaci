@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RefreshCcw, ServerCrash } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import SkeletonLoading from '../../global/SkeletonLoading.vue'
 import SessionItem from './SessionItem.vue'
 import { cn } from '~/lib/utils'
 import { Button } from '~/components/ui/button'
@@ -12,7 +13,7 @@ const { data: rawSessions, status } = await useAsyncData('user_sessions', () => 
 const sessions = computed(() =>
   rawSessions.value?.map(session => ({
     ...session,
-    expiresAt: new Date(session.expiresAt),
+    expires_at: new Date(session.expires_at),
   })) || [],
 )
 
@@ -50,19 +51,19 @@ const onRefresh = async (): Promise<void> => {
       </div>
       <Button
         variant="outline"
-        class="h-8 gap-1 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground"
+        class="h-8 gap-1 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground cursor-pointer"
         @click="onRefresh"
       >
         <RefreshCcw
           :class="cn(
             isRefreshing && 'animate-spin',
-            'size-5',
+            'size-4',
           )"
         />
         <span class="hidden md:block">Refresh</span>
       </Button>
     </div>
-    <WorkspaceGlobalSkeletonLoading v-if="status ==='pending' || status ==='idle'" />
+    <SkeletonLoading v-if="status ==='pending' || status ==='idle'" />
     <div
       v-else-if="status ==='error'"
       class="rounded-lg border"

@@ -66,10 +66,11 @@ const onSessionSignOut = async (payload: { token: string, sessionId: string }): 
       props.sessions && props.sessionIndex < props.sessions.length - 1 && 'border-b',
     )"
   >
-    <div class="flex items-center gap-1.5">
+    <div class="flex items-center gap-2">
       <Icon
         name="logos:chrome"
-        class="size-8 shrink-0 md:size-10"
+        class="shrink-0"
+        size="25"
       />
       <div class="w-full self-start">
         <div class="flex items-center justify-between text-sm font-medium sm:text-base">
@@ -78,10 +79,10 @@ const onSessionSignOut = async (payload: { token: string, sessionId: string }): 
           </h2>
           <p class="flex items-center gap-1 text-sm capitalize text-emerald-600 md:hidden">
             <Icon
-              :name="getSessionStatusIcon({ token: userSession.sessionToken ?? '', session: { ...props.session, expiresAt: new Date(props.session.expiresAt) } })"
+              :name="getSessionStatusIcon({ token: userSession?.sessionToken ?? '', session: { ...props.session, expiresAt: new Date(props.session.expires_at) } })"
               class="size-5"
             />
-            {{ getSessionStatus({ token: userSession.sessionToken ?? '', session: { ...props.session, expiresAt: new Date(props.session.expiresAt) } }) }}
+            {{ getSessionStatus({ token: userSession?.sessionToken ?? '', session: { ...props.session, expiresAt: new Date(props.session.expires_at) } }) }}
           </p>
         </div>
         <p class="text-xs text-muted-foreground md:text-sm">
@@ -92,15 +93,15 @@ const onSessionSignOut = async (payload: { token: string, sessionId: string }): 
     <div class="flex items-center justify-end gap-5 md:grid md:grid-cols-2 md:justify-between">
       <div class="hidden items-center gap-1 text-sm capitalize text-emerald-600 md:flex">
         <Icon
-          :name="getSessionStatusIcon({ token: userSession.sessionToken!, session: { ...props.session, expiresAt: new Date(props.session.expiresAt) } })"
+          :name="getSessionStatusIcon({ token: userSession?.sessionToken!, session: { ...props.session, expiresAt: new Date(props.session.expires_at) } })"
           class="size-5"
         />
-        {{ getSessionStatus({ token: userSession.sessionToken!, session: { ...props.session, expiresAt: new Date(props.session.expiresAt) } }) }}
+        {{ getSessionStatus({ token: userSession?.sessionToken!, session: { ...props.session, expiresAt: new Date(props.session.expires_at) } }) }}
       </div>
       <Button
         variant="outline"
-        class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit"
-        @click="onSessionSignOut({ token: userSession.sessionToken!, sessionId: props.session.id })"
+        class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit cursor-pointer"
+        @click="onSessionSignOut({ token: userSession?.sessionToken!, sessionId: props.session.id })"
       >
         <Loader2
           v-if="isLoading"

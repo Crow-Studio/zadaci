@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
+import CurrentSessions from '~/components/workspace/settings/security/CurrentSessions.vue'
+import Password from '~/components/workspace/settings/security/Password.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -60,17 +62,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <section>
+  <section class="grid gap-4">
+    <div>
+      <h1 class="text-xl font-medium">
+        Security & Authentication
+      </h1>
+      <p class="max-w-xl text-balance text-muted-foreground">
+        Our platform guarantees that your account is secured with measures in place.
+      </p>
+    </div>
     <div
-      v-if="status ==='idle' || status === 'pending' || isAppLoading"
+      v-if="status ==='idle' || status === 'pending'"
       class="min-h-[70vh] grid place-content-center"
     >
       <div class="flex items-center gap-x-2 text-muted-foreground text-sm">
         <Loader2 class="animate-spin size-5" />
       </div>
     </div>
-    <div v-else>
-      Settings Security
+    <div
+      v-else
+      class="grid gap-3.5"
+    >
+      <Password />
+      <CurrentSessions />
+      <!-- <CurrentSessions />
+      <MFA /> -->
     </div>
   </section>
 </template>

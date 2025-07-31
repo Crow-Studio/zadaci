@@ -46,7 +46,7 @@ const onResetPassword = () => {
         <Button
           v-if="data && data.isPasswordSet"
           variant="outline"
-          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit"
+          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit cursor-pointer"
           @click="onResetPassword"
         >
           <Icon
@@ -58,7 +58,7 @@ const onResetPassword = () => {
         <Button
           v-else
           variant="outline"
-          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit"
+          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit cursor-pointer"
           @click="onSetupPassword"
         >
           <Icon
