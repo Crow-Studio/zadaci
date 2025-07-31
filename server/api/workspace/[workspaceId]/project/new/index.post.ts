@@ -102,6 +102,8 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: `Invalid members (not in workspace): ${invalid.join(', ')}` })
     }
 
+    let projectId: string | null = null
+
     await useDrizzle().transaction(async (tx) => {
       // Create the new project
       const [project] = await tx.insert(tables.projectTable).values({
@@ -129,11 +131,14 @@ export default defineEventHandler(async (event) => {
         await tx.insert(tables.projectMembers).values(newMembers)
       }
 
+      projectId = project.id
+
       // todo: Send email notifications to members
     })
 
     return {
       message: 'Project created successfully!',
+      projectId: projectId ? projectId : null,
     }
   }
 

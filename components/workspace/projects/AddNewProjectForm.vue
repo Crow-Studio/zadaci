@@ -77,6 +77,10 @@ const onSubmit = form.handleSubmit(async (values) => {
     toast.success(res.message, {
       position: 'top-center',
     })
+
+    if (res.projectId) {
+      return navigateTo(`/workspace/${activeWorkspace.value?.id}/projects/${res.projectId}`)
+    }
   }
   catch (error: any) {
     const errorMessage = error.response
