@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css'
+import Signout from '~/modals/global/Signout.vue'
+import UseAuthenticatorApp from '~/modals/workspace/UseAuthenticatorApp.vue'
 
 useHead({
   meta: [
@@ -35,5 +37,7 @@ useHead({
     <div class="flex-1">
       <slot />
     </div>
+    <Signout />
+    <UseAuthenticatorApp />
   </main>
 </template>

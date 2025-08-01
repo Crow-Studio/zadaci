@@ -21,7 +21,7 @@ const onSignOut = () => {
 </script>
 
 <template>
-  <Card class="w-full max-w-sm">
+  <Card class="w-full max-w-lg">
     <RecoveryCode />
     <CardHeader class="text-center">
       <CardTitle>Two-Factor Authentication</CardTitle>
@@ -37,7 +37,7 @@ const onSignOut = () => {
       <AutheticatorApps v-if="user?.registered2FA && user?.registeredTOTP" />
       <Button
         variant="link"
-        class="w-full"
+        class="w-full cursor-pointer"
         :disabled="isAuthenticating"
         @click="onSignOut"
       >

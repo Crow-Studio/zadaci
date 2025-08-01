@@ -11,7 +11,7 @@ const onUseAuthenticatorApp = () => {
 
 <template>
   <Button
-    class="w-full bg-brand hover:bg-brand-secondary dark:text-white"
+    class="w-full bg-brand hover:bg-brand-secondary dark:text-white cursor-pointer"
     @click="onUseAuthenticatorApp"
   >
     <Icon

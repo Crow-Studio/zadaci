@@ -123,7 +123,7 @@ function onCancel() {
       <Button
         :disabled="isTwoFactorSetup"
         type="submit"
-        class="w-full gap-2 bg-brand hover:bg-brand-secondary"
+        class="w-full gap-2 bg-brand hover:bg-brand-secondary cursor-pointer"
       >
         <Loader
           v-if="isTwoFactorSetup"
@@ -133,7 +133,7 @@ function onCancel() {
       </Button>
       <Button
         type="button"
-        class="w-full"
+        class="w-full cursor-pointer"
         variant="outline"
         :disabled="isTwoFactorSetup"
         @click="onCancel"
