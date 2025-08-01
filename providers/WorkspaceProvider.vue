@@ -15,6 +15,7 @@ import AddTeammate from '~/modals/workspace/AddTeammate.vue'
 import AuthenticatorApp from '~/modals/workspace/AuthenticatorApp.vue'
 import ChangeUserRole from '~/modals/workspace/ChangeUserRole.vue'
 import UseAuthenticatorApp from '~/modals/workspace/UseAuthenticatorApp.vue'
+import DeleteAccount from '~/modals/workspace/DeleteAccount.vue'
 </script>
 
 <template>
@@ -35,5 +36,6 @@ import UseAuthenticatorApp from '~/modals/workspace/UseAuthenticatorApp.vue'
     <AuthenticatorApp />
     <ChangeUserRole />
     <UseAuthenticatorApp />
+    <DeleteAccount />
   </div>
 </template>

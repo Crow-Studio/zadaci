@@ -13,6 +13,7 @@ import { Button } from '~/components/ui/button'
 import { deleteWorkspaceSchema } from '~/types/forms/schema'
 
 const modalStore = useModalStore()
+const workspaceStore = useWorkspaceStore()
 const { user, clear: clearSession } = useUserSession()
 
 const form = useForm({
@@ -32,7 +33,7 @@ const isSubmitting = computed(() => {
   return false
 })
 
-const onDeleteWorkspace = form.handleSubmit(async (value) => {
+const onDeleteAccount = form.handleSubmit(async (value) => {
   try {
     isDeletingWorkspace.value = true
 
@@ -48,10 +49,9 @@ const onDeleteWorkspace = form.handleSubmit(async (value) => {
     })
 
     await clearSession()
-
+    workspaceStore?.onSetActiveWorkspace(null)
     onClose()
-    // clear session
-    return navigateTo(`/workspace/onboarding`)
+    return navigateTo(`/auth/signin`)
   }
 
   catch (error: any) {
@@ -78,7 +78,7 @@ const onClose = () => {
 <template>
   <form
     class="space-y-4"
-    @submit.prevent="onDeleteWorkspace"
+    @submit.prevent="onDeleteAccount"
   >
     <FormField
       v-slot="{ componentField }"
@@ -86,7 +86,7 @@ const onClose = () => {
     >
       <FormItem class="space-y-1">
         <FormLabel class="text-sm font-medium">
-          To confirm, type "<span class="font-semibold text-destructive dark:text-white">{{ user?.username }} </span>" in the below input.
+          To confirm, type<span class="font-semibold text-destructive dark:text-white">{{ user?.username }}</span>in the below input.
         </FormLabel>
         <FormControl>
           <div
@@ -132,7 +132,7 @@ const onClose = () => {
               'cursor-pointer bg-brand focus:bg-brand-secondary':
                 form.controlledValues.value.name
                 && !form.errors.value.name,
-              'cursor-not-allowed bg-[#9e8cce]':
+              'cursor-not-allowed bg-brand-secondary':
                 !form.controlledValues.value.name
                 || form.errors.value.name
                 || isDeletingWorkspace || form.controlledValues.value.name.trim() !== user?.username?.trim(),
@@ -150,7 +150,7 @@ const onClose = () => {
         type="button"
         :disabled="isDeletingWorkspace"
         variant="ghost"
-        class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all"
+        class="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded px-5 py-2 text-sm font-medium transition-all cursor-pointer"
         @click="onClose"
       >
         Cancel

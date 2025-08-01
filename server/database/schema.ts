@@ -203,7 +203,7 @@ export const tasksActivityTable = pgTable('tasks_activity', {
   id: text('id').primaryKey(),
   status: statusEnum('status').default('IDEA').notNull(),
   task_id: text('task_id').notNull().references(() => tasksTable.id, { onDelete: 'cascade' }),
-  changed_by: text('changed_by').notNull().references(() => workspaceMembersTable.id),
+  changed_by: text('changed_by').notNull().references(() => workspaceMembersTable.id, { onDelete: 'cascade' }),
   changed_at: timestamp('changed_at', { mode: 'date', precision: 3 }).notNull(),
 })
 

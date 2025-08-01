@@ -225,13 +225,19 @@ const projects = computed(() => {
             <button
               class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
               @click="onNavigateToPage({
-                name: 'Settings',
-                path: `/workspace/${currentActiveWorkspace?.id}/settings/general`,
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
                 children: [
                   {
-                    name: 'General',
+                    name: 'Settings',
                     path: `/workspace/${currentActiveWorkspace?.id}/settings/general`,
-                    children: null,
+                    children: [
+                      {
+                        name: 'General',
+                        path: `/workspace/${currentActiveWorkspace?.id}/settings/general`,
+                        children: null,
+                      },
+                    ],
                   },
                 ],
               }, `/workspace/${currentActiveWorkspace?.id}/settings/general`)"
@@ -241,6 +247,32 @@ const projects = computed(() => {
                 class="size-4"
               />
               General
+            </button>
+            <button
+              class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+              @click="onNavigateToPage({
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                children: [
+                  {
+                    name: 'Settings',
+                    path: `/workspace/${currentActiveWorkspace?.id}/settings/profile`,
+                    children: [
+                      {
+                        name: 'Profile',
+                        path: `/workspace/${currentActiveWorkspace?.id}/settings/profile`,
+                        children: null,
+                      },
+                    ],
+                  },
+                ],
+              }, `/workspace/${currentActiveWorkspace?.id}/settings/profile`)"
+            >
+              <Icon
+                name="hugeicons:user-settings-01"
+                class="size-4"
+              />
+              Profile
             </button>
             <button
               class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
