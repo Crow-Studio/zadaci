@@ -56,7 +56,7 @@ defineProps({
         </Link>
         <Container>
           <Text class="text-2xl font-semibold text-brand">
-            You've been invited to join {{ workspace }} Workspace on use-odama 🎉.
+            You've been invited to join {{ workspace }} Workspace on Zadaci 🎉.
           </Text>
           <Text class="text-base leading-6 text-gray-600">
             {{ sender }}, invited you to join {{ workspace }} Workspace. Join now to start collaborating!

@@ -3,8 +3,6 @@ import AuthenticatorApps from './AuthenticatorApps.vue'
 import Passkeys from './Passkeys.vue'
 
 const { data: mfa, status } = await useAsyncData('user_mfa_credentials', () => useRequestFetch()('/api/auth/user/2fa/credentials'))
-
-console.log(mfa.value)
 </script>
 
 <template>
@@ -21,7 +19,16 @@ console.log(mfa.value)
     <AuthenticatorApps :status="status" />
     <Passkeys
       :status="status"
-      :passkeys="mfa?.passkeyCredentials!"
+      :passkeys="mfa?.passkeyCredentials?.map((pk: any) => ({
+        id: pk.id,
+        userId: pk.user_id,
+        publicKey: pk.public_key,
+        counter: pk.counter,
+        backedUp: pk.backed_up,
+        transports: pk.transports,
+        createdAt: pk.created_at,
+        updatedAt: pk.updated_at,
+      })) ?? []"
     />
   </div>
 </template>

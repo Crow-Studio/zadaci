@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import { Loader2, ServerCrash } from 'lucide-vue-next'
+import SkeletonLoading from '../../global/SkeletonLoading.vue'
 import PasskeyItem from './PasskeyItem.vue'
 import type { AsyncDataRequestStatus } from '#app'
 import { Button } from '~/components/ui/button'
@@ -64,7 +65,7 @@ const onSetupPasskeys = async () => {
       </div>
       <Button
         variant="outline"
-        class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit"
+        class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit cursor-pointer"
         :disabled="isSettingUpPasskeys"
         @click="onSetupPasskeys"
       >
@@ -80,7 +81,7 @@ const onSetupPasskeys = async () => {
         {{ props?.passkeys.length > 0 ? 'Add passkeys' : 'Setup passkeys' }}
       </Button>
     </div>
-    <WorkspaceGlobalSkeletonLoading v-if="status ==='pending' || status ==='idle'" />
+    <SkeletonLoading v-if="status ==='pending' || status ==='idle'" />
     <div
       v-else-if="status ==='error'"
     >

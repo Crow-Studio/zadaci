@@ -14,6 +14,7 @@ import {
 import {
   PinInput,
   PinInputGroup,
+  PinInputSlot,
 } from '~/components/ui/pin-input'
 
 const props = defineProps<{
@@ -99,7 +100,7 @@ function onCancel() {
                 }"
               >
                 <PinInputGroup>
-                  <PinInputInput
+                  <PinInputSlot
                     v-for="(id, index) in 6"
                     :key="id"
                     :index="index"

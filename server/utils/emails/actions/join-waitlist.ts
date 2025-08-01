@@ -13,7 +13,7 @@ export async function sendWaitlistMail({ email }: Props) {
     })
 
     await resend.emails.send({
-      from: 'Team use-odama <noreply@thecodingmontana.com>',
+      from: 'Team Zadaci <noreply@thecodingmontana.com>',
       to: [email],
       subject: `You're on the waitlist!`,
       html,

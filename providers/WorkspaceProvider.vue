@@ -11,6 +11,10 @@ import DeleteWorkspace from '~/modals/workspace/DeleteWorkspace.vue'
 import TransferWorkspaceOwnership from '~/modals/workspace/TransferWorkspaceOwnership.vue'
 import ResetPassword from '~/modals/workspace/ResetPassword.vue'
 import SetupPassword from '~/modals/workspace/SetupPassword.vue'
+import AddTeammate from '~/modals/workspace/AddTeammate.vue'
+import AuthenticatorApp from '~/modals/workspace/AuthenticatorApp.vue'
+import ChangeUserRole from '~/modals/workspace/ChangeUserRole.vue'
+import UseAuthenticatorApp from '~/modals/workspace/UseAuthenticatorApp.vue'
 </script>
 
 <template>
@@ -27,5 +31,9 @@ import SetupPassword from '~/modals/workspace/SetupPassword.vue'
     <TransferWorkspaceOwnership />
     <ResetPassword />
     <SetupPassword />
+    <AddTeammate />
+    <AuthenticatorApp />
+    <ChangeUserRole />
+    <UseAuthenticatorApp />
   </div>
 </template>

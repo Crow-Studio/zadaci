@@ -11,6 +11,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function isValidEmail(email: string): boolean {
+  return /.+@.+/.test(email)
+}
+
+export function isValidName(name: string): boolean {
+  return /^[a-zA-Z\s-'']+$/.test(name)
+}
+
 export function get2FARedirect(user: User, defaultPath: string): string {
   if (user.registeredPasskey && !user.twoFactorVerified) {
     return '/auth/two-factor'

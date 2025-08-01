@@ -12,9 +12,9 @@ useHead({
 })
 
 defineOgImageComponent('UseOdama', {
-  title: 'use-odama - Onboarding',
+  title: 'Zadaci - Onboarding',
   description:
-    'Manage multiple restaurants, build menus, handle online orders, track inventory, and empower your team with use-odama.',
+    'All-in-one project management platform built to help you and your team get things done faster',
 })
 
 const workspaceStore = useWorkspaceStore()

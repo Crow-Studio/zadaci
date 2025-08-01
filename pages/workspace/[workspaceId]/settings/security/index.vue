@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
 import CurrentSessions from '~/components/workspace/settings/security/CurrentSessions.vue'
+import MFA from '~/components/workspace/settings/security/MFA.vue'
 import Password from '~/components/workspace/settings/security/Password.vue'
 
 definePageMeta({
@@ -85,8 +86,7 @@ onMounted(() => {
     >
       <Password />
       <CurrentSessions />
-      <!-- <CurrentSessions />
-      <MFA /> -->
+      <MFA />
     </div>
   </section>
 </template>

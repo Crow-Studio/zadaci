@@ -18,7 +18,7 @@ const isDisconnecting = ref(false)
 const totpKey = new Uint8Array(20)
 crypto.getRandomValues(totpKey)
 const encodedTOTPKey = encodeBase64(totpKey)
-const keyURI = createTOTPKeyURI('use-odama', user.value?.email as string, totpKey, 30, 6)
+const keyURI = createTOTPKeyURI('Zadaci', user.value?.email as string, totpKey, 30, 6)
 
 const qrcode = renderSVG(keyURI)
 
@@ -86,7 +86,7 @@ const onDisconnectTOTP = async () => {
         >
           <Button
             :disabled="isDisconnecting"
-            class="gap-2 bg-brand hover:bg-brand-secondary dark:text-primary sm:h-8"
+            class="gap-2 bg-brand hover:bg-brand-secondary dark:text-primary sm:h-8 cursor-pointer"
             @click="onSetupTOTP"
           >
             <Icon
@@ -98,7 +98,7 @@ const onDisconnectTOTP = async () => {
           <Button
             :disabled="isDisconnecting"
             variant="destructive"
-            class="gap-2 sm:h-8"
+            class="gap-2 sm:h-8 cursor-pointer"
             @click="onDisconnectTOTP"
           >
             <Loader2
@@ -116,7 +116,7 @@ const onDisconnectTOTP = async () => {
         <Button
           v-else
           variant="outline"
-          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit"
+          class="w-full border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground sm:h-8 sm:w-fit cursor-pointer"
           @click="onSetupTOTP"
         >
           <Icon

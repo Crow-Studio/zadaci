@@ -22,7 +22,7 @@ export async function sendWorkspaceInvite({ email, link, sender, workspace, expi
     })
 
     await resend.emails.send({
-      from: 'Team use-odama <noreply@thecodingmontana.com>',
+      from: 'Team Zadaci <noreply@thecodingmontana.com>',
       to: [email],
       subject: `You've been invited to work together in ${workspace} workspace.`,
       html,

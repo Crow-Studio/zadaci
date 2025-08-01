@@ -336,3 +336,14 @@ export interface ProjectMembers {
   avatar: string | null
   member_id: string
 }
+
+export interface MFAPasskey {
+  id: string
+  userId: string
+  publicKey: string
+  counter: number
+  backedUp: boolean
+  transports: string
+  createdAt: Date | string
+  updatedAt: Date | string
+}
