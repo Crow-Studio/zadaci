@@ -112,7 +112,7 @@ const onClose = () => {
               'cursor-pointer bg-brand focus:bg-brand-secondary':
                 form.controlledValues.value.password
                 && !form.errors.value.password,
-              'cursor-not-allowed bg-[#9e8cce]':
+              'cursor-not-allowed bg-brand-secondary':
                 !form.controlledValues.value.password
                 || form.errors.value.password
                 || isSettingupPassowrd,

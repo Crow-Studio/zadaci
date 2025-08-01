@@ -9,6 +9,8 @@ import CreateWorkspace from '~/modals/workspace/CreateWorkspace.vue'
 import DeleteProject from '~/modals/workspace/DeleteProject.vue'
 import DeleteWorkspace from '~/modals/workspace/DeleteWorkspace.vue'
 import TransferWorkspaceOwnership from '~/modals/workspace/TransferWorkspaceOwnership.vue'
+import ResetPassword from '~/modals/workspace/ResetPassword.vue'
+import SetupPassword from '~/modals/workspace/SetupPassword.vue'
 </script>
 
 <template>
@@ -23,5 +25,7 @@ import TransferWorkspaceOwnership from '~/modals/workspace/TransferWorkspaceOwne
     <DeleteProject />
     <DeleteWorkspace />
     <TransferWorkspaceOwnership />
+    <ResetPassword />
+    <SetupPassword />
   </div>
 </template>

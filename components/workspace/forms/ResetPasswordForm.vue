@@ -81,53 +81,55 @@ const onClose = () => {
     class="space-y-4"
     @submit.prevent="onResetPassword"
   >
-    <FormField
-      v-slot="{ value, handleChange }"
-      name="password"
-    >
-      <FormItem class="space-y-1">
-        <FormLabel class="text-onboarding-text-300 text-sm font-medium">
-          Current Password
-        </FormLabel>
-        <FormControl>
-          <OldPassword
-            :value="value as string"
-            :handle-change="handleChange"
-          />
-        </FormControl>
-        <div class="flex items-center gap-1 px-0.5 text-xs text-red-600">
-          <Icon
-            v-if="form.errors.value.password"
-            name="lucide-circle-alert"
-          />
-          <FormMessage />
-        </div>
-      </FormItem>
-    </FormField>
-    <FormField
-      v-slot="{ value, handleChange, setErrors }"
-      name="newPassword"
-    >
-      <FormItem class="space-y-1">
-        <FormLabel class="text-onboarding-text-300 text-sm font-medium">
-          New Password
-        </FormLabel>
-        <FormControl>
-          <Password
-            :value="value as string"
-            :handle-change="handleChange"
-            :set-errors="setErrors"
-          />
-        </FormControl>
-        <div class="flex items-center gap-1 px-0.5 text-xs text-red-600">
-          <Icon
-            v-if="form.errors.value.newPassword"
-            name="lucide-circle-alert"
-          />
-          <FormMessage />
-        </div>
-      </FormItem>
-    </FormField>
+    <div>
+      <FormField
+        v-slot="{ value, handleChange }"
+        name="password"
+      >
+        <FormItem class="space-y-1">
+          <FormLabel class="text-onboarding-text-300 text-sm font-medium">
+            Current Password
+          </FormLabel>
+          <FormControl>
+            <OldPassword
+              :value="value as string"
+              :handle-change="handleChange"
+            />
+          </FormControl>
+          <div class="flex items-center gap-1 px-0.5 text-xs text-red-600">
+            <Icon
+              v-if="form.errors.value.password"
+              name="lucide-circle-alert"
+            />
+            <FormMessage />
+          </div>
+        </FormItem>
+      </FormField>
+      <FormField
+        v-slot="{ value, handleChange, setErrors }"
+        name="newPassword"
+      >
+        <FormItem class="space-y-1">
+          <FormLabel class="text-onboarding-text-300 text-sm font-medium">
+            New Password
+          </FormLabel>
+          <FormControl>
+            <Password
+              :value="value as string"
+              :handle-change="handleChange"
+              :set-errors="setErrors"
+            />
+          </FormControl>
+          <div class="flex items-center gap-1 px-0.5 text-xs text-red-600">
+            <Icon
+              v-if="form.errors.value.newPassword"
+              name="lucide-circle-alert"
+            />
+            <FormMessage />
+          </div>
+        </FormItem>
+      </FormField>
+    </div>
     <div class="flex flex-col items-center gap-2">
       <button
         type="submit"
@@ -141,7 +143,7 @@ const onClose = () => {
                 && !form.errors.value.password
                 && form.controlledValues.value.newPassword
                 && !form.errors.value.newPassword,
-              'cursor-not-allowed bg-[#9e8cce]':
+              'cursor-not-allowed bg-brand-secondary':
                 !form.controlledValues.value.password
                 || form.errors.value.password
                 || !form.controlledValues.value.newPassword
