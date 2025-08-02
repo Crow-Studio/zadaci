@@ -27,7 +27,7 @@ const onTransferOnwership = () => {
     <div class="flex w-full flex-col gap-2 lg:w-fit lg:flex-row lg:items-center lg:self-start xl:gap-5">
       <Button
         variant="outline"
-        class="w-full gap-1.5 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground lg:w-fit cursor-pointer"
+        class="w-full gap-1.5 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white lg:w-fit cursor-pointer"
         @click="onTransferOnwership"
       >
         <Icon

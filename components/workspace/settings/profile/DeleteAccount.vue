@@ -33,7 +33,7 @@ const onTransferOnwership = () => {
       <Button
         v-if="currentActiveWorkspace?.userRole ==='OWNER'"
         variant="outline"
-        class="w-full gap-1.5 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white dark:border dark:bg-background dark:hover:bg-accent dark:hover:text-accent-foreground lg:w-fit cursor-pointer"
+        class="w-full gap-1.5 border-0 bg-brand text-white hover:bg-brand-secondary hover:text-white lg:w-fit cursor-pointer"
         @click="onTransferOnwership"
       >
         <Icon
