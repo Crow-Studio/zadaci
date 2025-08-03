@@ -320,7 +320,32 @@ const projects = computed(() => {
           </div>
         </div>
       </ScrollArea>
-      <div class="mt-auto w-full bg-transparent dark:bg-[#1d1d1d]">
+      <div class="mt-auto w-full bg-transparent dark:bg-[#1d1d1d] space-y-5">
+        <div class="grid">
+          <h3 class="p-2 text-xs text-muted-foreground">
+            App
+          </h3>
+          <button
+            class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+            @click="onNavigateToPage({
+              name: `${currentActiveWorkspace?.name}`,
+              path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+              children: [
+                {
+                  name: 'Support',
+                  path: `/workspace/${currentActiveWorkspace?.id}/support`,
+                  children: null,
+                },
+              ],
+            }, `/workspace/${currentActiveWorkspace?.id}/support`)"
+          >
+            <Icon
+              name="solar:help-outline"
+              class="size-4"
+            />
+            Support
+          </button>
+        </div>
         <User />
       </div>
     </div>
