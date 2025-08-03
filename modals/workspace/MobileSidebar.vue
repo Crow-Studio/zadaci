@@ -27,36 +27,10 @@ const isModalOpen = computed(() => {
   return modalStore?.type === 'mobileSidebar' && modalStore?.isOpen
 })
 
-const { data: rawWorkspaces, status } = await useAsyncData('mobile_workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`), {
-  transform(input) {
-    return {
-      input,
-      fetchedAt: new Date(),
-    }
-  },
-  getCachedData(key, nuxtApp) {
-    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-    // If data is not fetched yet
-    if (!data) {
-      // Fetch the first time
-      return
-    }
-
-    // Check if the data is older than 5 minutes
-    const expirationDate = new Date(data.fetchedAt)
-    expirationDate.setTime(expirationDate.getTime() + 5 * 60 * 1000) // 5 minutes TTL
-    const isExpired = expirationDate.getTime() < Date.now()
-    if (isExpired) {
-      // Refetch the data
-      return
-    }
-
-    return data
-  },
-})
+const { data: rawWorkspaces, status } = await useAsyncData('mobile_workspaces', () => useRequestFetch()(`/api/workspace/user/${user.value?.id}/workspaces`))
 
 const workspaces = computed(() => {
-  return rawWorkspaces.value?.input?.map(workspace => ({
+  return rawWorkspaces.value?.map(workspace => ({
     ...workspace,
     updatedAt: workspace.updatedAt || '',
   })) || []
@@ -351,7 +325,32 @@ const { data: projects } = await useAsyncData(`mobile_sidebar_projects_${current
             </div>
           </div>
         </ScrollArea>
-        <div class="mt-auto w-full bg-transparent dark:bg-[#1d1d1d]">
+        <div class="mt-auto w-full bg-transparent dark:bg-[#1d1d1d] space-y-5">
+          <div class="grid">
+            <h3 class="p-2 text-xs text-muted-foreground">
+              App
+            </h3>
+            <button
+              class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+              @click="onNavigateToPage({
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                children: [
+                  {
+                    name: 'Support',
+                    path: `/workspace/${currentActiveWorkspace?.id}/support`,
+                    children: null,
+                  },
+                ],
+              }, `/workspace/${currentActiveWorkspace?.id}/support`)"
+            >
+              <Icon
+                name="solar:help-outline"
+                class="size-4"
+              />
+              Support
+            </button>
+          </div>
           <User />
         </div>
       </div>
