@@ -60,7 +60,7 @@ const onChangeRole = async () => {
   <div className="space-y-3">
     <div class="w-full">
       <div class="grid grid-cols-2 gap-3">
-        <p>{{ props?.teammates.length > 1 ? 'Users' : 'Use' }}</p>
+        <p>{{ props?.teammates.length > 1 ? 'Members' : 'Member' }}</p>
         <p>Role</p>
       </div>
       <div class="grid gap-1.5">

@@ -40,11 +40,12 @@ const onClose = () => {
         <div class="flex items-center gap-2">
           <div class="grid shrink-0 place-items-center self-start rounded-full">
             <Icon
-              name="solar:mailbox-outline"
-              class="size-10 text-brand dark:text-primary"
+              name="hugeicons:user-edit-01"
+              class="text-brand dark:text-primary"
+              size="45"
             />
           </div>
-          <div class="grid gap-1">
+          <div class="grid">
             <AlertDialogTitle class="text-brand dark:text-primary">
               Update {{ teammates.length > 1 ? 'teammates' : 'teammate' }} {{ teammates.length > 1 ? 'roles' : 'role' }}
             </AlertDialogTitle>

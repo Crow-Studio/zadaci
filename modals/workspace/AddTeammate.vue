@@ -37,9 +37,10 @@ const onClose = () => {
             <Icon
               name="solar:mailbox-outline"
               class="size-10 text-brand dark:text-primary"
+              size="45"
             />
           </div>
-          <div class="grid gap-1">
+          <div class="grid">
             <AlertDialogTitle class="text-brand dark:text-primary">
               Add new team member
             </AlertDialogTitle>

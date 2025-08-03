@@ -46,47 +46,44 @@ const removeUser = (userId: string) => {
 </script>
 
 <template>
-  <div
-    class="group relative grid grid-cols-4 items-center gap-3"
-  >
-    <Select
-      v-model="member.id"
-      :default-value="props?.teammate.id"
-      :disabled="props?.isChangingRole"
-    >
-      <SelectTrigger
-        id="select-40"
-        class="col-span-2 h-auto ps-2 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0"
+  <div class="group grid grid-cols-2 gap-3">
+    <div>
+      <Select
+        v-model="member.id"
+        :default-value="props?.teammate.id"
+        :disabled="props?.isChangingRole"
       >
-        <SelectValue placeholder="Select a teammate" />
-      </SelectTrigger>
-      <SelectContent
-        class="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2"
-      >
-        <SelectItem
-          :value="props?.teammate.id"
-          class="**:data-desc:hidden"
+        <SelectTrigger class="w-full">
+          <SelectValue placeholder="Select a teammate" />
+        </SelectTrigger>
+        <SelectContent
+          class="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2"
         >
-          <span class="flex items-center gap-2">
-            <img
-              class="size-10 rounded-full object-cover"
-              :src="props?.teammate.avatar"
-              :alt="props?.teammate.username"
-              width="40"
-              height="40"
-            >
-            <span>
-              <span class="block font-medium">{{ props?.teammate.username }}</span>
-              <span class="sr-only"> : </span>
-              <span class="mt-0.5 block text-xs text-muted-foreground">
-                {{ props?.teammate.email }}
+          <SelectItem
+            :value="props?.teammate.id"
+            class="cursor-pointer"
+          >
+            <span class="flex items-center gap-2">
+              <img
+                class="size-10 rounded-full object-cover"
+                :src="props?.teammate.avatar"
+                :alt="props?.teammate.username"
+                width="40"
+                height="40"
+              >
+              <span>
+                <span class="block font-medium">{{ props?.teammate.username }}</span>
+                <span class="sr-only"> : </span>
+                <span class="mt-0.5 block text-xs text-muted-foreground">
+                  {{ props?.teammate.email }}
+                </span>
               </span>
             </span>
-          </span>
-        </SelectItem>
-      </SelectContent>
-    </Select>
-    <div class="col-span-2 grid grid-cols-4 items-center gap-3">
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+    <div class="items-center gap-3">
       <div
         :class="cn(
           'relative flex items-center',
@@ -101,18 +98,27 @@ const removeUser = (userId: string) => {
         >
           <SelectTrigger
             id="select-36"
-            class="outline-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+            class="outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 w-full"
           >
             <SelectValue placeholder="Choose a role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="EMPLOYEE">
-              Employee
+            <SelectItem
+              value="GUEST"
+              class="cursor-pointer"
+            >
+              Guest
             </SelectItem>
-            <SelectItem value="MANAGER">
-              Manager
+            <SelectItem
+              value="MEMBER"
+              class="cursor-pointer"
+            >
+              Member
             </SelectItem>
-            <SelectItem value="OWNER">
+            <SelectItem
+              value="OWNER"
+              class="cursor-pointer"
+            >
               Owner
             </SelectItem>
           </SelectContent>

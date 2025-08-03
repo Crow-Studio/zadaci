@@ -47,6 +47,9 @@ importers:
       '@polar-sh/sdk':
         specifier: ^0.34.3
         version: 0.34.3(zod@3.25.67)
+      '@radix-icons/vue':
+        specifier: ^1.0.0
+        version: 1.0.0(vue@3.5.17(typescript@5.8.3))
       '@simplewebauthn/browser':
         specifier: ^11.0.0
         version: 11.0.0
@@ -213,6 +216,9 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.2.52
         version: 1.2.52
+      '@iconify-json/radix-icons':
+        specifier: ^1.2.2
+        version: 1.2.2
       '@iconify-json/solar':
         specifier: ^1.2.2
         version: 1.2.2
@@ -950,6 +956,9 @@ packages:
   '@iconify-json/lucide@1.2.52':
     resolution: {integrity: sha512-MUFX9bB2XL7ugvUgEj8ftSJfamL1fp0Yp/oGLoLvCy8BC1vX0Z/a6TWHtqidSX4P3ERmDC2pqRwwuSTyZePdrA==}
 
+  '@iconify-json/radix-icons@1.2.2':
+    resolution: {integrity: sha512-+PPmKWDP7pfJMcEc9Ty1zyo/zzq+9rfKW4EGb2HSZcPu1VUhothDLFzWvBqQNoFIOYCJ2nm0Vmf8kVyYhq9G0Q==}
+
   '@iconify-json/solar@1.2.2':
     resolution: {integrity: sha512-lcTb6DWL4HZObiY1W3fHfuxxuQHUc6CFHFeywKEx7Ry0k+dU6POZCMC7oVLr0F8vuf+KgaQ3oOoGO/yFzOwrNg==}
 
@@ -1480,6 +1489,11 @@ packages:
   '@poppinss/utils@6.10.0':
     resolution: {integrity: sha512-IJWgX5KQ1KEG9NqVF4IsNTjyeJFnz03p2PRfBvttx4cyLB0QKOBdGy0Wbn1AkB7EPZ0gAFryO0bNqD2V9UgU/Q==}
     engines: {node: '>=18.16.0'}
+
+  '@radix-icons/vue@1.0.0':
+    resolution: {integrity: sha512-gKWWk9tTK/laDRRNe5KLLR8A0qUwx4q4+DN8Fq48hJ904u78R82ayAO3TrxbNLgyn2D0h6rRiGdLzQWj7rPcvA==}
+    peerDependencies:
+      vue: '>= 3'
 
   '@react-email/render@1.1.2':
     resolution: {integrity: sha512-RnRehYN3v9gVlNMehHPHhyp2RQo7+pSkHDtXPvg3s0GbzM9SQMW4Qrf8GRNvtpLC4gsI+Wt0VatNRUFqjvevbw==}
@@ -7658,6 +7672,10 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/radix-icons@1.2.2':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/solar@1.2.2':
     dependencies:
       '@iconify/types': 2.0.0
@@ -8539,6 +8557,10 @@ snapshots:
       flattie: 1.1.1
       safe-stable-stringify: 2.5.0
       secure-json-parse: 4.0.0
+
+  '@radix-icons/vue@1.0.0(vue@3.5.17(typescript@5.8.3))':
+    dependencies:
+      vue: 3.5.17(typescript@5.8.3)
 
   '@react-email/render@1.1.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:

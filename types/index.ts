@@ -1,6 +1,7 @@
+import { QuestionMarkCircledIcon } from '@radix-icons/vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 
 export const waitlistSchema = toTypedSchema(z.object({
   email: z.string().email({
@@ -121,6 +122,7 @@ export interface ModalData {
   projectId?: string
   project?: DBProject | null
   members?: ProjectMembers[]
+  teammates?: ChangeTeammateRole[]
 }
 
 export interface ModalStore {
@@ -347,3 +349,72 @@ export interface MFAPasskey {
   createdAt: Date | string
   updatedAt: Date | string
 }
+
+export type TeammatesWithProfile = {
+  id: string
+  createdAt: string
+  updatedAt: string | null
+  userId: string
+  workspaceId: string
+  role: UserRole
+  user: {
+    id: string
+    email: string
+    username: string | null
+    emailVerified: boolean
+    registered2FA: boolean
+    profilePictureUrl: string | null
+  }
+}
+
+export interface ChangeTeammateRole {
+  id: string
+  role: UserRole
+  username: string
+  avatar: string
+  email: string
+}
+
+export const roles = [
+  {
+    value: 'OWNER',
+    label: 'Owner',
+    icon: h(QuestionMarkCircledIcon),
+  },
+  {
+    value: 'MANAGER',
+    label: 'Manager',
+    icon: h(QuestionMarkCircledIcon),
+  },
+  {
+    value: 'EMPLOYEE',
+    label: 'Employee',
+    icon: h(QuestionMarkCircledIcon),
+  },
+]
+
+export const status = [
+  {
+    value: 'PENDING',
+    label: 'Pending',
+    icon: h(QuestionMarkCircledIcon),
+  },
+  {
+    value: 'CANCELED',
+    label: 'Canceled',
+    icon: h(QuestionMarkCircledIcon),
+  },
+]
+
+export const auth2fas = [
+  {
+    value: 'enabled',
+    label: 'Enabled',
+    icon: h(QuestionMarkCircledIcon),
+  },
+  {
+    value: 'disabled',
+    label: 'Disabled',
+    icon: h(QuestionMarkCircledIcon),
+  },
+]
