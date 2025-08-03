@@ -162,6 +162,26 @@ const { data: projects } = await useAsyncData(`mobile_sidebar_projects_${current
                 children: [
                   {
                     name: 'My Tasks',
+                    path: `/workspace/${currentActiveWorkspace?.id}/members`,
+                    children: null,
+                  },
+                ],
+              }, `/workspace/${currentActiveWorkspace?.id}/members`)"
+            >
+              <Icon
+                name="solar:users-group-two-rounded-outline"
+                class="size-4"
+              />
+              Members
+            </button>
+            <button
+              class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
+              @click="onNavigateToPage({
+                name: `${currentActiveWorkspace?.name}`,
+                path: `/workspace/${currentActiveWorkspace?.id}/dashboard`,
+                children: [
+                  {
+                    name: 'My Tasks',
                     path: `/workspace/${currentActiveWorkspace?.id}/my-tasks`,
                     children: null,
                   },
