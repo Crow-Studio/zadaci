@@ -21,7 +21,7 @@ const onHelpMeOut = () => {
 
 const onInviteTeammates = () => {
   onClose()
-  return navigateTo(`/workspace/${activeWorkspace.value?.id}/settings/users`)
+  return navigateTo(`/workspace/${activeWorkspace.value?.id}/members`)
 }
 
 const onClose = () => {
