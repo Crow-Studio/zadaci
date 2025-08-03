@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
 import { Avatar, AvatarImage, AvatarFallback } from '~/components/ui/avatar'
+import BoardProjectsView from '~/components/workspace/projects/BoardProjectsView.vue'
 import ProjectStats from '~/components/workspace/projects/ProjectStats.vue'
-import ProjectTabs from '~/components/workspace/projects/ProjectTabs.vue'
+// import ProjectTabs from '~/components/workspace/projects/ProjectTabs.vue'
 
 definePageMeta({
   middleware: ['authenticated'],
@@ -114,7 +115,8 @@ const onAddNewProject = () => {
         </Button>
       </div>
       <div class="grid md:grid-cols-4 xl:grid-cols-8 gap-10">
-        <ProjectTabs />
+        <!-- <ProjectTabs /> -->
+        <BoardProjectsView />
         <ProjectStats />
       </div>
     </div>

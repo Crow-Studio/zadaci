@@ -118,13 +118,15 @@ async function handleDrop(columnKey: Status, project: DBProject, index?: number)
 </script>
 
 <template>
-  <div class="flex overflow-x-scroll gap-5 my-2 scrollbar-hide">
-    <ProjectColumn
-      v-for="column in columns"
-      :key="column.name"
-      :column="column"
-      :data="projects[column.name.toUpperCase()] ?? []"
-      :on-drop="(project, index) => handleDrop(column.name.toUpperCase() as Status, project, index)"
-    />
+  <div class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6">
+    <div class="flex overflow-x-scroll gap-5 my-2 scrollbar-hide">
+      <ProjectColumn
+        v-for="column in columns"
+        :key="column.name"
+        :column="column"
+        :data="projects[column.name.toUpperCase()] ?? []"
+        :on-drop="(project, index) => handleDrop(column.name.toUpperCase() as Status, project, index)"
+      />
+    </div>
   </div>
 </template>
