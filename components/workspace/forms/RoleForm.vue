@@ -85,10 +85,7 @@ const removeUser = (userId: string) => {
     </div>
     <div class="items-center gap-3">
       <div
-        :class="cn(
-          'relative flex items-center',
-          props?.teammates.length <= 1 ? 'col-span-full' : 'col-span-3',
-        )"
+        class="relative items-center grid grid-cols-4 gap-2.5"
       >
         <Select
           v-model="member.role"
@@ -98,7 +95,11 @@ const removeUser = (userId: string) => {
         >
           <SelectTrigger
             id="select-36"
-            class="outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 w-full"
+            class="outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 col-span-full"
+            :class="cn(
+              'outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 w-full',
+              props?.teammates.length <=1 ? 'col-span-full' : 'col-span-3',
+            )"
           >
             <SelectValue placeholder="Choose a role" />
           </SelectTrigger>
@@ -123,16 +124,16 @@ const removeUser = (userId: string) => {
             </SelectItem>
           </SelectContent>
         </Select>
+        <Button
+          v-if="props?.teammates.length > 1"
+          variant="ghost"
+          size="icon"
+          class="size-7 rounded-full border text-destructive hover:text-rose-400"
+          @click="removeUser(teammate.id)"
+        >
+          <X class="size-4" />
+        </Button>
       </div>
-      <Button
-        v-if="props?.teammates.length > 1"
-        variant="ghost"
-        size="icon"
-        class="size-7 rounded-full border text-destructive hover:text-rose-400"
-        @click="removeUser(teammate.id)"
-      >
-        <X class="size-4" />
-      </Button>
     </div>
   </div>
 </template>

@@ -155,6 +155,7 @@ const { data: projects } = await useAsyncData(`mobile_sidebar_projects_${current
               Dashboard
             </button>
             <button
+              v-if="currentActiveWorkspace?.userRole ==='OWNER'"
               class="flex w-full items-center gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
               @click="onNavigateToPage({
                 name: `${currentActiveWorkspace?.name}`,
@@ -274,6 +275,7 @@ const { data: projects } = await useAsyncData(`mobile_sidebar_projects_${current
             </h3>
             <div>
               <button
+                v-if="currentActiveWorkspace?.userRole ==='OWNER'"
                 class="flex w-full items-center   gap-2 rounded-md p-2 hover:bg-[#f1f1f1] dark:hover:bg-[#343434] cursor-pointer"
                 @click="onNavigateToPage({
                   name: `${currentActiveWorkspace?.name}`,

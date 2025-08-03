@@ -96,7 +96,13 @@ const onDeclineInvite = async () => {
                 v-else-if="error"
                 class="relative flex flex-col items-center space-y-4"
               >
-                <SvgsSvgSmileOdama class="size-20" />
+                <NuxtLink
+                  to="/"
+                  class="flex items-center gap-x-2.5"
+                >
+                  <SvgsZadaci class="w-[3rem] h-auto" />
+                  <h1 class="text-5xl mt-1 font-semibold font-bebas-neue">Zadaci</h1>
+                </NuxtLink>
                 <div class="text-center">
                   <h3 class="text-3xl font-bold">
                     Whoops..!
@@ -105,62 +111,92 @@ const onDeclineInvite = async () => {
                     {{ error.statusMessage }}
                   </p>
                 </div>
-                <NuxtLink
-                  to="/"
-                  class="flex w-fit items-center justify-center gap-1.5 whitespace-nowrap rounded bg-brand px-5 py-2 font-medium text-white transition-all hover:bg-brand-secondary"
-                >
-                  Continue to use-odama
-                </NuxtLink>
+                <NuxtLink to="/">
+                  <Button class="inline-flex text-sm font-medium items-center justify-center rounded-lg transition-colors focus:ring-4 focus:outline-none h-max disabled:cursor-not-allowed border border-transparent bg-brand text-white hover:bg-primary-secondary disabled:shadow-xs disabled:hover:shadow-xs shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(249,129,99,1)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_#F97452_inset] hover:shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(252,199,185,0.8)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_hsla(0,_0%,_100%,_0.25)_inset] px-4 py-2 w-full group hover:translate-y-0.5 duration-300 ease-in-out cursor-pointer">
+                    Continue to Zadaci
+                    <Icon
+                      name="lucide-arrow-right"
+                      class="-rotate-45 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      size="15"
+                    />
+                  </Button>
+                </nuxtlink>
               </div>
               <div
                 v-else-if="acceptMessage"
                 class="relative flex flex-col items-center space-y-4"
               >
-                <SvgsSvgSmileOdama class="size-20" />
+                <NuxtLink
+                  to="/"
+                  class="flex items-center gap-x-2.5"
+                >
+                  <SvgsZadaci class="w-[3rem] h-auto" />
+                  <h1 class="text-5xl mt-1 font-semibold font-bebas-neue">Zadaci</h1>
+                </NuxtLink>
                 <div class="text-center">
                   <p class="max-w-lg text-balance">
                     {{ acceptMessage }}
                   </p>
                 </div>
-                <NuxtLink
-                  to="/auth/signin"
-                  class="flex w-fit items-center justify-center gap-1.5 whitespace-nowrap rounded bg-brand px-5 py-2 font-medium text-white transition-all hover:bg-brand-secondary"
-                >
-                  Signin to use-odama
-                </NuxtLink>
+                <NuxtLink to="/auth/signin">
+                  <Button class="inline-flex text-sm font-medium items-center justify-center rounded-lg transition-colors focus:ring-4 focus:outline-none h-max disabled:cursor-not-allowed border border-transparent bg-brand text-white hover:bg-primary-secondary disabled:shadow-xs disabled:hover:shadow-xs shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(249,129,99,1)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_#F97452_inset] hover:shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(252,199,185,0.8)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_hsla(0,_0%,_100%,_0.25)_inset] px-4 py-2 w-full group hover:translate-y-0.5 duration-300 ease-in-out cursor-pointer">
+                    Signin to Zadaci
+                    <Icon
+                      name="lucide-arrow-right"
+                      class="-rotate-45 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      size="15"
+                    />
+                  </Button>
+                </nuxtlink>
               </div>
               <div
                 v-else-if="declineMessage"
                 class="relative flex flex-col items-center space-y-4"
               >
-                <SvgsSvgSmileOdama class="size-20" />
+                <NuxtLink
+                  to="/"
+                  class="flex items-center gap-x-2.5"
+                >
+                  <SvgsZadaci class="w-[3rem] h-auto" />
+                  <h1 class="text-5xl mt-1 font-semibold font-bebas-neue">Zadaci</h1>
+                </NuxtLink>
                 <div class="text-center">
                   <p class="max-w-lg text-balance">
                     {{ declineMessage }}
                   </p>
                 </div>
-                <NuxtLink
-                  to="/"
-                  class="flex w-fit items-center justify-center gap-1.5 whitespace-nowrap rounded bg-brand px-5 py-2 font-medium text-white transition-all hover:bg-brand-secondary"
-                >
-                  Continue to use-odama
-                </NuxtLink>
+                <NuxtLink to="/">
+                  <Button class="inline-flex text-sm font-medium items-center justify-center rounded-lg transition-colors focus:ring-4 focus:outline-none h-max disabled:cursor-not-allowed border border-transparent bg-brand text-white hover:bg-primary-secondary disabled:shadow-xs disabled:hover:shadow-xs shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(249,129,99,1)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_#F97452_inset] hover:shadow-[0rem_-0.0625rem_0rem_0.0625rem_rgba(252,199,185,0.8)_inset,_0rem_0rem_0rem_0.0625rem_#F97452_inset,_0rem_0.03125rem_0rem_0.09375rem_hsla(0,_0%,_100%,_0.25)_inset] px-4 py-2 w-full group hover:translate-y-0.5 duration-300 ease-in-out cursor-pointer">
+                    Continue to Zadaci
+                    <Icon
+                      name="lucide-arrow-right"
+                      class="-rotate-45 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      size="15"
+                    />
+                  </Button>
+                </nuxtlink>
               </div>
               <div
                 v-else-if="workspace && status ==='success'"
                 class="relative flex flex-col space-y-6"
               >
                 <div class="space-y-4 text-center">
-                  <Avatar class="size-[4.5rem]">
+                  <Avatar class="size-16 rounded-md mx-auto">
                     <AvatarImage
                       :src="workspace.image_url"
                       :alt="workspace.name"
                     />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback class="rounded-md">
+                      CN
+                    </AvatarFallback>
                   </Avatar>
                   <h3 class="text-3xl font-bold text-brand dark:text-primary">
                     You've been invited to join the <br>
-                    {{ workspace.name }} Workspace in use-odama.
+                    {{ workspace.name }} Workspace in <NuxtLink
+                      to="/"
+                      target="_blank"
+                      class="hover:underline"
+                    >Zadaci</NuxtLink>.
                   </h3>
                   <div class="space-y-0.5 rounded-xl border py-3">
                     <h4>Managed by:</h4>
