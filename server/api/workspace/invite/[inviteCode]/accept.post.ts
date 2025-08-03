@@ -118,7 +118,7 @@ export default defineEventHandler(async (event) => {
 
     await sendWorkspaceWelcomeMail({
       email,
-      link: `${process.env.NUXT_PUBLIC_SITE_URL}/invite/${workspace.invite_code}?email=${email}`,
+      link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/dashboard`,
       workspace: workspace.name,
     })
 

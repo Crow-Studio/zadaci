@@ -52,14 +52,11 @@ defineProps({
           />
         </Link>
         <Container>
-          <Text class="text-2xl font-semibold text-red-600">
-            ❌ Invite Declined for {{ `${workspace} workspace` || 'Workspace' }}
-          </Text>
           <Text class="text-base leading-6 text-gray-600">
             Hi there 👋,
           </Text>
           <Text class="text-base leading-6 text-gray-600">
-            You've successfully declined the invite to join <strong>{{ workspace || 'this workspace' }}</strong>.
+            You've successfully declined the invite to join <strong>{{ workspace }} workspace</strong>.
           </Text>
           <Text class="text-base leading-6 text-gray-600">
             If this was a mistake, please ask the admin to resend the invite.

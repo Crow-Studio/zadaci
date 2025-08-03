@@ -13,31 +13,6 @@ const currentActiveWorkspace = computed(() => {
 
 const { data: workspace, status } = await useAsyncData('workspace_teammates', () => useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/teammates`), {
   watch: [() => currentActiveWorkspace.value?.id || ''],
-  transform(input) {
-    return {
-      ...input,
-      fetchedAt: new Date(),
-    }
-  },
-  getCachedData(key, nuxtApp) {
-    const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-    // If data is not fetched yet
-    if (!data) {
-      // Fetch the first time
-      return
-    }
-
-    // Check if the data is older than 5 minutes
-    const expirationDate = new Date(data.fetchedAt)
-    expirationDate.setTime(expirationDate.getTime() + 5 * 60 * 1000) // 5 minutes TTL
-    const isExpired = expirationDate.getTime() < Date.now()
-    if (isExpired) {
-      // Refetch the data
-      return
-    }
-
-    return data
-  },
 })
 </script>
 
