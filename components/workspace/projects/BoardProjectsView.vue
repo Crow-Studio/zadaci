@@ -1,13 +1,24 @@
-<!-- Parent.vue -->
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import ProjectColumn from './ProjectColumn.vue'
+import ProjectsBoardFilter from './ProjectsBoardFilter.vue'
 import type { DBProject, Status } from '~/types'
 import { columns } from '~/types'
 
 const workspaceStore = useWorkspaceStore()
 
-const projects = ref<Record<string, DBProject[]>>({
+// Original projects data from API
+const originalProjects = ref<Record<string, DBProject[]>>({
+  'IDEA': [],
+  'TODO': [],
+  'IN PROGRESS': [],
+  'IN REVIEW': [],
+  'COMPLETED': [],
+  'ABANDONED': [],
+})
+
+// Displayed projects (after filtering)
+const displayedProjects = ref<Record<string, DBProject[]>>({
   'IDEA': [],
   'TODO': [],
   'IN PROGRESS': [],
@@ -24,8 +35,12 @@ const { data } = await useAsyncData(`board_view_projects_${currentActiveWorkspac
   useRequestFetch()(`/api/workspace/${currentActiveWorkspace.value?.id}/user/projects/all`),
 )
 
+function handleProjectFiltered(newFilteredProjects: Record<string, DBProject[]>) {
+  displayedProjects.value = newFilteredProjects
+}
+
 function mapProjectsByStatus(data: DBProject[]) {
-  const grouped = Object.fromEntries(Object.keys(projects.value).map(k => [k, [] as DBProject[]]))
+  const grouped = Object.fromEntries(Object.keys(originalProjects.value).map(k => [k, [] as DBProject[]]))
 
   for (const project of data) {
     const key = project.status.toUpperCase()
@@ -39,7 +54,7 @@ function mapProjectsByStatus(data: DBProject[]) {
     }
   }
 
-  // sort each column by updatedAt descending
+  // Sort each column by updatedAt descending
   Object.keys(grouped).forEach((key) => {
     (grouped[key] ?? []).sort((a, b) => {
       if (!a.updatedAt || !b.updatedAt) return 0
@@ -48,7 +63,9 @@ function mapProjectsByStatus(data: DBProject[]) {
     })
   })
 
-  projects.value = grouped
+  originalProjects.value = grouped
+  // Initialize displayed projects with original data
+  displayedProjects.value = { ...grouped }
 }
 
 onMounted(() => {
@@ -76,23 +93,44 @@ watch(data, () => {
 }, { immediate: true })
 
 async function handleDrop(columnKey: Status, project: DBProject, index?: number) {
-  const list = projects.value[columnKey]
-  if (!list) return
+  // Update both original and displayed projects
+  const originalList = originalProjects.value[columnKey]
+  const displayedList = displayedProjects.value[columnKey]
 
-  const exists = list.find(p => p.id === project.id)
-  if (exists) return
+  if (!originalList || !displayedList) return
 
+  // Check if project already exists in the column
+  const existsInOriginal = originalList.find(p => p.id === project.id)
+  const existsInDisplayed = displayedList.find(p => p.id === project.id)
+
+  if (existsInOriginal || existsInDisplayed) return
+
+  const updatedProject = { ...project, status: columnKey }
+
+  // Update original projects
   if (typeof index === 'number') {
-    list.splice(index, 0, { ...project, status: columnKey })
+    originalList.splice(index, 0, updatedProject)
   }
   else {
-    list.push({ ...project, status: columnKey })
+    originalList.push(updatedProject)
   }
 
-  Object.keys(projects.value).forEach((key) => {
+  // Update displayed projects
+  if (typeof index === 'number') {
+    displayedList.splice(index, 0, updatedProject)
+  }
+  else {
+    displayedList.push(updatedProject)
+  }
+
+  // Remove from other columns in both original and displayed
+  Object.keys(originalProjects.value).forEach((key) => {
     if (key !== columnKey) {
-      if (projects.value[key]) {
-        projects.value[key] = projects.value[key]!.filter(p => p.id !== project.id)
+      if (originalProjects.value[key]) {
+        originalProjects.value[key] = originalProjects.value[key]!.filter(p => p.id !== project.id)
+      }
+      if (displayedProjects.value[key]) {
+        displayedProjects.value[key] = displayedProjects.value[key]!.filter(p => p.id !== project.id)
       }
     }
   })
@@ -103,7 +141,12 @@ async function handleDrop(columnKey: Status, project: DBProject, index?: number)
       body: { status: columnKey },
     })
 
-    await refreshNuxtData([`sidebar_projects_${currentActiveWorkspace.value?.id}`, `board_view_projects_${currentActiveWorkspace.value?.id}`, `all_project_stats_${currentActiveWorkspace.value?.id}`, `mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`])
+    await refreshNuxtData([
+      `sidebar_projects_${currentActiveWorkspace.value?.id}`,
+      `board_view_projects_${currentActiveWorkspace.value?.id}`,
+      `all_project_stats_${currentActiveWorkspace.value?.id}`,
+      `mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`,
+    ])
   }
   catch (error: any) {
     const errorMessage = error.response
@@ -119,12 +162,16 @@ async function handleDrop(columnKey: Status, project: DBProject, index?: number)
 
 <template>
   <div class="w-full overflow-x-hidden md:col-span-2 xl:col-span-6">
+    <ProjectsBoardFilter
+      :projects="originalProjects"
+      @projects-filtered="handleProjectFiltered"
+    />
     <div class="flex overflow-x-scroll gap-5 my-2 scrollbar-hide">
       <ProjectColumn
         v-for="column in columns"
         :key="column.name"
         :column="column"
-        :data="projects[column.name.toUpperCase()] ?? []"
+        :data="displayedProjects[column.name.toUpperCase()] ?? []"
         :on-drop="(project, index) => handleDrop(column.name.toUpperCase() as Status, project, index)"
       />
     </div>
