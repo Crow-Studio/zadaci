@@ -24,7 +24,7 @@ export const columns: ColumnDef<TeammatesWithProfile>[] = [
   {
     accessorKey: 'user',
     header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: 'Teammate' }),
+      h(DataTableColumnHeader, { column, title: 'Member' }),
     cell: ({ row }) => h(Teammate, { class: 'lowercase', row }),
     filterFn: (row, _, filterValue: string) => {
       const username = row.original.user?.username?.toLowerCase() ?? ''

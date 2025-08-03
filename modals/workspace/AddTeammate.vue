@@ -35,7 +35,7 @@ const onClose = () => {
         <div class="flex items-center gap-2">
           <div class="grid shrink-0 place-items-center self-start rounded-full">
             <Icon
-              name="solar:mailbox-outline"
+              name="hugeicons:user-add-01"
               class="size-10 text-brand dark:text-primary"
               size="45"
             />

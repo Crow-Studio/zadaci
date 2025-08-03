@@ -20,7 +20,7 @@ const onSendInvite = async () => {
   try {
     const teammates = emailTags.value.map((email) => {
       return {
-        role: 'EMPLOYEE',
+        role: 'MEMBER',
         email,
       }
     })
@@ -58,8 +58,8 @@ const onSendInvite = async () => {
   <div className="space-y-3">
     <div class="grid gap-2">
       <p class="text-center text-sm text-muted-foreground">
-        New members will have <strong>employee</strong> role permissions in the workspace, but you can change this
-        later in the <strong>users</strong> settings page.
+        New members will have <strong>member</strong> role permissions in the workspace, but you can change this
+        later in the <strong>members</strong> page.
       </p>
       <InviteEmailTags
         :email-tags="emailTags"
@@ -69,7 +69,7 @@ const onSendInvite = async () => {
     </div>
     <div class="grid gap-2">
       <Button
-        :disabled="isSendingInvites"
+        :disabled="isSendingInvites || emailTags.length <= 0"
         class="flex w-full gap-2 bg-brand hover:bg-brand-secondary dark:bg-primary dark:hover:bg-zinc-300"
         @click="onSendInvite"
       >

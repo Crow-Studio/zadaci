@@ -3,10 +3,11 @@ import { addDays } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
 import { isValidEmail } from '~/server/utils/validations'
 import { sendWorkspaceInvite } from '~/server/utils/emails/actions/send-invite'
+import type { UserRole } from '~/types'
 
 interface ITeammate {
   email: string
-  role: 'OWNER' | 'MEMBER' | 'GUEST'
+  role: UserRole
 }
 
 export default defineEventHandler(async (event) => {
