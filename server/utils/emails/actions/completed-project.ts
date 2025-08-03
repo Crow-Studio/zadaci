@@ -26,7 +26,7 @@ export async function sendProjectCompletionMail({ email, workspace, user, projec
     await resend.emails.send({
       from: 'Team Zadaci <noreply@thecodingmontana.com>',
       to: [email],
-      subject: `✅ Your task has been marked as completed!`,
+      subject: `✅ Your project has been marked as completed!`,
       html,
     })
   }

@@ -1,5 +1,6 @@
 import { eq, and, inArray } from 'drizzle-orm'
 import { v4 as uuidV4 } from 'uuid'
+import { sendProjectCompletionMail } from '~/server/utils/emails/actions/completed-project'
 import { type ProjectMembers, validPriorities, validStatuses, type Priority, type Status } from '~/types'
 
 export default defineEventHandler(async (event) => {
@@ -100,6 +101,26 @@ export default defineEventHandler(async (event) => {
     }))
 
     await db.insert(tables.projectMembers).values(newMembers)
+
+    if (status === 'COMPLETED') {
+      const membersToNotify = await db.query.workspaceMembersTable.findMany({
+        where: inArray(tables.workspaceMembersTable.id, validIds),
+        with: {
+          user: true,
+        },
+      })
+
+      for (const member of membersToNotify) {
+        await sendProjectCompletionMail({
+          workspace: workspace.name,
+          user: member.user.username as string,
+          project: project.title,
+          completedBy: session.user.username,
+          link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/projects/${project.id}`,
+          email: member.user.email,
+        })
+      }
+    }
 
     return { message: 'Project updated successfully!' }
   }

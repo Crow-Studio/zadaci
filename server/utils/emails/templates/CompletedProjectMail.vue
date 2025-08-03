@@ -49,6 +49,7 @@ defineProps({
             alt="Zadaci"
             width="200"
             height="60"
+            style="margin: 0 auto;"
             class="rounded-md object-contain h-16 w-auto"
           />
         </Link>
@@ -76,7 +77,7 @@ defineProps({
 
         <Container>
           <Text class="text-sm text-gray-500">
-            You received this because you're a member of the project "{{ project }}" in workspace "{{ workspace }}".
+            You received this because you're a member of the project {{ project }} in workspace {{ workspace }}.
           </Text>
         </Container>
       </Container>

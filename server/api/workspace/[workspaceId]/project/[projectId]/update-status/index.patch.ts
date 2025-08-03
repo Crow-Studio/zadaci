@@ -1,3 +1,4 @@
+import { sendProjectCompletionMail } from '~/server/utils/emails/actions/completed-project'
 import { validStatuses, type Status } from '~/types'
 
 export default defineEventHandler(async (event) => {
@@ -53,6 +54,17 @@ export default defineEventHandler(async (event) => {
         eq(table.id, projectId),
         eq(table.workspace_id, workspaceId),
       ),
+      with: {
+        members: {
+          with: {
+            member: {
+              with: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     })
 
     if (!project) {
@@ -70,6 +82,19 @@ export default defineEventHandler(async (event) => {
       eq(tables.projectTable.id, projectId),
       eq(tables.projectTable.workspace_id, workspaceId),
     ))
+
+    if (status === 'COMPLETED') {
+      for (const project_member of project.members) {
+        await sendProjectCompletionMail({
+          workspace: workspace.name,
+          user: project_member.member.user.username as string,
+          project: project.title,
+          completedBy: session.user.username,
+          link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/projects/${project.id}`,
+          email: project_member.member.user.email,
+        })
+      }
+    }
 
     return {
       message: 'Project status updated successfully!',
