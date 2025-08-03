@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Loader2 } from 'lucide-vue-next'
+import { Loader2, Plus } from 'lucide-vue-next'
+import Button from '~/components/ui/button/Button.vue'
 import AllTasksStats from '~/components/workspace/dashboard/AllTasksStats.vue'
 import Greetings from '~/components/workspace/dashboard/Greetings.vue'
 import OverallStats from '~/components/workspace/dashboard/OverallStats.vue'
@@ -12,6 +13,7 @@ definePageMeta({
 })
 
 const workspaceStore = useWorkspaceStore()
+const modalStore = useModalStore()
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
@@ -50,6 +52,11 @@ onMounted(() => {
     })
   }
 })
+
+const onAddNewProject = () => {
+  modalStore?.onOpen('addNewProject')
+  modalStore?.setIsOpen(true)
+}
 </script>
 
 <template>
@@ -67,7 +74,16 @@ onMounted(() => {
       class="grid grid-cols-1 gap-10 md:grid-cols-4 w-full"
     >
       <div class="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col gap-8 self-start">
-        <Greetings />
+        <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row sm:items-center lg:items-center justify-between gap-3">
+          <Greetings />
+          <Button
+            class="bg-brand hover:bg-brand-secondary dark:text-white w-full sm:w-fit md:w-full lg:w-fit"
+            @click="onAddNewProject"
+          >
+            <Plus />
+            New project
+          </Button>
+        </div>
         <div class="grid gap-y-3 lg:gap-y-6">
           <OverallStats :workspace-id="currentActiveWorkspace?.id!" />
           <WeeklyTasksProductivity :workspace-id="currentActiveWorkspace?.id!" />
