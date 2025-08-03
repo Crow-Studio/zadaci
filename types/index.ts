@@ -436,3 +436,5 @@ export interface WorkspaceInvite {
     profilePictureUrl: string | null
   }
 }
+
+export const appLink = process.env.NUXT_PUBLIC_SITE_URL as string

@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue-email/components'
+import { appLink } from '~/types'
 </script>
 
 <template>
@@ -33,19 +34,26 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
       }"
     >
       <Container class="mx-auto max-w-[650px] bg-gray-100 p-5">
-        <Img
-          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
-          alt="Zadaci"
-          style="margin: 0 auto; object-fit: contain"
-          class="h-16 w-auto rounded-md"
-        />
+        <Link
+          :href="appLink"
+          class="flex items-center justify-center"
+        >
+          <Img
+            src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+            alt="Zadaci"
+            width="200"
+            height="60"
+            style="margin: 0 auto;"
+            class="rounded-md object-contain h-16 w-auto"
+          />
+        </Link>
         <Text class="text-center text-2xl font-semibold text-brand">
           You're on the waitlist!
         </Text>
         <Container>
           <Text class="text-base leading-6 text-gray-600">
             Thanks for joining the waitlist for <Link
-              href="https://zadaci.vercel.app"
+              :href="appLink"
               class="inline font-semibold text-brand"
             >
               Zadaci
@@ -66,7 +74,7 @@ import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue
             You're receiving this email because you signup for the waitlist on
           </Text>
           <Link
-            href="https://zadaci.vercel.app"
+            :href="appLink"
             class="flex items-center justify-center"
           >
             <Img

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Container, Font, Head, Hr, Html, Img, Tailwind, Text } from '@vue-email/components'
+import { appLink } from '~/types'
 
 const props = defineProps({
   code: String,
@@ -39,12 +40,19 @@ const props = defineProps({
       }"
     >
       <Container class="mx-auto max-w-[600px] px-4 py-8 font-roboto">
-        <Img
-          src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
-          alt="Zadaci"
-          style="margin: 0 auto; object-fit: contain"
-          class="h-16 w-auto rounded-md"
-        />
+        <Link
+          :href="appLink"
+          class="flex items-center justify-center"
+        >
+          <Img
+            src="https://res.cloudinary.com/dfa1yoc1v/image/upload/v1751271040/rrgh50r6tads0nqxnakg.png"
+            alt="Zadaci"
+            width="200"
+            height="60"
+            style="margin: 0 auto;"
+            class="rounded-md object-contain h-16 w-auto"
+          />
+        </Link>
         <Text class="text-xl font-semibold text-center">
           The code below is only valid for 10 minutes.
         </Text>

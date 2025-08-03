@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { Container, Font, Head, Hr, Html, Img, Tailwind, Text, Link } from '@vue-email/components'
 import { formatDistance } from 'date-fns'
+import { appLink } from '~/types'
 
 defineProps({
   sender: String,
@@ -42,7 +43,7 @@ defineProps({
     >
       <Container class="mx-auto max-w-[650px] bg-gray-100 p-5">
         <Link
-          href="https://zadaci.vercel.app"
+          :href="appLink"
           class="flex items-center justify-center"
         >
           <Img
