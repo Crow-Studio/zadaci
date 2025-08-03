@@ -1,5 +1,6 @@
 import { inArray, and, eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
+import { sendTaskCompletionMail } from '~/server/utils/emails/actions/completed-task copy'
 import type { Priority, ProjectMembers, Status } from '~/types'
 import { validPriorities, validStatuses } from '~/types'
 
@@ -78,6 +79,9 @@ export default defineEventHandler(async (event) => {
         eq(tables.projectTable.id, projectId),
         eq(tables.projectTable.workspace_id, workspaceId),
       ),
+      with: {
+        workspace: true,
+      },
     })
 
     if (!project) throw createError({ statusCode: 400, statusMessage: 'Invalid Project!' })
@@ -183,6 +187,20 @@ export default defineEventHandler(async (event) => {
       }))
 
       await useDrizzle().insert(tables.taskAssigneesTable).values(assigneeValues)
+
+      if (status === 'COMPLETED') {
+        for (const member of assignees) {
+          await sendTaskCompletionMail({
+            workspace: project.workspace.name,
+            user: member.username as string,
+            project: project.title,
+            completedBy: session.user.username,
+            link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${project.workspace.id}/projects/${project.id}`,
+            email: member.email,
+            task: task.name,
+          })
+        }
+      }
     }
 
     return { message: 'Task updated successfully' }

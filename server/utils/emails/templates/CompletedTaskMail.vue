@@ -56,9 +56,6 @@ defineProps({
         </Link>
 
         <Container>
-          <Text class="text-2xl font-semibold text-brand">
-            ✅ Task "{{ task }}" has been marked as completed!
-          </Text>
           <Text class="text-base leading-6 text-gray-600">
             Hi {{ user }},
           </Text>

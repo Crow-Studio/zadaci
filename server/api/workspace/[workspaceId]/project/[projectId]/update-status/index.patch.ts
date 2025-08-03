@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
           workspace: workspace.name,
           user: project_member.member.user.username as string,
           project: project.title,
-          completedBy: session.user.username,
+          completedBy: session.user.id === project_member.member.user.id ? 'You' : session.user.username,
           link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/projects/${project.id}`,
           email: project_member.member.user.email,
         })

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { sendTaskCompletionMail } from '~/server/utils/emails/actions/completed-task copy'
 import { validStatuses, type Status } from '~/types'
 
 export default defineEventHandler(async (event) => {
@@ -48,6 +49,23 @@ export default defineEventHandler(async (event) => {
         eq(table.id, projectId),
         eq(table.workspace_id, workspaceId),
       ),
+      with: {
+        members: {
+          with: {
+            member: {
+              with: {
+                user: true,
+              },
+            },
+          },
+        },
+        workspace: {
+          columns: {
+            name: true,
+            id: true,
+          },
+        },
+      },
     })
 
     if (!project) {
@@ -58,7 +76,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // update task status
-    await useDrizzle().update(tables.tasksTable).set({
+    const [task] = await useDrizzle().update(tables.tasksTable).set({
       updated_at: new Date(),
       status,
     }).where(and(
@@ -90,6 +108,20 @@ export default defineEventHandler(async (event) => {
         status,
         changed_at: new Date(),
       })
+    }
+
+    if (status === 'COMPLETED') {
+      for (const project_member of project.members) {
+        await sendTaskCompletionMail({
+          workspace: project.workspace.name,
+          user: project_member.member.user.username as string,
+          project: project.title,
+          completedBy: session.user.id === project_member.member.user.id ? 'You' : session.user.username,
+          link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${project.workspace.id}/projects/${project.id}`,
+          email: project_member.member.user.email,
+          task: task.name,
+        })
+      }
     }
 
     return { message: 'Task status updated successfully!' }
