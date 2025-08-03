@@ -63,7 +63,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="grid gap-4">
+  <section class="grid gap-4 mb-4">
     <div>
       <h1 class="text-xl font-medium">
         Security & Authentication

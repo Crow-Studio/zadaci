@@ -418,3 +418,21 @@ export const auth2fas = [
     icon: h(QuestionMarkCircledIcon),
   },
 ]
+
+export interface WorkspaceInvite {
+  status: string
+  workspaceId: string
+  id: string
+  email: string
+  createdAt: string
+  updatedAt: string | null
+  expiresAt: string
+  role: UserRole
+  invitedBy: string
+  user: {
+    id: string
+    email: string
+    username: string | null
+    profilePictureUrl: string | null
+  }
+}

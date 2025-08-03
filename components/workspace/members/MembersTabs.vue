@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import InvitesTable from '../tables/teammates/invites/InvitesTable.vue'
 import TeammatesTable from '../tables/teammates/TeammatesTable.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 </script>
@@ -30,7 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
     <TabsContent
       value="invites"
     >
-      <!-- <InvitesTable /> -->
+      <InvitesTable />
     </TabsContent>
   </Tabs>
 </template>
