@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { faker } from '@faker-js/faker'
 import { encryptString } from '~/server/utils/encryption'
 import { generateRandomRecoveryCode } from '~/server/utils'
+import { sendWorkspaceWelcomeMail } from '~/server/utils/emails/actions/workspace-welcome'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -115,18 +116,11 @@ export default defineEventHandler(async (event) => {
 
     const message = existingUser ? `You’ve been successfully added to ${workspace.name ? `${workspace.name} workspace` : 'a workspace'}.` : `You’ve been successfully added to ${workspace.name ? `${workspace.name} workspace` : 'a workspace'}, and an account has been created for you.`
 
-    // await sendEmail({
-    //   to: email,
-    //   subject: `🎉 Welcome to ${workspace?.name || 'your new workspace'}!`,
-    //   html: `
-    //       <p>Hi there,</p>
-    //       <p>You’ve been successfully added to <strong>${workspace?.name || 'a workspace'}</strong>, and an account has been created for you.</p>
-    //       <p>You can now log in and start collaborating with your team.</p>
-    //       <p>If you have any questions, feel free to reach out to the workspace admin.</p>
-    //       <br>
-    //       <p>– The Team</p>
-    //     `,
-    // })
+    await sendWorkspaceWelcomeMail({
+      email,
+      link: `${process.env.NUXT_PUBLIC_SITE_URL}/invite/${workspace.invite_code}?email=${email}`,
+      workspace: workspace.name,
+    })
 
     return {
       message,

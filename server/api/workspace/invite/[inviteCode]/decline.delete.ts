@@ -1,3 +1,5 @@
+import { sendWorkspaceDeclineMail } from '~/server/utils/emails/actions/workspace-decline'
+
 export default defineEventHandler(async (event) => {
   try {
     const inviteCode = getRouterParam(event, 'inviteCode')
@@ -52,15 +54,11 @@ export default defineEventHandler(async (event) => {
         ),
       )
 
-    //   await sendEmail({
-    //     to: session.user.email,
-    //     subject: `❌ Invite Declined for ${workspace?.name || 'Workspace'}`,
-    //     html: `
-    //       <p>Hi ${session.user.name || 'there'},</p>
-    //       <p>You've successfully declined the invite to join <strong>${workspace?.name || 'this workspace'}</strong>.</p>
-    //       <p>If this was a mistake, please ask the admin to resend the invite.</p>
-    //     `,
-    //   })
+    await sendWorkspaceDeclineMail({
+      workspace: workspace.name,
+      supportLink: `mailto:thecodingmontana@gmail.com`,
+      email,
+    })
 
     return {
       message: `You’ve successfully declined the invite to join ${workspace.name ? workspace.name + ' workspace.' : 'a workspace.'}`,
