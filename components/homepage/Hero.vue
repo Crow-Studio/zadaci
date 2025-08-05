@@ -88,7 +88,7 @@ onUnmounted(() => {
           :while-hover="{ scale: 1.02 }"
           :transition="{ duration: 0.3 }"
         >
-          <div class="px-6 py-12 text-center">
+          <div class="px-6 text-center">
             <motion.h1
               class="text-4xl md:text-6xl font-bold font-instrument-serif mb-6 leading-tight"
               :variants="itemVariants"
@@ -146,28 +146,8 @@ onUnmounted(() => {
                   </Button>
                 </NuxtLink>
               </motion.div>
-
-              <motion.div
-                :while-hover="{ scale: 1.05 }"
-                :while-tap="{ scale: 0.95 }"
-                @mouseenter="setIsHovering(true)"
-                @mouseleave="setIsHovering(false)"
-              >
-                <Button
-                  variant="ghost"
-                  class="hover:bg-transparent cursor-pointer"
-                >
-                  <Icon
-                    name="solar:play-circle-outline"
-                    size="20"
-                  />
-                  See how it works
-                </Button>
-              </motion.div>
             </motion.div>
           </div>
-
-          <!-- Dashboard Preview -->
         </motion.div>
       </div>
     </motion.div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Footer from '~/components/shared/Footer.vue'
 import Header from '~/components/shared/navigations/Header.vue'
 
 useHead({
@@ -30,5 +31,6 @@ useHead({
     <div class="flex-1">
       <slot />
     </div>
+    <Footer />
   </main>
 </template>

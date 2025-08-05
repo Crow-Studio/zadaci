@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import CTA from '~/components/homepage/CTA.vue'
+import Demo from '~/components/homepage/Demo.vue'
 import Hero from '~/components/homepage/Hero.vue'
+import Management from '~/components/homepage/Management.vue'
 
 const { loggedIn } = useUserSession()
 
@@ -15,5 +18,8 @@ watch(() => loggedIn.value, (loggedIn) => {
 <template>
   <div>
     <Hero />
+    <Demo />
+    <Management />
+    <CTA />
   </div>
 </template>
