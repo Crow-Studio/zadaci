@@ -1,6 +1,7 @@
 import { inArray, and, eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 import { sendTaskCompletionMail } from '~/server/utils/emails/actions/completed-task'
+import { sendTaskAssignmentEmail } from '~/server/utils/emails/actions/send-task-assignment'
 import type { Priority, ProjectMembers, Status } from '~/types'
 import { validPriorities, validStatuses } from '~/types'
 
@@ -73,6 +74,11 @@ export default defineEventHandler(async (event) => {
         statusMessage: `Invalid assignees (not in workspace): ${invalidWorkspaceMembers.join(', ')}`,
       })
     }
+
+    const workspace = await useDrizzle().query.workspaceTable.findFirst({
+      where: eq(tables.workspaceTable.id, workspaceId),
+    })
+    if (!workspace) throw createError({ statusCode: 400, statusMessage: 'Invalid Workspace!' })
 
     const project = await useDrizzle().query.projectTable.findFirst({
       where: and(
@@ -177,6 +183,15 @@ export default defineEventHandler(async (event) => {
     }
 
     if (assignees && assignees.length > 0) {
+      // Get existing members before deletion
+      const existingMembers = await useDrizzle().query.projectMembers.findMany({
+        where: eq(tables.projectMembers.project_id, projectId),
+        columns: {
+          member_id: true,
+        },
+      })
+      const existingMemberIds = existingMembers.map(m => m.member_id)
+
       await useDrizzle().delete(tables.taskAssigneesTable).where(eq(tables.taskAssigneesTable.task_id, task.id))
 
       const assigneeValues = assignees.map(member => ({
@@ -187,6 +202,32 @@ export default defineEventHandler(async (event) => {
       }))
 
       await useDrizzle().insert(tables.taskAssigneesTable).values(assigneeValues)
+
+      const newMemberIds = memberIds.filter(id => !existingMemberIds.includes(id) && id !== session.user.id)
+
+      // Notify only new members
+      if (newMemberIds.length > 0) {
+        const usersToNotify = await useDrizzle().query.workspaceMembersTable.findMany({
+          where: inArray(tables.workspaceMembersTable.id, newMemberIds),
+          with: {
+            user: true,
+          },
+        })
+
+        for (const user of usersToNotify) {
+          if (!user.user?.email || user.user_id === session.user.id) continue
+
+          await sendTaskAssignmentEmail({
+            email: user.user.email,
+            user: user.user.username,
+            addedBy: session.user.username,
+            project: project.title,
+            workspace: workspace.name,
+            link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/projects/${projectId}`,
+            task: task.name,
+          })
+        }
+      }
 
       if (status === 'COMPLETED') {
         for (const member of assignees) {

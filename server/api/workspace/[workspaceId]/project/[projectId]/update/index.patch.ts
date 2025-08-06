@@ -89,6 +89,15 @@ export default defineEventHandler(async (event) => {
       title,
     }).where(and(eq(tables.projectTable.id, projectId), eq(tables.projectTable.workspace_id, workspaceId)))
 
+    // Get existing members before deletion
+    const existingMembers = await db.query.projectMembers.findMany({
+      where: eq(tables.projectMembers.project_id, projectId),
+      columns: {
+        member_id: true,
+      },
+    })
+    const existingMemberIds = existingMembers.map(m => m.member_id)
+
     await db.delete(tables.projectMembers).where(eq(tables.projectMembers.project_id, projectId))
 
     const now = new Date()
@@ -101,6 +110,31 @@ export default defineEventHandler(async (event) => {
     }))
 
     await db.insert(tables.projectMembers).values(newMembers)
+
+    const newMemberIds = memberIds.filter(id => !existingMemberIds.includes(id) && id !== session.user.id)
+
+    // Notify only new members
+    if (newMemberIds.length > 0) {
+      const usersToNotify = await db.query.workspaceMembersTable.findMany({
+        where: inArray(tables.workspaceMembersTable.id, newMemberIds),
+        with: {
+          user: true,
+        },
+      })
+
+      for (const user of usersToNotify) {
+        if (!user.user?.email || user.user_id === session.user.id) continue
+
+        await sendProjectAssignmentEmail({
+          email: user.user.email,
+          user: user.user.username,
+          addedBy: session.user.username,
+          project: title,
+          workspace: workspace.name,
+          link: `${process.env.NUXT_PUBLIC_SITE_URL}/workspace/${workspace.id}/projects/${projectId}`,
+        })
+      }
+    }
 
     if (status === 'COMPLETED') {
       const membersToNotify = await db.query.workspaceMembersTable.findMany({
