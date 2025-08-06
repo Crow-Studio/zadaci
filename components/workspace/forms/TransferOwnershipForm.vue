@@ -51,7 +51,7 @@ const onTransferOwnership = async () => {
       >
         <SelectTrigger
           id="select-40"
-          class="h-auto ps-2 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0"
+          class="h-auto ps-2 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0 w-full"
         >
           <SelectValue placeholder="Select a teammate" />
         </SelectTrigger>

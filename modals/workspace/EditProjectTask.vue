@@ -100,13 +100,22 @@ const onClose = () => {
           Project title
         </SheetDescription>
       </SheetHeader>
-      <EditTaskForm
-        :on-set-is-update-task="onSetIsUpdateTask"
-        :is-update-task="isUpdateTask"
-        :on-close="onClose"
-        :project-id="task?.project.id!"
-        :task="task?.data!"
-      />
+      <div
+        class="overflow-y-auto
+  [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 pt-4 pb-12 -mt-5"
+      >
+        <EditTaskForm
+          :on-set-is-update-task="onSetIsUpdateTask"
+          :is-update-task="isUpdateTask"
+          :on-close="onClose"
+          :project-id="task?.project.id!"
+          :task="task?.data!"
+        />
+      </div>
     </SheetContent>
   </Sheet>
 </template>

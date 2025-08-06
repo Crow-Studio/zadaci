@@ -22,8 +22,6 @@ const { projects } = defineProps<{
   projects: Record<string, DBProject[]>
 }>()
 
-console.log('Projects', projects)
-
 const emit = defineEmits<{
   'projects-filtered': [newFilteredProjects: Record<string, DBProject[]>]
 }>()

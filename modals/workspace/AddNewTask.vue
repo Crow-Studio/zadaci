@@ -38,7 +38,7 @@ const onClose = () => {
     @update:open="onClose"
   >
     <SheetContent class="dark:bg-[#1d1d1d]">
-      <SheetHeader>
+      <SheetHeader class="px-4 pt-4">
         <SheetTitle class="flex items-center gap-x-2 text-xl capitalize">
           <div class="size-10 p-2 rounded-md bg-muted">
             <Icon
@@ -52,12 +52,21 @@ const onClose = () => {
           Add new task
         </SheetDescription>
       </SheetHeader>
-      <AddNewTaskForm
-        :on-set-is-add-new-task="onSetIsAddNewTask"
-        :is-add-new-task="isAddNewTask"
-        :on-close="onClose"
-        :project="project ?? null"
-      />
+      <div
+        class="overflow-y-auto
+  [&::-webkit-scrollbar]:w-2
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 pt-4 pb-12 -mt-5"
+      >
+        <AddNewTaskForm
+          :on-set-is-add-new-task="onSetIsAddNewTask"
+          :is-add-new-task="isAddNewTask"
+          :on-close="onClose"
+          :project="project ?? null"
+        />
+      </div>
     </SheetContent>
   </Sheet>
 </template>

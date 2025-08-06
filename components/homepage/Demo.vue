@@ -1,20 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { motion } from 'motion-v'
-
-const videoRef = ref<HTMLVideoElement | null>(null)
-
-onMounted(() => {
-  if (videoRef.value) {
-    videoRef.value.addEventListener('loadeddata', () => {
-      console.log('Video loaded successfully')
-    })
-
-    videoRef.value.addEventListener('canplay', () => {
-      console.log('Video is ready to play')
-    })
-  }
-})
 </script>
 
 <template>
@@ -26,7 +11,6 @@ onMounted(() => {
   >
     <div class="rounded-3xl border-[10px] overflow-clip">
       <video
-        ref="videoRef"
         autoplay
         loop
         muted

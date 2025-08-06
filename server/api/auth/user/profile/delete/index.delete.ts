@@ -3,8 +3,6 @@ export default defineEventHandler(async (event) => {
     const session = await requireUserSession(event)
     const { name } = await readBody(event)
 
-    console.log(name)
-
     if (!session) {
       throw createError({
         statusCode: 401,
@@ -65,7 +63,6 @@ export default defineEventHandler(async (event) => {
     }
   }
   catch (error: any) {
-    console.log(error)
     const errorMessage = error.error ? error.error.message : error.message
     throw createError({
       statusCode: error.statusCode ? error.statusCode : 500,
