@@ -10,7 +10,7 @@ import { motion } from 'motion-v'
     class="container mx-auto flex flex-col items-center gap-y-3 px-6 py-5"
   >
     <p class="">
-      @{{ new Date().getFullYear() }} Crow Studios. All rights reserved.
+      © {{ new Date().getFullYear() }} Crow Studios. All rights reserved.
     </p>
     <nav class="flex items-center md:gap-x-8">
       <NuxtLink

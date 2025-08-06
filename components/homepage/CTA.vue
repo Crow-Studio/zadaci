@@ -16,7 +16,7 @@ import { Button } from '../ui/button'
           Enhance your team's productivity with Zadaci
         </h4>
         <p class="text-lg text-muted-foreground max-w-3xl">
-          Empower you or your team with integrated tools for file project/task management, and team collaboration, ensuring smooth project workflows from start to finish.
+          Empower you or your team with integrated tools for seamless project/task management, and team collaboration, ensuring smooth project workflows from start to finish.
         </p>
       </div>
       <NuxtLink to="/auth/signup">
