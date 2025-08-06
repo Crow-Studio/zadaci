@@ -8,7 +8,7 @@ const agileFeatures = [
   },
   {
     title: '📊 Kanban Views',
-    info: 'Plan and break down work into sprints. Stay focused on what matters each cycle.',
+    info: 'Visualize workflow with intuitive board layouts. Move tasks seamlessly through stages.',
   },
   {
     title: '🎯 Task Prioritization',
