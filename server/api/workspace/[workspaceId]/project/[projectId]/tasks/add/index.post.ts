@@ -1,7 +1,8 @@
 import { inArray, and, eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
+import { sendTaskAssignmentEmail } from '~/server/utils/emails/actions/send-task-assignment'
 import type { Priority, ProjectMembers, Status } from '~/types'
-import { validPriorities, validStatuses } from '~/types'
+import { appLink, validPriorities, validStatuses } from '~/types'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -145,16 +146,38 @@ export default defineEventHandler(async (event) => {
 
     await useDrizzle().insert(tables.taskAssigneesTable).values(assigneeValues)
 
-    // Save task activity if status is final
-    // if (['COMPLETED', 'IN REVIEW', 'ABANDONED'].includes(status)) {
-    //   await useDrizzle().insert(tables.tasksActivityTable).values({
-    //     id: uuidv4(),
-    //     task_id: task.id,
-    //     changed_by: session.user.id,
-    //     status,
-    //     changed_at: new Date(),
-    //   })
-    // }
+    // Fetch user details for each member to send emails
+    const users = await useDrizzle().query.workspaceMembersTable.findMany({
+      where: inArray(tables.workspaceMembersTable.id, memberIds),
+      with: {
+        user: true,
+      },
+    })
+
+    const workspace = await useDrizzle().query.workspaceTable.findFirst({
+      where: table => eq(table.id, workspaceId),
+    })
+
+    if (!workspace) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Invalid workspace!',
+      })
+    }
+
+    for (const user of users) {
+      if (!user.user?.email || user.user_id === session.user.id) continue
+
+      await sendTaskAssignmentEmail({
+        email: user.user.email,
+        user: user.user.username,
+        addedBy: session.user.username,
+        project: project.title,
+        workspace: workspace.name,
+        link: `${appLink}/workspace/${workspaceId}/projects/${project.id}`,
+        task: task.name,
+      })
+    }
 
     return {
       message: 'Task created successfully',

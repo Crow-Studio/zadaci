@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { eq, and, inArray } from 'drizzle-orm'
-import { type Priority, type Status, validStatuses, validPriorities, type ProjectMembers } from '~/types'
+import { type Priority, type Status, validStatuses, validPriorities, type ProjectMembers, appLink } from '~/types'
+import { sendProjectAssignmentEmail } from '~/server/utils/emails/actions/send-project-assignment'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -133,7 +134,37 @@ export default defineEventHandler(async (event) => {
 
       projectId = project.id
 
-      // todo: Send email notifications to members
+      // Fetch user details for each member to send emails
+      const users = await tx.query.workspaceMembersTable.findMany({
+        where: inArray(tables.workspaceMembersTable.id, memberIds),
+        with: {
+          user: true,
+        },
+      })
+
+      const workspace = await useDrizzle().query.workspaceTable.findFirst({
+        where: table => eq(table.id, workspaceId),
+      })
+
+      if (!workspace) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid workspace!',
+        })
+      }
+
+      for (const user of users) {
+        if (!user.user?.email || user.user_id === session.user.id) continue
+
+        await sendProjectAssignmentEmail({
+          email: user.user.email,
+          user: user.user.username,
+          addedBy: session.user.username,
+          project: title,
+          workspace: workspace.name,
+          link: `${appLink}/workspace/${workspaceId}/projects/${project.id}`,
+        })
+      }
     })
 
     return {

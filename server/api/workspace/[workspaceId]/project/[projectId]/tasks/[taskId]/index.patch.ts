@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { sendTaskCompletionMail } from '~/server/utils/emails/actions/completed-task copy'
+import { sendTaskCompletionMail } from '~/server/utils/emails/actions/completed-task'
 import { validStatuses, type Status } from '~/types'
 
 export default defineEventHandler(async (event) => {
