@@ -10,12 +10,12 @@ defineOgImageComponent('Zadaci', {
 </script>
 
 <template>
-  <section class="mx-auto mt-16 max-w-6xl space-y-6 p-6">
+  <section class="mx-auto max-w-6xl space-y-6 p-6">
     <h1 class="text-3xl font-bold">
       Terms of Service
     </h1>
     <p class="text-sm text-muted-foreground">
-      Last updated: 27 March 2025
+      Last updated: 6 August 2025
     </p>
 
     <div class="space-y-4">
@@ -27,7 +27,7 @@ defineOgImageComponent('Zadaci', {
       <h2 class="text-xl font-semibold">
         2. About Zadaci
       </h2>
-      <p>Zadaci is a modern SaaS platform designed to help restaurant owners manage menus, orders, teams, inventory, and more through easy-to-use web and mobile tools.</p>
+      <p>Zadaci is a modern and collaborative project management platform designed to help teams plan, manage, and execute tasks effectively. With features like projects, subtasks, team collaboration, workspaces, and planned GitHub integration, Zadaci aims to streamline your workflow.</p>
 
       <h2 class="text-xl font-semibold">
         3. Eligibility
@@ -37,56 +37,61 @@ defineOgImageComponent('Zadaci', {
       <h2 class="text-xl font-semibold">
         4. Account Registration & Google Sign-In
       </h2>
-      <p>Account creation is required to access certain features. You may register using Google Sign-In. You authorize us to access your Google account's basic information (name, email, and profile picture) solely for account creation and management.</p>
+      <p>Account creation is required to access certain features. You may register using Google Sign-In. You authorize us to access your Google account’s basic information (name, email, and profile picture) solely for account creation and management.</p>
 
       <h2 class="text-xl font-semibold">
-        5. Free and Paid Features
+        5. Free, Premium, and Integrated Features
       </h2>
-      <p>Some features of Zadaci are free, while others require payment. You agree to pay all applicable fees for premium features. We reserve the right to change pricing at any time with reasonable notice.</p>
+      <p>Zadaci offers both free and premium features. Premium features may require a valid payment method and subscription. We reserve the right to modify pricing or feature availability with reasonable notice. We are also planning to introduce optional GitHub integration, allowing users to sync tasks with GitHub issues. This will require connecting your GitHub account via OAuth. Your GitHub data will be used only to improve your productivity and will not be shared.</p>
 
       <h2 class="text-xl font-semibold">
         6. License to Use
       </h2>
-      <p>We grant you a limited, non-exclusive, non-transferable, revocable license to use the Service for lawful purposes.</p>
+      <p>We grant you a limited, non-exclusive, non-transferable, and revocable license to use the Service solely for personal or business productivity purposes in accordance with these Terms.</p>
 
       <h2 class="text-xl font-semibold">
         7. User Responsibilities
       </h2>
-      <p>You agree to use Zadaci responsibly and to comply with all applicable laws. You will not misuse the Service, attempt to hack it, or engage in activities that could harm other users or the platform.</p>
+      <p>You agree to use Zadaci responsibly and to comply with all applicable laws and regulations. You may not misuse the Service, attempt unauthorized access, disrupt systems, or infringe on others' rights while using Zadaci.</p>
 
       <h2 class="text-xl font-semibold">
         8. Ownership and Intellectual Property
       </h2>
-      <p>Zadaci and its content (excluding user-submitted data) are the property of Zadaci. You retain ownership of your restaurant data but grant us a limited license to use it solely to provide the Service.</p>
+      <p>All intellectual property related to Zadaci, including design, branding, and software, remains the property of Zadaci. You retain ownership of the content you create, such as tasks, projects, and workspace data. By using the Service, you grant us a limited license to process and store your data solely to provide the platform's functionality.</p>
 
       <h2 class="text-xl font-semibold">
-        9. Cancellation & Termination
+        9. Data Privacy
       </h2>
-      <p>You may cancel your account anytime. We may suspend or terminate accounts that violate these Terms. Upon termination, your data may be deleted as per our data retention policy.</p>
+      <p>We respect your privacy. Your personal and project-related data is handled according to our Privacy Policy. We do not sell your data. Any third-party integration (e.g., Google or GitHub) will ask for your explicit consent before access.</p>
 
       <h2 class="text-xl font-semibold">
-        10. Disclaimers
+        10. Cancellation & Termination
       </h2>
-      <p>We strive to provide a reliable platform but do not guarantee uninterrupted, error-free service. The Service is provided "as is" without warranties of any kind.</p>
+      <p>You can cancel your account at any time through your account settings. We may suspend or terminate accounts that violate these Terms or cause harm to the platform or other users. Upon termination, we may delete your data based on our retention policies.</p>
 
       <h2 class="text-xl font-semibold">
-        11. Limitation of Liability
+        11. Disclaimers
       </h2>
-      <p>To the maximum extent permitted by law, Zadaci shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Service.</p>
+      <p>Zadaci is provided "as is" without warranties of any kind. While we strive to maintain high uptime and data security, we do not guarantee uninterrupted or error-free service.</p>
 
       <h2 class="text-xl font-semibold">
-        12. Changes to Terms
+        12. Limitation of Liability
       </h2>
-      <p>We reserve the right to update these Terms. Continued use of the Service after changes constitutes acceptance of the revised Terms.</p>
+      <p>To the fullest extent permitted by law, Zadaci and its operators shall not be liable for any indirect, incidental, or consequential damages arising out of your use of the Service.</p>
 
       <h2 class="text-xl font-semibold">
-        13. Contact Us
+        13. Changes to Terms
+      </h2>
+      <p>We may update these Terms at any time. Changes will be communicated via the platform or email. Continued use of Zadaci after changes means you accept the updated Terms.</p>
+
+      <h2 class="text-xl font-semibold">
+        14. Contact Us
       </h2>
       <p>
-        Questions about these Terms? Contact us at <a
-          href="mailto:support@Zadaci.com"
+        Have questions or concerns? Reach out to us at <a
+          href="mailto:thecodingmontana@gmail.com"
           class="font-semibold text-brand underline hover:text-brand-secondary dark:text-primary"
-        >support@Zadaci.com</a>.
+        >thecodingmontana@gmail.com</a>.
       </p>
     </div>
   </section>

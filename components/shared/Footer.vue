@@ -21,11 +21,11 @@ import { motion } from 'motion-v'
         Privacy Policy
       </NuxtLink>
       <NuxtLink
-        to="/terms"
+        to="/terms-of-service"
         class="gap-1 font-normal shrink-0 rounded-full ring-[--control] focus-visible:ring-2 outline-hidden outline-0 px-2 tracking-tight text-[--text-tertiary] hover:text-[--text-primary] dark:text-[--dark-text-secondary] dark:hover:text-[--dark-text-primary]"
         target="_self"
       >
-        Terms
+        Terms of service
       </NuxtLink>
     </nav>
   </motion.footer>
