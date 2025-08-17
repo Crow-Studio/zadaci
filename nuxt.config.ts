@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     'nuxt-charts',
     '@vueuse/nuxt',
     '@polar-sh/nuxt',
+    'floating-vue/nuxt',
   ],
   devtools: { enabled: true },
   app: {

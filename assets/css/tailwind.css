@@ -161,3 +161,144 @@
 .overflow-x-auto {
   -webkit-overflow-scrolling: touch;
 }
+
+.tiptap {
+  padding: 4rem 1rem;
+  outline: none !important;
+}
+
+.tiptap:focus-visible {
+  outline: none !important;
+}
+
+.tiptap .ProseMirror-selectednode {
+  background-color: #dbeafe; /* bg-blue-100 */
+}
+
+.tiptap [data-name='title'] {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.tiptap h2[data-name='heading'] {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap h3[data-name='heading'] {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap h4[data-name='heading'] {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap [data-name='paragraph'] {
+  margin: 0;
+}
+
+.tiptap [data-name='blockquote'] {
+  margin: 0;
+  padding-left: 0.5rem;
+  position: relative;
+}
+
+.tiptap [data-name='blockquote']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #d1d5db; /* bg-gray-300 */
+}
+
+/* Dark mode blockquote */
+@media (prefers-color-scheme: dark) {
+  .tiptap [data-name='blockquote']::after {
+    background-color: #4b5563; /* dark:bg-gray-600 */
+  }
+}
+
+.tiptap ol ol {
+  list-style-type: lower-roman;
+}
+
+.tiptap ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.tiptap [data-checked] {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tiptap [data-checked][data-checked='true'] {
+  text-decoration: line-through;
+  color: #a3a3a3; /* text-neutral-400 */
+  transition: color 0.15s ease-in-out;
+}
+
+.tiptap [data-placeholder]::before {
+  content: attr(data-placeholder);
+  color: #d4d4d4; /* text-neutral-300 */
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Dark mode placeholder */
+@media (prefers-color-scheme: dark) {
+  .tiptap [data-placeholder]::before {
+    color: #525252; /* dark:text-neutral-600 */
+  }
+}
+
+/* Marks */
+.tiptap [data-name='bold'] {
+  font-weight: 700;
+  color: #000000; /* text-black */
+}
+
+/* Dark mode bold */
+@media (prefers-color-scheme: dark) {
+  .tiptap [data-name='bold'] {
+    color: #ffffff; /* dark:text-white */
+  }
+}
+
+.tiptap [data-name='code'] {
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  margin: 0 0.25rem;
+  background-color: #e4e4e7; /* bg-zinc-200 */
+}
+
+/* Dark mode code */
+@media (prefers-color-scheme: dark) {
+  .tiptap [data-name='code'] {
+    background-color: #27272a; /* dark:bg-zinc-800 */
+  }
+}
+
+.tiptap [data-name='italic'] {
+  font-style: italic;
+  margin: 0 0.25rem;
+}
+
+.tiptap [data-name='strike'] {
+  color: #a3a3a3; /* text-neutral-400 */
+  transition: color 0.15s ease-in-out;
+}
