@@ -95,7 +95,12 @@ defineExpose({
 <template>
   <dl
     ref="menuRef"
-    class="fixed my-0 max-h-80 overflow-auto rounded-2 bg-gray-100 p-2 transition-transform shadow-surround dark:bg-gray-900 dark:shadow-stone-700"
+    class="fixed my-0 max-h-80 rounded-2 bg-white overflow-y-auto
+  [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 rounded-md p-2 transition-transform shadow-surround dark:bg-background"
   >
     <div
       v-for="group in itemsGroups"
@@ -109,19 +114,21 @@ defineExpose({
         v-for="item in group.items"
         :id="item.index.toString()"
         :key="item.label"
-        class="m-0 flex cursor-pointer scroll-mt-1 items-center gap-4 rounded-1 px-2 py-1 transition-colors"
-        :class="{ 'bg-zinc-300 dark:bg-zinc-700': item.index === currentIndex }"
+        class="m-0 flex cursor-pointer scroll-mt-1 items-center gap-4 rounded px-2 py-1 transition-colors"
+        :class="{ 'bg-accent': item.index === currentIndex }"
         @mouseenter="onMouseenter(item.index)"
         @click="selectItem(item.index)"
       >
-        <div class="rounded-1 p-1 text-xl shadow">
-          <div :class="item.icon" />
-        </div>
+        <Icon
+          :name="item.icon"
+          class="flex-shrink-0"
+          size="22"
+        />
         <div>
           <div class="text-sm">
             {{ item.label }}
           </div>
-          <p class="my-0 text-xs text-neutral-600 dark:text-neutral-400">
+          <p class="my-0 text-xs text-muted-foreground">
             {{ item.desc }}
           </p>
         </div>

@@ -65,7 +65,7 @@ const downloadOptions: DropdownOption[] = [
 
 <template>
   <header
-    class="sticky top-0 h-12 w-full flex items-center justify-between bg-gray-200/50 px-14 py-2 shadow-md backdrop-blur-lg dark:bg-gray-800/50"
+    class="sticky top-0 left-0 right-0 z-30 h-10 w-full flex items-center justify-between px-14 py-2 shadow-md backdrop-blur-lg bg-[#fafafa] dark:bg-[#1d1d1d]"
     :style="{ zIndex }"
   >
     <div class="flex">

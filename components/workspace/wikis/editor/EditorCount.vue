@@ -43,14 +43,11 @@ onBeforeUnmount(() => {
     class="flex items-center gap-1 text-sm"
     title="Characters count"
   >
-    <div class="text-base">
-      <Icon
-        class="h-1em w-1em"
-        name="i-mdi:fountain-pen-tip"
-      />
-    </div>
-    <span ref="countRef">
+    <Icon
+      name="i-mdi:fountain-pen-tip"
+    />
+    <p ref="countRef">
       {{ count }}
-    </span>
+    </p>
   </div>
 </template>

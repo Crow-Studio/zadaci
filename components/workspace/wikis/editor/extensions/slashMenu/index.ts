@@ -77,7 +77,7 @@ export const slashMenuItems: SlashMenuItem[] = [
   {
     label: 'To-do list',
     desc: 'Create a to-do list.',
-    icon: 'i-mdi:format-list-checkbox ',
+    icon: 'i-mdi:format-list-checkbox',
     command: (editor, range) => editor.chain().focus().deleteRange(range).toggleTaskList().run(),
     group: 0,
     relatedWords: ['task'],
@@ -85,7 +85,7 @@ export const slashMenuItems: SlashMenuItem[] = [
   {
     label: 'To-do list',
     desc: 'Create a to-do list.',
-    icon: 'i-mdi:format-list-checkbox ',
+    icon: 'i-mdi:format-list-checkbox',
     command: (editor, range) => editor.chain().focus().deleteRange(range).toggleTaskList().run(),
     group: 0,
     relatedWords: ['task'],

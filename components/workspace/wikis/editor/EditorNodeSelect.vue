@@ -55,20 +55,17 @@ function onClickItem(item: SlashMenuItem) {
     :disabled="disabled"
   >
     <div
-      class="flex cursor-pointer items-center gap-1 rounded-2 px-2 py-1 text-sm text-indigo-600 font-600 transition-colors hover:bg-zinc-300 dark:text-indigo-400 dark:hover:bg-zinc-700"
+      class="flex cursor-pointer items-center gap-1 rounded-2 px-2 py-1 text-sm font-bold transition-colors hover:bg-zinc-300 dark:text-indigo-400 dark:hover:bg-zinc-700"
       :class="{ 'cursor-not-allowed !bg-transparent': disabled }"
       :title="activatedItem?.desc"
     >
-      <span> {{ activatedItem?.label }}</span>
-      <div
-        class="text-xl transition-transform transition-duration-300"
-        :class="{ 'rotate-x-180': !!floatingRef?.visible }"
-      >
-        <Icon
-          name="i-iconamoon:arrow-down-2"
-          class="h-1em w-1em"
-        />
-      </div>
+      <p class="sm:text-base">
+        {{ activatedItem?.label }}
+      </p>
+      <Icon
+        :name="!!floatingRef?.visible ? 'i-iconamoon:arrow-up-2' : 'i-iconamoon:arrow-down-2'"
+        size="20"
+      />
     </div>
     <template #floating>
       <ul class="my-0 list-none p-0">

@@ -49,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-full bg-gray-100 dark:bg-gray-900">
+  <div class="h-full bg-[#fafafa] dark:bg-[#1d1d1d]">
     <main class="h-screen relative">
       <Editor />
     </main>

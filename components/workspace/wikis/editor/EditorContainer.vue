@@ -24,6 +24,7 @@ import { hashRecord } from './extensions/hashRecord'
 
 import content from './templates/intro.json'
 import EditorHeader from './EditorHeader.vue'
+import EditorHandle from './EditorHandle.vue'
 
 const editor = useEditor({
   content,
@@ -87,18 +88,7 @@ const editor = useEditor({
       :editor="editor"
       class="mx-auto mt-12 max-w-5xl"
     />
-    <!-- <EditorHandle :editor="editor" /> -->
-
-    <!-- fix load dynamic icon -->
-    <div class="">
-      <div class="i-mdi:format-text" />
-      <div class="i-mdi:format-heading-2" />
-      <div class="i-mdi:format-heading-3" />
-      <div class="i-mdi:format-heading-4" />
-      <div class="i-mdi:format-list-bulleted" />
-      <div class="i-mdi:format-list-numbered" />
-      <div class="i-mdi:format-list-checkbox" />
-    </div>
+    <EditorHandle :editor="editor" />
   </div>
 </template>
 
