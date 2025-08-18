@@ -69,6 +69,12 @@ const onSendUniqueCode = sendUniqueCodeForm.handleSubmit(async (values) => {
     class="mt-5 space-y-4"
     @submit.prevent="onSendUniqueCode"
   >
+    <div
+      v-if="props.lastUsedMethod === 'email'"
+      class="mb-2 flex items-center justify-end"
+    >
+      <span class="rounded px-2 py-0.5 text-xs font-semibold border bg-background">Last used</span>
+    </div>
     <FormField
       v-slot="{ componentField }"
       name="email"
