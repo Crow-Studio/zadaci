@@ -70,7 +70,7 @@ const onSendUniqueCode = sendUniqueCodeForm.handleSubmit(async (values) => {
     @submit.prevent="onSendUniqueCode"
   >
     <div
-      v-if="lastUsedMethod === 'email'"
+      v-if="props.lastUsedMethod === 'email'"
       class="mb-2 flex items-center justify-end"
     >
       <span class="rounded px-2 py-0.5 text-xs font-semibold border bg-background">Last used</span>
