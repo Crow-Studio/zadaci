@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css'
+import FAB from '~/components/workspace/FAB.vue'
 import Sidebar from '~/components/workspace/navigations/Sidebar.vue'
 import WorkspaceHeader from '~/components/workspace/navigations/WorkspaceHeader.vue'
 import WorkspaceProvider from '~/providers/WorkspaceProvider.vue'
@@ -52,6 +53,7 @@ const isOpenSidebar = computed(() => {
           </div>
         </div>
       </div>
+      <FAB />
     </div>
 
     <Toaster
