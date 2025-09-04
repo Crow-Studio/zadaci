@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { Analytics } from '@vercel/analytics/nuxt'
 import CTA from '~/components/homepage/CTA.vue'
 import Demo from '~/components/homepage/Demo.vue'
 import Hero from '~/components/homepage/Hero.vue'
 import Management from '~/components/homepage/Management.vue'
-import { Analytics } from '@vercel/analytics/nuxt'
 
 const { loggedIn } = useUserSession()
 
@@ -22,6 +22,6 @@ watch(() => loggedIn.value, (loggedIn) => {
     <Demo />
     <Management />
     <CTA />
-     <Analytics/>
+    <Analytics />
   </div>
 </template>
