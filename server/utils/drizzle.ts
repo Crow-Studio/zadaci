@@ -13,11 +13,14 @@ const connectionString = process.env.DATABASE_URL!
 
 const pinoLogger = pino()
 
-const logger = new EnhancedQueryLogger({
-  log: (message) => {
-    pinoLogger.info(message)
-  },
-})
+const logger
+  = process.env.NODE_ENV !== 'production'
+    ? new EnhancedQueryLogger({
+      log: (message) => {
+        pinoLogger.info(message)
+      },
+    })
+    : undefined
 
 const queryClient = postgres(connectionString, { prepare: false })
 

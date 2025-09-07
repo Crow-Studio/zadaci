@@ -6,9 +6,9 @@ import {
   subWeeks,
 } from 'date-fns'
 import { ref, watchEffect } from 'vue'
+import { Loader2 } from 'lucide-vue-next'
 import { Button } from '~/components/ui/button'
 import { useAsyncData, refreshNuxtData } from '#app'
-import { cn } from '~/lib/utils'
 
 interface DonutItem {
   color: string
@@ -25,6 +25,7 @@ const totalCompleted = ref(0)
 const totalInProgress = ref(0)
 const weeklyDifference = ref<number | null>(null)
 const isRefreshing = ref(false)
+const chartLoaded = ref(false)
 
 function isLastWeek(date: Date) {
   const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }) // Monday
@@ -92,6 +93,12 @@ watchEffect(() => {
   }
 })
 
+onMounted(() => {
+  setTimeout(() => {
+    chartLoaded.value = true
+  }, 500)
+})
+
 async function refreshStats() {
   isRefreshing.value = true
   try {
@@ -114,27 +121,44 @@ async function refreshStats() {
       </h2>
       <Button
         :disabled="isRefreshing"
-        :class="cn(
-          'rounded-full cursor-pointer',
-          isRefreshing && 'animate-spin',
-        )
-        "
+        class="rounded-full cursor-pointer"
         variant="ghost"
         size="icon"
         @click="refreshStats"
       >
-        <Icon name="solar:refresh-outline" />
+        <Loader2
+          v-if="isRefreshing"
+          class="w-5 h-5 animate-spin"
+        />
+        <Icon
+          v-else
+          name="solar:refresh-outline"
+        />
       </Button>
     </div>
 
-    <div class="max-w-full overflow-hidden">
+    <div class="max-w-full overflow-hidden flex items-center justify-center h-[275px]">
+      <div
+        v-if="!chartLoaded"
+        class="flex flex-col items-center gap-y-1.5"
+      >
+        <Loader2
+
+          class="w-8 h-8 animate-spin text-muted-foreground"
+        />
+        <p class="text-xs text-muted-foreground">
+          Loading chart
+        </p>
+      </div>
       <DonutChart
+        v-else
         :data="donutData.map(i => i.value)"
         :height="275"
         :labels="donutData"
         :hide-legend="true"
         :radius="0"
         type="half"
+        @ready="chartLoaded = true"
       />
     </div>
 

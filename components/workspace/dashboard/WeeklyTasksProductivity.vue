@@ -16,6 +16,7 @@ type ProductivityDataItem = {
 const selectedValue = ref<'on' | 'off'>('on') // 'on' = this week, 'off' = last week
 const productivityData = ref<ProductivityDataItem[]>([])
 const isFetchingData = ref(false)
+const chartLoaded = ref(false)
 
 const normalizeData = (raw: Partial<ProductivityDataItem>[]): ProductivityDataItem[] => {
   return weekDays.map((day) => {
@@ -57,10 +58,18 @@ const ProductivityCategories = {
 
 const xFormatter = (i: number): string => productivityData.value[i]?.day ?? ''
 const yFormatter = (tick: number) => tick.toString()
+
+onMounted(() => {
+  setTimeout(() => {
+    chartLoaded.value = true
+  }, 500)
+})
 </script>
 
 <template>
-  <div class="p-5 rounded-md border grid gap-5">
+  <div
+    class="p-5 rounded-md border grid gap-5"
+  >
     <div class="flex items-center justify-between xl:flex-row flex-col gap-2">
       <h2 class="text-lg font-medium">
         Weekly Tasks Productivity Overview
@@ -101,7 +110,12 @@ const yFormatter = (tick: number) => tick.toString()
       </div>
     </div>
     <div class="w-full overflow-hidden">
+      <div
+        v-if="!chartLoaded"
+        class="h-80 rounded-md animate-pulse bg-[#fafafa] dark:bg-[#1d1d1d]"
+      />
       <BarChart
+        v-else
         :data="productivityData"
         :height="300"
         :categories="ProductivityCategories"
@@ -115,6 +129,7 @@ const yFormatter = (tick: number) => tick.toString()
         :legend-position="LegendPosition.Top"
         :hide-legend="false"
         :y-grid-line="false"
+        @ready="chartLoaded = true"
       />
     </div>
   </div>

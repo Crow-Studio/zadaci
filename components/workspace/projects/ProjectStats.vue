@@ -5,7 +5,8 @@ import {
   endOfWeek,
   subWeeks,
 } from 'date-fns'
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed, onMounted } from 'vue'
+import { Loader2 } from 'lucide-vue-next'
 import { Button } from '~/components/ui/button'
 import { useAsyncData, refreshNuxtData } from '#app'
 import { cn } from '~/lib/utils'
@@ -22,14 +23,15 @@ const totalCompleted = ref(0)
 const totalInProgress = ref(0)
 const weeklyDifference = ref<number | null>(null)
 const isRefreshing = ref(false)
+const chartLoaded = ref(false)
 
 const currentActiveWorkspace = computed(() => {
   return workspaceStore.activeWorkspace
 })
 
 function isLastWeek(date: Date) {
-  const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }) // Monday
-  const lastWeekEnd = endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }) // Sunday
+  const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })
+  const lastWeekEnd = endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })
   return date >= lastWeekStart && date <= lastWeekEnd
 }
 
@@ -102,14 +104,20 @@ async function refreshStats() {
     isRefreshing.value = false
   }
 }
+
+onMounted(() => {
+  // fallback if chart doesn’t emit
+  setTimeout(() => {
+    chartLoaded.value = true
+  }, 500)
+})
 </script>
 
 <template>
   <div class="md:col-span-2 p-3">
     <div class="flex flex-col">
-      <div
-        class="flex items-center justify-between -mb-2.5"
-      >
+      <!-- Header -->
+      <div class="flex items-center justify-between -mb-2.5">
         <h2 class="text-lg font-semibold">
           Project Stats
         </h2>
@@ -118,8 +126,7 @@ async function refreshStats() {
           :class="cn(
             'rounded-full cursor-pointer',
             isRefreshing && 'animate-spin',
-          )
-          "
+          )"
           variant="ghost"
           size="icon"
           @click="refreshStats"
@@ -128,20 +135,33 @@ async function refreshStats() {
         </Button>
       </div>
 
-      <div>
+      <div class="flex items-center justify-center h-[275px] w-full">
+        <div
+          v-if="!chartLoaded"
+          class="flex flex-col items-center gap-y-1.5"
+        >
+          <Loader2
+
+            class="w-8 h-8 animate-spin text-muted-foreground"
+          />
+          <p class="text-xs text-muted-foreground">
+            Loading chart
+          </p>
+        </div>
         <DonutChart
+          v-else
           :data="donutData.map(i => i.value)"
           :height="275"
           :labels="donutData"
           :hide-legend="true"
           :radius="0"
           type="half"
+          @ready="chartLoaded = true"
         />
       </div>
 
-      <div
-        class="grid grid-cols-2 -mt-6"
-      >
+      <!-- Stats under chart -->
+      <div class="grid grid-cols-2 -mt-6">
         <div class="flex flex-col items-center">
           <div class="flex items-center gap-x-2">
             <div class="bg-green-500 size-1.5 rounded-full" />
@@ -166,6 +186,7 @@ async function refreshStats() {
         </div>
       </div>
 
+      <!-- Weekly diff -->
       <p class="text-center text-muted-foreground text-sm">
         <template v-if="weeklyDifference !== null">
           You completed

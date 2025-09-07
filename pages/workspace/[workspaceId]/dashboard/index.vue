@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Loader2, Plus } from 'lucide-vue-next'
 import Button from '~/components/ui/button/Button.vue'
 import AllTasksStats from '~/components/workspace/dashboard/AllTasksStats.vue'
 import Greetings from '~/components/workspace/dashboard/Greetings.vue'
@@ -61,14 +60,7 @@ const onAddNewProject = () => {
 
 <template>
   <section class="">
-    <div
-      v-if="status ==='idle' || status === 'pending'"
-      class="min-h-[70vh] grid place-content-center"
-    >
-      <div class="flex items-center gap-x-2 text-muted-foreground text-base">
-        <Loader2 class="animate-spin size-5" />
-      </div>
-    </div>
+    <WorkspaceDashboardLoadingSkeleton v-if="status ==='idle' || status === 'pending'" />
     <div
       v-else
       class="grid grid-cols-1 gap-10 md:grid-cols-4 w-full"
