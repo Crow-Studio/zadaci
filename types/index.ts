@@ -438,3 +438,15 @@ export interface WorkspaceInvite {
 }
 
 export const appLink = process.env.NUXT_PUBLIC_SITE_URL as string
+
+export type DueItem = {
+  id: string
+  type: 'project' | 'task'
+  title: string
+  dueDate: Date
+  assignee: string
+  avatar: string | null
+  priority: string | null
+  description: string | null
+  workspaceId: string
+}
