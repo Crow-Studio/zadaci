@@ -449,4 +449,5 @@ export type DueItem = {
   priority: string | null
   description: string | null
   workspaceId: string
+  projectId: string
 }

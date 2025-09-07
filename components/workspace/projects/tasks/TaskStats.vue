@@ -6,8 +6,10 @@ import {
   subWeeks,
 } from 'date-fns'
 import { ref, watchEffect } from 'vue'
+import { Loader2 } from 'lucide-vue-next'
 import { Button } from '~/components/ui/button'
 import { useAsyncData, refreshNuxtData } from '#app'
+import { cn } from '~/lib/utils'
 
 interface DonutItem {
   color: string
@@ -24,6 +26,7 @@ const donutData = ref<DonutItem[]>([])
 const totalCompleted = ref(0)
 const totalInProgress = ref(0)
 const weeklyDifference = ref<number | null>(null)
+const chartLoaded = ref(false)
 
 function isLastWeek(date: Date) {
   const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }) // Monday
@@ -91,6 +94,12 @@ watchEffect(() => {
   }
 })
 
+onMounted(() => {
+  setTimeout(() => {
+    chartLoaded.value = true
+  }, 500)
+})
+
 function refreshStats() {
   refreshNuxtData(`all_project_task_stats_${props.projectId}`)
 }
@@ -113,16 +122,38 @@ function refreshStats() {
         </Button>
       </div>
 
-      <DonutChart
-        :data="donutData.map(i => i.value)"
-        :height="275"
-        :labels="donutData"
-        :hide-legend="true"
-        :radius="0"
-        type="half"
-      />
+      <div>
+        <div
+          v-if="!chartLoaded"
+          class="h-40 grid place-content-center "
+        >
+          <div class="flex flex-col items-center gapy-1.5">
+            <Loader2
+              class="w-8 h-8 animate-spin text-muted-foreground"
+            />
+            <p class="text-xs text-muted-foreground">
+              Loading chart
+            </p>
+          </div>
+        </div>
+        <DonutChart
+          v-else
+          :data="donutData.map(i => i.value)"
+          :height="275"
+          :labels="donutData"
+          :hide-legend="true"
+          :radius="0"
+          type="half"
+          @ready="chartLoaded = true"
+        />
+      </div>
 
-      <div class="grid grid-cols-2 -mt-8">
+      <div
+        :class="cn(
+          'grid grid-cols-2',
+          chartLoaded && '-mt-8',
+        )"
+      >
         <div class="flex flex-col items-center">
           <div class="flex items-center gap-x-2">
             <div class="bg-green-500 size-1.5 rounded-full" />

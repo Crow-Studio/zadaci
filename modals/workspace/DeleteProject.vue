@@ -30,7 +30,7 @@ async function onDeleteProject() {
       method: 'DELETE',
     })
 
-    await refreshNuxtData([`sidebar_projects_${project.value?.workspaceId}`, `board_view_projects_${project.value?.workspaceId}`, `all_project_stats_${project.value?.workspaceId}`, `mobile_sidebar_projects_${project.value?.workspaceId}`])
+    await refreshNuxtData([`sidebar_projects_${project.value?.workspaceId}`, `board_view_projects_${project.value?.workspaceId}`, `all_project_stats_${project.value?.workspaceId}`, `mobile_sidebar_projects_${project.value?.workspaceId}`, `workspace_user_due_items_${project.value?.workspaceId}`])
     onClose()
 
     toast.success(res.message, {

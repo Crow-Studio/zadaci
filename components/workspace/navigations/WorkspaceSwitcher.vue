@@ -38,7 +38,7 @@ const onSelectActiveWorkspace = async (w: Workspace) => {
     path: `/workspace/${w.id}/dashboard`,
     children: null,
   })
-  await refreshNuxtData([`sidebar_projects_${w.id}`, `board_view_projects_${w.id}`, `all_project_stats_${w.id}`, `mobile_sidebar_projects_${w.id}`])
+  await refreshNuxtData([`sidebar_projects_${w.id}`, `board_view_projects_${w.id}`, `all_project_stats_${w.id}`, `mobile_sidebar_projects_${w.id}`, `workspace_user_due_items_${w.id}`])
   navigateTo(`/workspace/${w.id}/dashboard`)
 }
 

@@ -1,4 +1,4 @@
-import { inArray, eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,20 +13,19 @@ export default defineEventHandler(async (event) => {
 
     const db = useDrizzle()
 
-    // Get all workspace member IDs for this user
-    const userMemberships = await db.query.workspaceMembersTable.findMany({
-      where: table => eq(table.user_id, session.user.id),
+    const workspaceId = getRouterParam(event, 'workspaceId') as string
+
+    const userMembership = await db.query.workspaceMembersTable.findFirst({
+      where: table =>
+        and(eq(table.user_id, session.user.id), eq(table.workspace_id, workspaceId)),
     })
 
-    const memberIds = userMemberships.map(member => member.id)
-
-    if (memberIds.length === 0) {
-      return [] // User is not in any workspace
+    if (!userMembership) {
+      return []
     }
 
-    // Get all tasks assigned to the user
     const taskAssignees = await db.query.taskAssigneesTable.findMany({
-      where: table => inArray(table.member_id, memberIds),
+      where: table => eq(table.member_id, userMembership.id),
       with: {
         task: {
           with: {
@@ -48,7 +47,7 @@ export default defineEventHandler(async (event) => {
     })
 
     const tasks = taskAssignees
-      .filter(assignee => assignee.task) // Ensure task exists
+      .filter(assignee => assignee.task)
       .map((assignee) => {
         const task = assignee.task
         return {
@@ -80,7 +79,7 @@ export default defineEventHandler(async (event) => {
             status: task.project.status,
             priority: task.project.priority,
             dueDate: task.project.due_date,
-            workspaceId: task.project.id,
+            workspaceId: task.project.workspace_id,
           },
         }
       })

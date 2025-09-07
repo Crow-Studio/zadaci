@@ -146,6 +146,7 @@ async function handleDrop(columnKey: Status, project: DBProject, index?: number)
       `board_view_projects_${currentActiveWorkspace.value?.id}`,
       `all_project_stats_${currentActiveWorkspace.value?.id}`,
       `mobile_sidebar_projects_${currentActiveWorkspace.value?.id}`,
+      `workspace_user_due_items_${currentActiveWorkspace.value?.id}`,
     ])
   }
   catch (error: any) {

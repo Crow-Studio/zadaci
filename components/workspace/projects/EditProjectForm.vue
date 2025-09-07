@@ -99,7 +99,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       body: newFormValues,
     })
 
-    await refreshNuxtData([`sidebar_projects_${props?.project.workspaceId}`, `board_view_projects_${props?.project.workspaceId}`, `all_project_stats_${props?.project.workspaceId}`, `mobile_sidebar_projects_${props?.project.workspaceId}`])
+    await refreshNuxtData([`sidebar_projects_${props?.project.workspaceId}`, `board_view_projects_${props?.project.workspaceId}`, `all_project_stats_${props?.project.workspaceId}`, `mobile_sidebar_projects_${props?.project.workspaceId}`, `workspace_user_due_items_${props?.project.workspaceId}`])
     form.resetForm()
     onCloseModal()
 

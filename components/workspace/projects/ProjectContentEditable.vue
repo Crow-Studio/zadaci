@@ -55,6 +55,7 @@ async function updateField(field: string, event: Event) {
       `all_project_stats_${props?.project.workspaceId}`,
       `mobile_sidebar_projects_${props?.project.workspaceId}`,
       `project-${props.project.id}`,
+      `workspace_user_due_items_${props.project.workspaceId}`,
     ])
 
     target.blur()
@@ -93,6 +94,7 @@ async function onUpdateProjectInfo(field: string, value: Status | Priority | str
       `all_project_stats_${props?.project.workspaceId}`,
       `mobile_sidebar_projects_${props?.project.workspaceId}`,
       `project-${props.project.id}`,
+      `workspace_user_due_items_${props.project.workspaceId}`,
     ])
 
     savingState.value = { isSaving: true, message: 'Saved' }

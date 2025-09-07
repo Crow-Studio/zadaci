@@ -181,7 +181,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       body: newFormValues,
     })
 
-    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`, `board_view_my_tasks_${currentActiveWorkspace?.value?.id}`, `all_my_tasks_stats_${currentActiveWorkspace?.value?.id}`])
+    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`, `board_view_my_tasks_${currentActiveWorkspace?.value?.id}`, `all_my_tasks_stats_${currentActiveWorkspace?.value?.id}`, `workspace_user_due_items_${currentActiveWorkspace.value?.id}`])
 
     form.resetForm()
     onCloseModal()
@@ -210,7 +210,7 @@ const onDeleteTask = async () => {
       method: 'DELETE',
     })
 
-    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`, `board_view_my_tasks_${currentActiveWorkspace?.value?.id}`, `all_my_tasks_stats_${currentActiveWorkspace?.value?.id}`])
+    await refreshNuxtData([`board_view_project_tasks_${props?.projectId}`, `all_project_task_stats_${props.projectId}`, `board_view_my_tasks_${currentActiveWorkspace?.value?.id}`, `all_my_tasks_stats_${currentActiveWorkspace?.value?.id}`, `workspace_user_due_items_${currentActiveWorkspace.value?.id}`])
 
     form.resetForm()
     onCloseModal()

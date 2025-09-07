@@ -1,4 +1,5 @@
-import { eq, and, or, lt } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
+import { isToday, isTomorrow, isThisWeek } from 'date-fns'
 import type { DueItem } from '~/types'
 
 export default defineEventHandler(async (event) => {
@@ -13,11 +14,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const query = getQuery(event)
-    const workspaceId = query.workspaceId as string
+    const workspaceId = getRouterParam(event, 'workspaceId') as string
     const userId = session.user.id
-
-    const now = new Date()
 
     const rows = await db
       .select({
@@ -64,42 +62,44 @@ export default defineEventHandler(async (event) => {
         and(
           eq(tables.workspaceTable.id, workspaceId),
           eq(tables.workspaceMembersTable.user_id, userId),
-          or(
-            lt(tables.projectTable.due_date, now),
-            lt(tables.tasksTable.due_date, now),
-          ),
         ),
       )
 
     const items: DueItem[] = rows.flatMap((row) => {
       const res: DueItem[] = []
 
-      if (row.projectId && row.projectDue && row.projectDue < now) {
-        res.push({
-          id: row.projectId,
-          type: 'project',
-          title: row.projectTitle,
-          dueDate: row.projectDue,
-          assignee: row.username,
-          avatar: row.avatar,
-          priority: row.projectPriority,
-          description: row.projectDesc,
-          workspaceId: row.workspaceId,
-        })
+      if (row.projectId && row.projectDue) {
+        if (isToday(row.projectDue) || isTomorrow(row.projectDue) || isThisWeek(row.projectDue)) {
+          res.push({
+            id: row.projectId,
+            projectId: row.projectId,
+            type: 'project',
+            title: row.projectTitle,
+            dueDate: row.projectDue,
+            assignee: row.username,
+            avatar: row.avatar,
+            priority: row.projectPriority,
+            description: row.projectDesc,
+            workspaceId: row.workspaceId,
+          })
+        }
       }
 
-      if (row.taskId && row.taskDue && row.taskDue < now) {
-        res.push({
-          id: row.taskId,
-          type: 'task',
-          title: row.taskTitle as string,
-          dueDate: row.taskDue,
-          assignee: row.username,
-          avatar: row.avatar,
-          priority: row.taskPriority,
-          description: row.taskDesc,
-          workspaceId: row.workspaceId,
-        })
+      if (row.taskId && row.taskDue) {
+        if (isToday(row.taskDue) || isTomorrow(row.taskDue) || isThisWeek(row.taskDue)) {
+          res.push({
+            id: row.taskId,
+            projectId: row.projectId,
+            type: 'task',
+            title: row.taskTitle as string,
+            dueDate: row.taskDue,
+            assignee: row.username,
+            avatar: row.avatar,
+            priority: row.taskPriority,
+            description: row.taskDesc,
+            workspaceId: row.workspaceId,
+          })
+        }
       }
 
       return res
