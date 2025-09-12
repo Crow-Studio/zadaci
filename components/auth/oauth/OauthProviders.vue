@@ -4,6 +4,7 @@ import { cn } from '~/lib/utils'
 import type { IAuthProvider } from '~/types'
 
 const oauthStore = useOauthStore()
+const lastUsedMethod = ref<'email' | 'google' | 'github' | null>(null)
 
 const oauth = computed(() => {
   return oauthStore?.oauth
@@ -14,13 +15,20 @@ const onSigninWith = (provider: IAuthProvider) => {
     isSigninWithOauth: true,
     provider,
   })
+  lastUsedMethod.value = provider
+  localStorage.setItem('lastUsedMethod', provider)
   window.location.href = `/api/auth/signin/${provider}`
 }
+
+onMounted(() => {
+  const stored = localStorage.getItem('lastUsedMethod')
+  if (stored) lastUsedMethod.value = stored as any
+})
 </script>
 
 <template>
   <div class="grid gap-2 overflow-hidden">
-    <div class="flex h-[42px] items-center !overflow-hidden">
+    <div class="flex h-[42px] items-center !overflow-hidden relative">
       <button
         :disabled="oauth.isSigninWithOauth"
         :class="cn(
@@ -39,6 +47,10 @@ const onSigninWith = (provider: IAuthProvider) => {
           class="size-4"
         />
         Continue with Google
+        <span
+          v-if="lastUsedMethod === 'google'"
+          class="absolute right-2 top-2 rounded px-2 py-0.5 text-xs font-semibold border bg-background"
+        >Last used</span>
       </button>
     </div>
   </div>
