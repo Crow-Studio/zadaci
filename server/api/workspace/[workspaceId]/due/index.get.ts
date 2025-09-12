@@ -1,4 +1,4 @@
-import { eq, and } from 'drizzle-orm'
+import { eq, and, notInArray } from 'drizzle-orm'
 import { isToday, isTomorrow, isThisWeek } from 'date-fns'
 import type { DueItem } from '~/types'
 
@@ -52,11 +52,17 @@ export default defineEventHandler(async (event) => {
       )
       .innerJoin(
         tables.projectTable,
-        eq(tables.projectMembers.project_id, tables.projectTable.id),
+        and(
+          eq(tables.projectMembers.project_id, tables.projectTable.id),
+          notInArray(tables.projectTable.status, ['IN REVIEW', 'COMPLETED', 'ABANDONED']),
+        ),
       )
       .leftJoin(
         tables.tasksTable,
-        eq(tables.tasksTable.project_id, tables.projectTable.id),
+        and(
+          eq(tables.tasksTable.project_id, tables.projectTable.id),
+          notInArray(tables.tasksTable.status, ['IN REVIEW', 'COMPLETED', 'ABANDONED']),
+        ),
       )
       .where(
         and(
