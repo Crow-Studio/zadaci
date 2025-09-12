@@ -91,6 +91,7 @@ onMounted(() => {
               :key="item.id"
               :to="`/workspace/${workspace?.id}/projects/${item.projectId}`"
               class="block"
+              @click="isOpen = false"
             >
               <motion.div
                 :initial="{ opacity: 0, x: -20 }"
